@@ -42,6 +42,51 @@
     \end{description}
 \end{description}
 
+\begin{description}
+    \item [Post service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST posts (creator, content, tags)
+        \item[Out:] /
+        \item[Logic:] Create a new post
+        \item[]
 
+        \item[In:] GET posts/user/user\_id
+        \item[Out:] Posts (creator, timestamp, content, tags)
+        \item[Logic:] Get all the posts from a user
+        \item[]
+
+        \item[In:] GET posts/post\_id
+        \item[Out:] Post (creator, timestamp, content, tags)
+        \item[Logic:] Get a specific post
+        \item[]
+        
+        \item[In:] POST posts/post\_id/like (user\_id)
+        \item[Out:] /
+        \item[Logic: ] User likes a post
+    \end{description}
+\end{description}
+
+
+\begin{description}
+    \item [Comment service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST comments (post\_id, creator, content)
+        \item[Out:] /
+        \item[Logic:] Create a comment on a specific post
+        \item[]
+        
+        \item[In:] GET comments/comment\_id
+        \item[Out:] Comment (comment\_id, creator, timestamp, content)
+        \item[Logic:] Get a specific comment
+        \item[]
+
+        \item[In:] GET comments/posts/post\_id
+        \item[Out:] Comments (comment\_id, creator, timestamp, content)
+        \item[Logic:] Get all the comments on a post
+        \item[]
+    \end{description}
+\end{description}
 
 \end{document}
