@@ -25,22 +25,73 @@
 \section{API Services}
 
 \begin{description}
+    \item [Message service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST message (contents, sender id, receiver id)
+        \item[Out:] /
+        \item[Logic:] Add message to DB
+        \item[]
+        
+        \item[In:] GET messages/receiver\_id/sender\_id
+        \item[Out:] All messages in conversation between receiver and sender (message: content, timestamp, id) (Maybe need extra conversations service?)
+        \item[Logic:] Mark messages as read by receiver
+        \item[]
+    \end{description}
+\end{description}
+
+\begin{description}
     \item [Notification service:] 
     \begin{description}
         \item[]
-        \item[In:] POST (notification contents, notification recipient(s) (UID))
+        \item[In:] POST notifications (notification contents, notification recipient(s) (UID))
         \item[Out:] /
         \item[Logic:] Add notification to DB
         \item[]
         
-        \item[In:] GET getnotifications/user\_id 
-        \item[Out:] Notifications (ID, Timestamp, Content)
+        \item[In:] GET notifications/user\_id 
+        \item[Out:] Notifications (ID, timestamp, content)
         \item[Logic:] Mark notification as requested
         \item[]
         
-        \item[In:] PUT removenotification/notification\_id/user\_id
+        \item[In:] PUT notifications/notification\_id/user\_id
         \item[Out:] /
         \item[Logic: ] Mark notification as read
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Ad service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST ads (contents, shape, targeted users classes(s)) (user class example: "male" or "female")
+        \item[Out:] /
+        \item[Logic:] Add advertisement to DB
+        \item[]
+        
+        \item[In:] GET ads/shape/user\_id (shape $\in$ \{"banner", "column", $\dots$\})
+        \item[Out:] Advertisement (contents)
+        \item[Logic:] Increment view count of advertisement
+        \item[]
+        
+		\item[In:] GET ads (may be used for administrator view)
+        \item[Out:] List of all advertisements (shape, target user class(es), contents)
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Anti-Cyberbullying service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST addwords (wordlist)
+        \item[Out:] /
+        \item[Logic:] Words from wordlist get merged with existing words in DB
+        \item[]
+        
+        \item[In:] POST containsbadwords (sentence)
+        \item[Out:] True if the provided sentence contains one or more bad words, false otherwise
+        \item[Logic:] 
+        \item[]
     \end{description}
 \end{description}
 
