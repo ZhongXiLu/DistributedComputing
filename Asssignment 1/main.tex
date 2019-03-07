@@ -3,7 +3,7 @@
 \usepackage{float}
 
 \title{Distributed computing assignment 1: SOA}
-\author{t7025t }
+\author{Zhong-Xi Lu, Angela Mizero, Thomas Van Bogaert}
 \date{}
 
 \usepackage{natbib}
@@ -13,7 +13,7 @@
 
 \maketitle
 
-\section{Services}
+\section{Service Oriented Architecture}
 
 \begin{figure}[H]
     \centering
@@ -21,6 +21,8 @@
     \caption{Service oriented architecture}
     \label{soa}
 \end{figure}
+
+\section{API Services}
 
 \begin{description}
     \item [Notification service:] 
@@ -67,6 +69,26 @@
     \end{description}
 \end{description}
 
+\begin{description}
+    \item [Tag service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST tags (post\_id, user\_id(s))
+        \item[Out:] /
+        \item[Logic:] Create a user tag on a specific post
+        \item[]
+        
+        \item[In:] GET tags/tag\_id
+        \item[Out:] tag (tag\_id, post\_id, user\_id)
+        \item[Logic:] Get a specific tag
+        \item[]
+
+        \item[In:] GET tags/posts/post\_id
+        \item[Out:] Tags (tag\_id, post\_id, user\_id)
+        \item[Logic:] Get all the tags on a post
+        \item[]
+    \end{description}
+\end{description}
 
 \begin{description}
     \item [Comment service:] 
