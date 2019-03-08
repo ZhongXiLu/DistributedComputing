@@ -91,7 +91,16 @@
         \item[In:] POST containsbadwords (sentence)
         \item[Out:] True if the provided sentence contains one or more bad words, false otherwise
         \item[Logic:] 
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Newsfeed service:] 
+    \begin{description}
         \item[]
+        \item[In:] GET newsfeed/user\_id
+        \item[Out:] Posts
+        \item[Logic:] Get the newsfeed of a user
     \end{description}
 \end{description}
 
@@ -117,6 +126,31 @@
         \item[In:] POST posts/post\_id/like (user\_id)
         \item[Out:] /
         \item[Logic: ] User likes a post
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Like service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST likes (post\_id, user\_id(s))
+        \item[Out:] /
+        \item[Logic:] User likes a specific post
+        \item[]
+        
+        \item[In:] GET likes/like\_id
+        \item[Out:] Like (like\_id, post\_id, user\_id)
+        \item[Logic:] Get a specific like
+        \item[]
+
+        \item[In:] DELETE likes/like\_id
+        \item[Out:] /
+        \item[Logic:] Undo a like
+        \item[]
+
+        \item[In:] GET likes/posts/post\_id
+        \item[Out:] Likes (like\_id, post\_id, user\_id)
+        \item[Logic:] Get all the likes of a post
     \end{description}
 \end{description}
 
