@@ -23,6 +23,41 @@
 \end{figure}
 
 \section{API Services}
+\begin{description}
+    \item [User service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST user(email, username, password)
+        \item[Out:] Admin View or Default View (depending on the user role)
+        \item[Logic:] Registers or creates a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] DELETE users/user\_id
+        \item[Out:] Admin View
+        \item[Logic:] Deletes a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] PUT users/user\_id
+        \item[Out:] Admin View
+        \item[Logic:] Blocks a user
+        \item[]
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Authentication service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST user (email, password)
+        \item[Out:] Default View
+        \item[Logic:] Logs a user in and displays a view depending on the user's role (user or admin)
+        \item[]
+    \end{description}
+\end{description}
 
 \begin{description}
     \item [Message service:] 
@@ -91,6 +126,28 @@
         \item[In:] POST containsbadwords (sentence)
         \item[Out:] True if the provided sentence contains one or more bad words, false otherwise
         \item[Logic:] 
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Follow service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST user(email, username, password)
+        \item[Out:] Default View
+        \item[Logic:] Follows a user by adding them to the "Follow" database.
+        \item[]
+    \end{description}
+\end{description}
+
+\begin{description}
+    \item [Friend service:] 
+    \begin{description}
+        \item[]
+        \item[In:] POST user(email, username, password)
+        \item[Out:] Default View
+        \item[Logic:] Adds a new user to the "Friend" database
+        \item[]
     \end{description}
 \end{description}
 
