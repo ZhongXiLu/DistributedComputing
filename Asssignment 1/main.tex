@@ -28,21 +28,35 @@
     \begin{description}
         \item[]
         \item[In:] POST user(email, username, password)
-        \item[Out:] Admin View or Default View (depending on the user role)
+        \item[Out:] /
         \item[Logic:] Registers or creates a user
         \item[]
     \end{description}
     \begin{description}
         \item[]
+        \item[In:] GET users/
+        \item[Out:] users(email, username)
+        \item[Logic:] Gets all the users
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] GET users/user\_id
+        \item[Out:] user(email, username)
+        \item[Logic:] Get a particular user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
         \item[In:] DELETE users/user\_id
-        \item[Out:] Admin View
+        \item[Out:] /
         \item[Logic:] Deletes a user
         \item[]
     \end{description}
     \begin{description}
         \item[]
         \item[In:] PUT users/user\_id
-        \item[Out:] Admin View
+        \item[Out:] /
         \item[Logic:] Blocks a user
         \item[]
     \end{description}
@@ -53,7 +67,7 @@
     \begin{description}
         \item[]
         \item[In:] POST user (email, password)
-        \item[Out:] Default View
+        \item[Out:] /
         \item[Logic:] Logs a user in and displays a view depending on the user's role (user or admin)
         \item[]
     \end{description}
@@ -134,8 +148,29 @@
     \begin{description}
         \item[]
         \item[In:] POST user(email, username, password)
-        \item[Out:] Default View
+        \item[Out:] /
         \item[Logic:] Follows a user by adding them to the "Follow" database.
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] DELETE follow/user\_id
+        \item[Out:] /
+        \item[Logic:] Unfollow a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] GET follow/user\_id
+        \item[Out:] user(email, username), posts(creator, content)
+        \item[Logic:] Gets a followed user from the database and all their information.
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] GET follow/
+        \item[Out:] users(email, username), posts(creator, content)
+        \item[Logic:] Gets all the followed users from the database and all their information.
         \item[]
     \end{description}
 \end{description}
@@ -145,8 +180,29 @@
     \begin{description}
         \item[]
         \item[In:] POST user(email, username, password)
-        \item[Out:] Default View
+        \item[Out:] /
         \item[Logic:] Adds a new user to the "Friend" database
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] DELETE friend/user\_id
+        \item[Out:] /
+        \item[Logic:] Unfriend a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] GET friend/user\_id
+        \item[Out:] user(email, username), posts(creator, content)
+        \item[Logic:] Gets a friend from the database and all their information.
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] GET friend/
+        \item[Out:] users(email, username), posts(creator, content)
+        \item[Logic:] Gets all the friends from the database and all their information.
         \item[]
     \end{description}
 \end{description}
