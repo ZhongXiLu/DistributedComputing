@@ -46,6 +46,12 @@ This section will go more into these microservices by precisely defining their R
         \item[]
     \end{description}
     \begin{description}
+        \item[In:] GET users/user/username
+        \item[Out:] users (user\_id, email, username)
+        \item[Logic:] Gets a user by username
+        \item[]
+    \end{description}
+    \begin{description}
         \item[In:] GET users/user\_id
         \item[Out:] user (user\_id, email, username)
         \item[Logic:] Get a particular user
@@ -61,6 +67,12 @@ This section will go more into these microservices by precisely defining their R
         \item[In:] PUT users/user\_id/block
         \item[Out:] /
         \item[Logic:] Blocks a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[In:] PUT users/user\_id/unblock
+        \item[Out:] /
+        \item[Logic:] Unblocks a user
     \end{description}
 \end{description}
 
@@ -68,8 +80,8 @@ This section will go more into these microservices by precisely defining their R
     \item [Authentication service:] 
     \begin{description}
         \item[]
-        \item[In:] POST user (email, password)
-        \item[Out:] Flag indicating whether the authentication was succesfull
+        \item[In:] POST user (user\_id, password)
+        \item[Out:] Flag indicating whether the authentication was successful
         \item[Logic:] Tries to authenticate a user by checking the credentials
     \end{description}
 \end{description}
@@ -84,7 +96,7 @@ This section will go more into these microservices by precisely defining their R
         \item[]
         
         \item[In:] GET messages/receiver\_id/sender\_id
-        \item[Out:] All messages in conversation between receiver and sender (message: content, timestamp, id) (Maybe need extra conversations service?)
+        \item[Out:] All messages in conversation between receiver and sender (message: content, timestamp, id)
         \item[Logic:] Mark messages as read by receiver
     \end{description}
 \end{description}
@@ -113,17 +125,17 @@ This section will go more into these microservices by precisely defining their R
     \item [Ad service:] 
     \begin{description}
         \item[]
-        \item[In:] POST ads (contents, shape, targeted users classes(s)) (user class example: "male" or "female")
+        \item[In:] POST ads (contents, targeted users classes(s)) (user class example: "male" or "female")
         \item[Out:] /
         \item[Logic:] Add advertisement to DB
         \item[]
         
-        \item[In:] GET ads/shape/user\_id (shape $\in$ \{"banner", "column", $\dots$\})
+        \item[In:] GET ads/user\_id
         \item[Out:] Advertisement (contents)
         \item[Logic:] Increment view count of advertisement
         \item[]
         
-		\item[In:] GET ads (may be used for administrator view)
+        \item[In:] GET ads (may be used for administrator view)
         \item[Out:] List of all advertisements (shape, target user class(es), contents)
     \end{description}
 \end{description}
@@ -232,11 +244,6 @@ This section will go more into these microservices by precisely defining their R
         \item[In:] GET posts/post\_id
         \item[Out:] Post (creator, timestamp, content, tags)
         \item[Logic:] Get a specific post
-        \item[]
-        
-        \item[In:] POST posts/post\_id/like (user\_id)
-        \item[Out:] /
-        \item[Logic: ] User likes a post
     \end{description}
 \end{description}
 
