@@ -1,0 +1,1 @@
+alias dockerExec='docker-compose -f docker-compose-dev.yml exec'
