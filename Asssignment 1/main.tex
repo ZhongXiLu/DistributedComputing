@@ -28,15 +28,31 @@ In the logic and storage layer, we have several microservices that all have thei
 
 \section{API Services}
 
-This section will go more into these microservices by precisely defining their REST API.
+This section will go more into these microservices by precisely defining their REST API and their dependencies (what services they communicate with).
 
 \begin{description}
-    \item [User service:] 
+    \item [User service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] Authentication service
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST users (email, username, password)
         \item[Out:] /
         \item[Logic:] Registers or creates a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[In:] POST users/login (username, password)
+        \item[Out:] Response indicating whether the login was successful or not (and return some token if it was successful)
+        \item[Logic:] Tries to login a user
+        \item[]
+    \end{description}
+    \begin{description}
+        \item[In:] POST users/logout (token)
+        \item[Out:] /
+        \item[Logic:] Logs out a user
         \item[]
     \end{description}
     \begin{description}
@@ -77,17 +93,37 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Authentication service:] 
+    \item [Authentication service:]
     \begin{description}
         \item[]
-        \item[In:] POST user (user\_id, password)
+        \item[Dependencies:] /
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] POST password (user\_id, password)
+        \item[Out:] /
+        \item[Logic:] Adds user and password pair to the database to verify tokens in the future
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] DELETE password (user\_id)
+        \item[Out:] /
+        \item[Logic:] Remove password from the database
+    \end{description}
+    \begin{description}
+        \item[]
+        \item[In:] POST user (token)
         \item[Out:] Flag indicating whether the authentication was successful
         \item[Logic:] Tries to authenticate a user by checking the credentials
     \end{description}
 \end{description}
 
 \begin{description}
-    \item [Message service:] 
+    \item [Message service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] Friend, notification service
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST message (contents, sender id, receiver id)
@@ -102,7 +138,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Notification service:] 
+    \item [Notification service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST notifications (notification contents, notification recipient(s) (UID))
@@ -122,7 +162,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Ad service:] 
+    \item [Ad service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST ads (contents, targeted users classes(s)) (user class example: "male" or "female")
@@ -136,12 +180,16 @@ This section will go more into these microservices by precisely defining their R
         \item[]
         
         \item[In:] GET ads (may be used for administrator view)
-        \item[Out:] List of all advertisements (shape, target user class(es), contents)
+        \item[Out:] List of all advertisements (target user class(es), contents)
     \end{description}
 \end{description}
 
 \begin{description}
-    \item [Anti-Cyberbullying service:] 
+    \item [Anti-Cyberbullying service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST addwords (wordlist)
@@ -156,7 +204,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Follow service:] 
+    \item [Follow service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST follows (user\_id, other\_user\_id)
@@ -190,7 +242,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Friend service:] 
+    \item [Friend service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description} 
     \begin{description}
         \item[]
         \item[In:] POST friends (user\_id, other\_user\_id)
@@ -221,6 +277,10 @@ This section will go more into these microservices by precisely defining their R
     \item [Newsfeed service:] 
     \begin{description}
         \item[]
+        \item[Dependencies:] Follow, Post service
+    \end{description}
+    \begin{description}
+        \item[]
         \item[In:] GET newsfeed/user\_id
         \item[Out:] Posts
         \item[Logic:] Get the newsfeed of a user
@@ -228,7 +288,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Post service:] 
+    \item [Post service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] Follow, Notification service
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST posts (creator, content, tags)
@@ -248,7 +312,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Like service:] 
+    \item [Like service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST likes (post\_id, user\_id(s))
@@ -273,7 +341,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Tag service:] 
+    \item [Tag service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST tags (post\_id, user\_id(s))
@@ -294,7 +366,11 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Comment service:] 
+    \item [Comment service:]
+    \begin{description}
+        \item[]
+        \item[Dependencies:] /
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST comments (post\_id, creator, content)
