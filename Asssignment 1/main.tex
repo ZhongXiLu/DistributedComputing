@@ -291,7 +291,7 @@ This section will go more into these microservices by precisely defining their R
     \item [Post service:]
     \begin{description}
         \item[]
-        \item[Dependencies:] Follow, Notification service
+        \item[Dependencies:] Follow, Notification, Tag service
     \end{description}
     \begin{description}
         \item[]
@@ -301,12 +301,12 @@ This section will go more into these microservices by precisely defining their R
         \item[]
 
         \item[In:] GET posts/user/user\_id
-        \item[Out:] Posts (creator, timestamp, content, tags)
+        \item[Out:] Posts (post\_id, creator, timestamp, content)
         \item[Logic:] Get all the posts from a user
         \item[]
 
         \item[In:] GET posts/post\_id
-        \item[Out:] Post (creator, timestamp, content, tags)
+        \item[Out:] Post (post\_id, creator, timestamp, content)
         \item[Logic:] Get a specific post
     \end{description}
 \end{description}

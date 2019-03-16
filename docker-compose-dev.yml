@@ -27,3 +27,29 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  post:
+    build:
+      context: ./services/post
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/post:/usr/src/app'
+    ports:
+      - 5002:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@posts-db:5432/posts_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@posts-db:5432/posts_test
+    depends_on:
+      - posts-db
+
+  posts-db:
+    build:
+      context: ./services/post/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5436:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

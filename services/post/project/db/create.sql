@@ -1,0 +1,2 @@
+CREATE DATABASE posts_dev;
+CREATE DATABASE posts_test;
