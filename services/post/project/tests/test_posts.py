@@ -110,6 +110,13 @@ class TestPostService(BaseTestCase):
                 self.assertEqual(user_id, received_posts[index]['creator'])
                 self.assertEqual(post, received_posts[index]['content'])
 
+            # Check if no posts are returned for a user who hasn't posted yet
+            response = self.client.get(f'/posts/user/999')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            received_posts = data['data']['posts']
+            self.assertEqual(0, len(received_posts))
+
     # TODO: create tests for adding Tags to a post
 
 

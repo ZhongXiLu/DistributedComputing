@@ -65,21 +65,14 @@ def get_post(post_id):
 @post_blueprint.route('/user/<user_id>', methods=['GET'])
 def get_post_of_user(user_id):
     """Get all the posts from a user"""
-    response_object = {
-        'status': 'fail',
-        'message': 'User did not post anything yet'
-    }
     try:
         posts = Post.query.filter_by(creator=int(user_id))
-        if not posts:
-            return jsonify(response_object), 404
-        else:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'posts': [post.to_json() for post in posts]
-                }
+        response_object = {
+            'status': 'success',
+            'data': {
+                'posts': [post.to_json() for post in posts]
             }
-            return jsonify(response_object), 200
+        }
+        return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404

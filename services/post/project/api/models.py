@@ -9,7 +9,7 @@ class Post(db.Model):
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    creator = db.Column(db.Integer, nullable=False)     # user_id
+    creator = db.Column(db.Integer, nullable=False)     # TODO: make this foreign key? (users.id)
     content = db.Column(db.String(4096), nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 

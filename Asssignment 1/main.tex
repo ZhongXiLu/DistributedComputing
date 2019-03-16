@@ -319,24 +319,20 @@ This section will go more into these microservices by precisely defining their R
     \end{description}
     \begin{description}
         \item[]
-        \item[In:] POST likes (post\_id, user\_id(s))
+        \item[In:] POST likes (post\_id, user\_id)
         \item[Out:] /
         \item[Logic:] User likes a specific post
         \item[]
-        
-        \item[In:] GET likes/like\_id
-        \item[Out:] Like (like\_id, post\_id, user\_id)
-        \item[Logic:] Get a specific like
-        \item[]
 
-        \item[In:] DELETE likes/like\_id
+        \item[In:] GET likes/posts/post\_id
+        \item[Out:] Likes (post\_id, user\_id)
+        \item[Logic:] Get all the likes of a post
+        \item[]
+        
+        \item[In:] DELETE likes/posts/post\_id (user\_id)
         \item[Out:] /
         \item[Logic:] Undo a like
         \item[]
-
-        \item[In:] GET likes/posts/post\_id
-        \item[Out:] Likes (like\_id, post\_id, user\_id)
-        \item[Logic:] Get all the likes of a post
     \end{description}
 \end{description}
 
@@ -348,18 +344,13 @@ This section will go more into these microservices by precisely defining their R
     \end{description}
     \begin{description}
         \item[]
-        \item[In:] POST tags (post\_id, user\_id(s))
+        \item[In:] POST tags (post\_id, user\_id's)
         \item[Out:] /
-        \item[Logic:] Create a user tag on a specific post
-        \item[]
-        
-        \item[In:] GET tags/tag\_id
-        \item[Out:] tag (tag\_id, post\_id, user\_id)
-        \item[Logic:] Get a specific tag
+        \item[Logic:] Create user tags on a specific post
         \item[]
 
         \item[In:] GET tags/posts/post\_id
-        \item[Out:] Tags (tag\_id, post\_id, user\_id)
+        \item[Out:] Tags (post\_id, user\_id)
         \item[Logic:] Get all the tags on a post
         \item[]
     \end{description}
