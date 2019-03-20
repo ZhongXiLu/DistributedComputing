@@ -140,6 +140,15 @@ class TestUserService(BaseTestCase):
             self.assertIn('fletcher@notreal.com', data['data']['users'][1]['email'])
             self.assertIn('success', data['status'])
 
+    def test_all_users_empty(self):
+        """Ensure get all users behaves correctly when there are no users."""
+        with self.client:
+            response = self.client.get('/users')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(data['data']['users']), 0)
+            self.assertIn('success', data['status'])
+
 
 if __name__ == '__main__':
     unittest.main()
