@@ -13,17 +13,43 @@ services:
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
-      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev  # new
-      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test  # new
-    depends_on:  # new
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
+    depends_on:
       - users-db
 
-  users-db:  # new
+  users-db:
     build:
       context: ./services/users/project/db
       dockerfile: Dockerfile
     ports:
       - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  authentication:
+    build:
+      context: ./services/authentication
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/authentication:/usr/src/app'
+    ports:
+      - 5004:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
+    depends_on:
+      - users-db
+
+  authentication-db:
+    build:
+      context: ./services/authentication/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5438:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
