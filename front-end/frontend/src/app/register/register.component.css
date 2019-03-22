@@ -1,0 +1,9 @@
+.register{
+    height: 100vh;
+    background-image: url("/assets/register.jpg");
+    background-size: cover;
+}
+.register-row{
+    width: 80%;
+    margin: 0 auto;
+}
