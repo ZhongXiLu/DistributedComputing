@@ -1,3 +1,5 @@
+import unicodedata
+
 from passlib.apps import custom_app_context as pwd_context
 from random import SystemRandom
 
@@ -9,7 +11,7 @@ class Password(db.Model):
 
     user_id = db.Column(db.Integer, primary_key=True)
     password_hash = db.Column(db.String(128), nullable=False)
-    salt = db.Column(db.String(128), nullable=False)
+    salt = db.Column(db.String(64), nullable=False)
     auth_allowed = db.Column(db.Boolean(), default=True, nullable=False)
 
     def __init__(self, user_id, password):
@@ -22,7 +24,9 @@ class Password(db.Model):
         # Python chr(i) supports input from 0 to 1114111, so at least 6 digits/char allowed
         for i in range(0, len(random_val), 6):
             char_nr = int("".join(random_val[i + k] for k in range(6) if i + k < len(random_val)))
-            random_str += chr(char_nr)
+            char = chr(char_nr + 32)
+            if unicodedata.category(char) not in 'cC':  # not a control character
+                random_str += char
         self.salt = random_str
         self.password_hash = pwd_context.hash(self.salt + password)
 
