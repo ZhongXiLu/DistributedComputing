@@ -15,7 +15,7 @@ class Password(db.Model):
     auth_allowed = db.Column(db.Boolean(), default=True, nullable=False)
 
     def __init__(self, user_id, password):
-        self.password_hash = user_id
+        self.user_id = user_id
         self.set_password(password)
 
     def set_password(self, password):

@@ -60,7 +60,8 @@ class TestUserService(BaseTestCase):
         invalid_jsons = [
             {'password': '7kbe9d'},  # user_id must not be None
             {'user_id': 0},  # password must not be None
-            {'user_id': '0', 'password': '6bjvpe'},  # user_id must be integer
+            {'user_id': 0.0, 'password': '6bjvpe'},  # user_id must be integer
+            {'user_id': '0.0', 'password': '6bjvpe'},  # user_id must be integer
         ]
         for invalid_json in invalid_jsons:
             response = self.client.post(
