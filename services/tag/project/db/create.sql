@@ -1,0 +1,2 @@
+CREATE DATABASE tags_dev;
+CREATE DATABASE tags_test;
