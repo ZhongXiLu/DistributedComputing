@@ -2,6 +2,7 @@
 
 import json
 import unittest
+import requests
 
 from project import db
 from project.api.models import Post
@@ -25,10 +26,10 @@ class TestPostService(BaseTestCase):
                 '/posts',
                 data=json.dumps({
                     'creator': '0',
-                    'content': 'Hello World!',
-                    'tags': ['0', '1', '2']
+                    'content': 'Hello World!'
+                    # 'tags': ['0', '1', '2']
                 }),
-                content_type='application/json',
+                content_type='application/json'
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
@@ -109,8 +110,48 @@ class TestPostService(BaseTestCase):
             received_posts = data['data']['posts']
             self.assertEqual(0, len(received_posts))
 
+    def test_delete_post(self):
+        """Ensure a post can get deleted"""
+        postToBeDeleted = add_post(0, 'Post to be deleted')
+
+        with self.client:
+            # Check if message got added
+            response = self.client.get(f'/posts/{postToBeDeleted.id}')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(data['data']['id'], postToBeDeleted.id)
+
+            # Delete message
+            response = self.client.delete(f'/posts/{postToBeDeleted.id}')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('success', data['status'])
+
+            # Check if message got deleted
+            response = self.client.get(f'/posts/{postToBeDeleted.id}')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 404)
+            self.assertIn('Post does not exist', data['message'])
+            self.assertIn('fail', data['status'])
+
     # def test_add_tags_to_post(self):
     #     """Ensure all the tags are correctly added to a post"""
+    #     with self.client:
+    #         response = self.client.post(
+    #             '/posts',
+    #             data=json.dumps({
+    #                 'creator': '0',
+    #                 'content': 'Hello World!',
+    #                 'tags': ['1', '2', '3']
+    #             }),
+    #             content_type='application/json',
+    #         )
+    #         data = json.loads(response.data.decode())
+    #         self.assertEqual(response.status_code, 201)
+    #         self.assertIn('success', data['status'])
+    #
+    #         response = requests.get('http://tag:5000/tags/posts/0')
+    #         self.assertEqual(response.status_code, 200)
 
 
 if __name__ == '__main__':
