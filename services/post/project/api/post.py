@@ -98,7 +98,7 @@ def delete_post(post_id):
             db.session.delete(post)
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = 'post was successfully created'
+            response_object['message'] = 'post was successfully deleted'
             return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404

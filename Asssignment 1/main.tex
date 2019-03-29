@@ -179,7 +179,7 @@ This section will go more into these microservices by precisely defining their R
         \item[Logic:] Increment view count of advertisement
         \item[]
         
-        \item[In:] GET ads (may be used for administrator view)
+		\item[In:] GET ads (may be used for administrator view)
         \item[Out:] List of all advertisements (target user class(es), contents)
     \end{description}
 \end{description}
@@ -196,10 +196,10 @@ This section will go more into these microservices by precisely defining their R
         \item[Out:] /
         \item[Logic:] Words from wordlist get merged with existing words in DB
         \item[]
-        
+
         \item[In:] POST containsbadwords (sentence)
         \item[Out:] True if the provided sentence contains one or more bad words, false otherwise
-        \item[Logic:] 
+        \item[Logic:]
     \end{description}
 \end{description}
 
@@ -246,7 +246,7 @@ This section will go more into these microservices by precisely defining their R
     \begin{description}
         \item[]
         \item[Dependencies:] /
-    \end{description} 
+    \end{description}
     \begin{description}
         \item[]
         \item[In:] POST friends (user\_id, other\_user\_id)
@@ -274,7 +274,7 @@ This section will go more into these microservices by precisely defining their R
 \end{description}
 
 \begin{description}
-    \item [Newsfeed service:] 
+    \item [Newsfeed service:]
     \begin{description}
         \item[]
         \item[Dependencies:] Follow, Post service
@@ -308,6 +308,11 @@ This section will go more into these microservices by precisely defining their R
         \item[In:] GET posts/post\_id
         \item[Out:] Post (post\_id, creator, timestamp, content)
         \item[Logic:] Get a specific post
+        \item[]
+
+        \item[In:] DELETE posts/post\_id
+        \item[Out:] /
+        \item[Logic:] Delete a specific post
     \end{description}
 \end{description}
 

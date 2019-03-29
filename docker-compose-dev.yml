@@ -126,3 +126,33 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - mynetwork
+
+  like:
+    build:
+      context: ./services/like
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/like:/usr/src/app'
+    ports:
+      - 5005:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@likes-db:5432/likes_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@likes-db:5432/likes_test
+    depends_on:
+      - likes-db
+    networks:
+      - mynetwork
+
+  likes-db:
+    build:
+      context: ./services/like/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5439:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork

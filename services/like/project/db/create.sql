@@ -1,0 +1,2 @@
+CREATE DATABASE likes_dev;
+CREATE DATABASE likes_test;

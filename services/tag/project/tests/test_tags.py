@@ -9,10 +9,10 @@ from project.tests.base import BaseTestCase
 
 
 def add_tag(post_id, user_id):
-    post = Tag(post_id=post_id, user_id=user_id)
-    db.session.add(post)
+    tag = Tag(post_id=post_id, user_id=user_id)
+    db.session.add(tag)
     db.session.commit()
-    return post
+    return tag
 
 
 class TestTagService(BaseTestCase):
