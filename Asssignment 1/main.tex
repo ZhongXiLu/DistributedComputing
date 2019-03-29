@@ -333,7 +333,7 @@ This section will go more into these microservices by precisely defining their R
         \item[Out:] Likes (post\_id, user\_id)
         \item[Logic:] Get all the likes of a post
         \item[]
-        
+
         \item[In:] DELETE likes/posts/post\_id (user\_id)
         \item[Out:] /
         \item[Logic:] Undo a like
@@ -373,7 +373,7 @@ This section will go more into these microservices by precisely defining their R
         \item[Out:] /
         \item[Logic:] Create a comment on a specific post
         \item[]
-        
+
         \item[In:] GET comments/comment\_id
         \item[Out:] Comment (comment\_id, creator, timestamp, content)
         \item[Logic:] Get a specific comment
@@ -382,6 +382,11 @@ This section will go more into these microservices by precisely defining their R
         \item[In:] GET comments/posts/post\_id
         \item[Out:] Comments (comment\_id, creator, timestamp, content)
         \item[Logic:] Get all the comments on a post
+        \item[]
+
+        \item[In:] DELETE comments/comment\_id
+        \item[Out:] /
+        \item[Logic:] Delete a comment
         \item[]
     \end{description}
 \end{description}

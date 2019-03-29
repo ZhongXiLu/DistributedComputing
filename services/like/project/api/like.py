@@ -75,13 +75,12 @@ def get_likes_of_post(post_id):
     """Get all the likes on a post"""
     try:
         likes = Like.query.filter_by(post_id=int(post_id))
-        if likes:
-            response_object = {
-                'status': 'success',
-                'data': {
-                    'likes': [like.to_json() for like in likes]
-                }
+        response_object = {
+            'status': 'success',
+            'data': {
+                'likes': [like.to_json() for like in likes]
             }
-            return jsonify(response_object), 200
+        }
+        return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
