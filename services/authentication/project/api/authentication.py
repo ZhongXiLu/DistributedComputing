@@ -28,11 +28,11 @@ def add_password():
     if not post_data:
         return jsonify(response_object), 400
     user_id = post_data.get('user_id')
-    # print("--\tuser id: ", user_id)
     password = post_data.get('password')
-    # print("--\tpassword: ", password)
 
-    if not isinstance(user_id, numbers.Integral):
+    try:
+        user_id = int(str(user_id))
+    except (ValueError, TypeError):
         return jsonify(response_object), 400
     if password is None:
         return jsonify(response_object), 400
@@ -45,7 +45,7 @@ def add_password():
             response_object['status'] = 'success'
             response_object['message'] = f'{user_id}\'s password was added!'
 
-            pw1 = Password.query.filter_by(user_id=user_id).first()
+            # pw1 = Password.query.filter_by(user_id=user_id).first()
             # print(pw1.to_json())
 
             return jsonify(response_object), 201

@@ -1,6 +1,6 @@
 # services/users/project/api/users.py
 
-
+import requests
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 
@@ -16,6 +16,12 @@ def ping_pong():
         'status': 'success',
         'message': 'pong!'
     })
+
+
+@users_blueprint.route('/users/ping2', methods=['GET'])
+def ping2():
+    ret = requests.get('http://authentication:5000/authentication/ping')
+    return jsonify(ret.json())
 
 
 @users_blueprint.route('/users', methods=['POST'])
