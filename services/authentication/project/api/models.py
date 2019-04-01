@@ -1,9 +1,13 @@
 import unicodedata
 
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 from passlib.apps import custom_app_context as pwd_context
 from random import SystemRandom
 
-from project import db
+from project import create_app, db
+
+app = create_app()
 
 
 class Password(db.Model):
@@ -33,6 +37,22 @@ class Password(db.Model):
 
     def verify_password(self, password):
         return pwd_context.verify(self.salt + password, self.password_hash)
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'user_id', self.user_id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # Expired valid token
+        except BadSignature:
+            return None  # Invalid token
+        user_id = data['id']
+        return user_id
 
     def to_json(self):
         return {

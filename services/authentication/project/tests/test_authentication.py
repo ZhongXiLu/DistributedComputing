@@ -99,6 +99,15 @@ class TestUserService(BaseTestCase):
             self.assertIn(f'User 0 already exists.', data['message'])
             self.assertIn('fail', data['status'])
 
+    def test_validate_password(self):
+        """Ensure right response when providing a correct password"""
+        with self.client:
+            add_password(0, "asdf")
+
+            response = self.client.post(
+                '/authentication/verify_password'
+            )
+
     '''
     def test_single_user(self):
         """Ensure get single user behaves correctly."""
