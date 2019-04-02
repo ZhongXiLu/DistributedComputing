@@ -6,8 +6,48 @@ from sqlalchemy import exc
 
 from project.api.models import Password
 from project import db
+from flask_httpauth import HTTPBasicAuth
+
+auth = HTTPBasicAuth()
 
 authentication_blueprint = Blueprint('authentication', __name__)
+
+"""
+Tutorial: https://blog.miguelgrinberg.com/post/restful-authentication-with-flask
+
+Add password:
+[POST]: /passwords
+user_id  # type: int
+password  # type: string
+Returns: user_id
+
+Update password 
+[PUT]: /passwords
+(login_required)
+password  # type: string
+Returns: user_id
+
+Delete password 
+[DELETE]: /passwords
+(login_required)
+Returns: user_id
+
+
+Verify user_id + password
+[POST]: /verify_credentials
+user_id  # type: int
+password  # type: string
+Returns: user_id + (True | False)
+
+Get token
+[GET]: /token
+(login_required)
+Returns: user_id
+
+Authenticate
+
+"""
+
 
 
 @authentication_blueprint.route('/authentication/ping', methods=['GET'])
@@ -55,6 +95,28 @@ def add_password():
     except exc.IntegrityError:
         db.session.rollback()
         return jsonify(response_object), 400
+
+
+@authentication_blueprint.route('/authentication/ping2', methods=['GET'])
+@auth.login_required
+def ping_pong_login_required():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })
+
+@auth.verify_password
+def verify_password(user_id, password):
+    # pw = Password.verify_auth_token(user_id)
+    pw = Password.query.filter_by(user_id=int(user_id)).first()
+    if not pw or not pw.verify_password(password):
+        return False
+    return True
+
+
+@authentication_blueprint.route('/authentication/verify_password')
+def verify_password_rest(user_id, password):
+    pass
 
 
 '''@authentication_blueprint.route('/users/<user_id>', methods=['GET'])

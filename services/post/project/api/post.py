@@ -1,5 +1,7 @@
 
 
+import requests
+import json
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 
@@ -7,6 +9,14 @@ from project.api.models import Post
 from project import db
 
 post_blueprint = Blueprint('post', __name__, url_prefix='/posts')
+
+
+@post_blueprint.route('/ping', methods=['GET'])
+def ping_pong():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })
 
 
 @post_blueprint.route('', methods=['POST'])
@@ -25,13 +35,24 @@ def create_post():
     tags = post_data.get('tags')
 
     try:
-        db.session.add(Post(creator=creator, content=content))
+        post = Post(creator=creator, content=content)
+        db.session.add(post)
         db.session.commit()
-        # TODO: Add tags to post by calling the Tag service
+        if tags:
+            headers = {'content-type': 'application/json'}
+            data = {
+                'post_id': post.id,
+                'user_ids': tags
+            }
+            response = requests.post('http://tag:5000/tags', data=json.dumps(data), headers=headers)
+            if response.status_code != 201:
+                raise Exception("Failed adding tags to post")
+
         response_object['status'] = 'success'
+        response_object['message'] = 'post was successfully created'
         return jsonify(response_object), 201
 
-    except exc.IntegrityError:
+    except:
         db.session.rollback()
         return jsonify(response_object), 400
 
@@ -57,6 +78,27 @@ def get_post(post_id):
                     'created_date': post.created_date
                 }
             }
+            return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+
+
+@post_blueprint.route('/<post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    """Delete a specific post"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Post does not exist'
+    }
+    try:
+        post = Post.query.filter_by(id=int(post_id)).first()
+        if not post:
+            return jsonify(response_object), 404
+        else:
+            db.session.delete(post)
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = 'post was successfully deleted'
             return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404

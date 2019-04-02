@@ -81,6 +81,9 @@ services:
       - DATABASE_TEST_URL=postgres://postgres:postgres@posts-db:5432/posts_test
     depends_on:
       - posts-db
+      - tag
+    networks:
+      - mynetwork
 
   posts-db:
     build:
@@ -91,3 +94,95 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
+
+  tag:
+    build:
+      context: ./services/tag
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/tag:/usr/src/app'
+    ports:
+      - 5003:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@tags-db:5432/tags_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@tags-db:5432/tags_test
+    depends_on:
+      - tags-db
+    networks:
+      - mynetwork
+
+  tags-db:
+    build:
+      context: ./services/tag/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5437:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
+
+  like:
+    build:
+      context: ./services/like
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/like:/usr/src/app'
+    ports:
+      - 5005:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@likes-db:5432/likes_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@likes-db:5432/likes_test
+    depends_on:
+      - likes-db
+    networks:
+      - mynetwork
+
+  likes-db:
+    build:
+      context: ./services/like/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5439:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
+
+  comment:
+    build:
+      context: ./services/comment
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/comment:/usr/src/app'
+    ports:
+      - 5006:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@comments-db:5432/comments_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@comments-db:5432/comments_test
+    depends_on:
+      - comments-db
+    networks:
+      - mynetwork
+
+  comments-db:
+    build:
+      context: ./services/comment/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5440:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
