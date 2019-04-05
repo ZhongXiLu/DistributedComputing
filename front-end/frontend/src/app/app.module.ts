@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     LoginComponent,
     HomeComponent,
     ProfileComponent,
-    NavbarComponent
+    NavbarComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
