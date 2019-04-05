@@ -6,6 +6,19 @@ networks:
 
 services:
 
+  frontend:
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/frontend:/usr/src/app'
+    ports:
+      - 4200:4200
+    depends_on:
+      - users
+    networks:
+      - mynetwork
+
   users:
     build:
       context: ./services/users

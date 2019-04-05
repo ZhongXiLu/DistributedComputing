@@ -1,0 +1,18 @@
+FROM node:10-alpine
+
+RUN apk update && \
+    apk add --no-cache bash && \
+    apk add nodejs && \
+    apk add npm
+
+WORKDIR /usr/src/app
+
+RUN npm install -g @angular/cli && \
+    npm install
+
+COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+COPY . /usr/src/app
+
+CMD ["/usr/src/app/entrypoint.sh"]

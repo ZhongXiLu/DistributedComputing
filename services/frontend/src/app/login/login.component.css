@@ -1,0 +1,9 @@
+.login{
+    height: 100vh;
+    background-image: url("/assets/register.jpg");
+    background-size: cover;
+}
+.login-row{
+    width: 80%;
+    margin: 0 auto;
+}
