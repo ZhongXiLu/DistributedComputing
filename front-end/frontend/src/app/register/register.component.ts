@@ -20,9 +20,14 @@ export class RegisterComponent implements OnInit {
     event.preventDefault();
     const password = (<HTMLInputElement>document.getElementById("inputPassword")).value;
     const username = (<HTMLInputElement>document.getElementById("inputUsername")).value;
+    var admin = "";
+    if (username === "thomas"){
+      admin = "1";
+    }
     this.http.post('http://127.0.0.1:5000/api/users/register', {
       username: username,
-      password: password
+      password: password,
+      admin  : admin
     }).subscribe(
       res => {
         console.log(res);

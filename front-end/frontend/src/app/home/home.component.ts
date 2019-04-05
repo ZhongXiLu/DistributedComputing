@@ -8,6 +8,7 @@ import { TokenService } from '../login/token.service';
 })
 export class HomeComponent implements OnInit {
   welcome = ""
+  public responseHolder : any
   constructor(private http: HttpClient, private tokens: TokenService) {
     const token = tokens.token;
     const headers = new HttpHeaders({
@@ -16,14 +17,15 @@ export class HomeComponent implements OnInit {
     this.http.post(
       "http://127.0.0.1:5000/api/users/authentication",
       {
-        username: "angela",
+        username: localStorage.getItem('username'),
         token: token,
       }
       
    ).subscribe(
     res => {
       console.log(res);
-      this.welcome = res.data
+      this.responseHolder = res
+      this.welcome = this.responseHolder.data
     },
     err => {
       console.log("Error occured");

@@ -11,6 +11,7 @@ import { tokenKey } from '@angular/core/src/view';
 })
 export class LoginComponent implements OnInit {
   public token
+  public responseHolder :any
   constructor(private http: HttpClient, private router:Router, private tokens: TokenService){
     
   } 
@@ -28,9 +29,18 @@ export class LoginComponent implements OnInit {
     }).subscribe(
       res => {
         this.token = res;
-        console.log(res.response);
-        this.tokens.token = res.response
-        this.router.navigate(['/']);
+        this.responseHolder = res
+        console.log(this.responseHolder.response);
+        this.tokens.token = this.responseHolder.response
+        localStorage.setItem('username', username);
+        if (this.responseHolder.admin==""){
+          this.router.navigate(['/']);
+        }
+        else
+        {
+          this.router.navigate(['/admin']);
+        }
+        
       },
       err => {
         console.log("Error occured");
