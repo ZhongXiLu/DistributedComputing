@@ -5,9 +5,14 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 from passlib.apps import custom_app_context as pwd_context
 from random import SystemRandom
 
-from project import create_app, db
+from project import db
 
-app = create_app()
+
+def get_app():  # Avoid circular dependency
+    if not hasattr(get_app, "app"):
+        from project import create_app
+        get_app.app = create_app()
+    return get_app.app
 
 
 class Password(db.Model):
@@ -39,19 +44,20 @@ class Password(db.Model):
         return pwd_context.verify(self.salt + password, self.password_hash)
 
     def generate_auth_token(self, expiration=600):
-        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
-        return s.dumps({'user_id', self.user_id})
+        s = Serializer(get_app().config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'user_id': self.user_id})
 
     @staticmethod
     def verify_auth_token(token):
-        s = Serializer(app.config)
+        s = Serializer(get_app().config['SECRET_KEY'])
         try:
+
             data = s.loads(token)
         except SignatureExpired:
             return None  # Expired valid token
         except BadSignature:
             return None  # Invalid token
-        user_id = data['id']
+        user_id = Password.query.get(data['user_id'])
         return user_id
 
     def to_json(self):
