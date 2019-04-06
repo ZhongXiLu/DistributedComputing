@@ -18,7 +18,7 @@ class TestUserService(BaseTestCase):
 
     def test_users(self):
         """Ensure the /ping route behaves correctly."""
-        response = self.client.get('/authentication/ping')
+        response = self.client.get('/ping')
         data = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertIn('pong!', data['message'])
@@ -28,7 +28,7 @@ class TestUserService(BaseTestCase):
         """Ensure a new password can be added to the database."""
         with self.client:
             response = self.client.post(
-                '/authentication',
+                '/passwords',
                 data=json.dumps({
                     'user_id': 0,
                     'password': 'correct horse battery staple'
@@ -44,7 +44,7 @@ class TestUserService(BaseTestCase):
         """Ensure error is thrown if the JSON object is empty."""
         with self.client:
             response = self.client.post(
-                '/authentication',
+                '/passwords',
                 data=json.dumps({}),
                 content_type='application/json',
             )
@@ -65,7 +65,7 @@ class TestUserService(BaseTestCase):
         ]
         for invalid_json in invalid_jsons:
             response = self.client.post(
-                '/authentication',
+                '/passwords',
                 data=json.dumps(invalid_json),
                 content_type='application/json'
             )
@@ -79,7 +79,7 @@ class TestUserService(BaseTestCase):
         with self.client:
             # add_password(0, 'ozlq6qwm')
             self.client.post(
-                '/authentication',
+                '/passwords',
                 data=json.dumps({
                     'user_id': 0,
                     'password': 'ozlq6qwm'
@@ -87,7 +87,7 @@ class TestUserService(BaseTestCase):
                 content_type='application/json',
             )
             response = self.client.post(
-                '/authentication',
+                '/passwords',
                 data=json.dumps({
                     'user_id': 0,
                     'password': 'ozlq6qwm_2'
@@ -100,13 +100,16 @@ class TestUserService(BaseTestCase):
             self.assertIn('fail', data['status'])
 
     def test_validate_password(self):
-        """Ensure right response when providing a correct password"""
+        """Ensure right response when providing no password"""
         with self.client:
             add_password(0, "asdf")
 
-            response = self.client.post(
-                '/authentication/verify_password'
+            response = self.client.get(
+                '/verify_credentials'
             )
+            self.assert401(response)
+
+            # self.client.get()
 
     '''
     def test_single_user(self):

@@ -1,18 +1,30 @@
 FROM node:10-alpine
 
-RUN apk update && \
-    apk add --no-cache bash && \
-    apk add nodejs && \
-    apk add npm
+#RUN apk update && apk add disown
 
 WORKDIR /usr/src/app
 
-RUN npm install -g @angular/cli && \
-    npm install
-
-COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
-RUN chmod +x /usr/src/app/entrypoint.sh
-
 COPY . /usr/src/app
 
+RUN cd /usr/src/app && npm install && npm install --save-dev @angular-devkit/build-angular && npm install -g @angular/cli
+#CMD ["nohup","ng","serve","--host","0.0.0.0","&"]
 CMD ["/usr/src/app/entrypoint.sh"]
+
+
+#RUN apk update && \
+#    apk add --no-cache bash && \
+#    apk add nodejs && \
+#    apk add npm
+
+#WORKDIR /usr/src/app
+
+
+#RUN npm install && npm install -g @angular/cli #&& \
+    #npm install --save-dev @angular-devkit/build-angular \
+    #npm install
+
+#COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+#RUN chmod +x /usr/src/app/entrypoint.sh
+
+
+#CMD ["/usr/src/app/entrypoint.sh"]
