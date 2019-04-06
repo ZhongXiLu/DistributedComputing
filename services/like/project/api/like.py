@@ -85,6 +85,10 @@ def delete_like(post_id):
 @like_blueprint.route('/posts/<post_id>', methods=['GET'])
 def get_likes_of_post(post_id):
     """Get all the likes on a post"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Like does not exist'
+    }
     try:
         likes = Like.query.filter_by(post_id=int(post_id))
         response_object = {

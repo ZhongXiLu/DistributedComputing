@@ -110,6 +110,23 @@ services:
     networks:
       - mynetwork
 
+  newsfeed:
+    build:
+      context: ./services/newsfeed
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/newsfeed:/usr/src/app'
+    ports:
+      - 5007:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+    depends_on:
+      #- follow
+      - post
+    networks:
+      - mynetwork
+
   tag:
     build:
       context: ./services/tag

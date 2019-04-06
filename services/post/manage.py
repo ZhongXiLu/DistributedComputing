@@ -27,12 +27,14 @@ def test():
     return 1
 
 
-# @cli.command('seed_db')
-# def seed_db():
-#     """Seeds the database."""
-#     db.session.add(User(username='michael', email="hermanmu@gmail.com"))
-#     db.session.add(User(username='michaelherman', email="michael@mherman.org"))
-#     db.session.commit()
+@cli.command('seed_db')
+def seed_db():
+    """Seeds the database."""
+    # db.session.add(Post(creator='0', content='Hello World!'))
+    # db.session.add(Post(creator='0', content='Hello World again!'))
+    # db.session.add(Post(creator='1', content='Some other post'))
+    # db.session.add(Post(creator='69', content='Yet another another post :)'))
+    db.session.commit()
 
 
 if __name__ == '__main__':

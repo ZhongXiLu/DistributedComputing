@@ -108,6 +108,10 @@ def delete_comment(comment_id):
 @comment_blueprint.route('/posts/<post_id>', methods=['GET'])
 def get_comments_of_post(post_id):
     """Get all the comments on a post"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Comment does not exist'
+    }
     try:
         comments = Comment.query.filter_by(post_id=int(post_id))
         response_object = {

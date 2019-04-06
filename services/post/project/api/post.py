@@ -119,6 +119,10 @@ def delete_post(post_id):
 @post_blueprint.route('/user/<user_id>', methods=['GET'])
 def get_post_of_user(user_id):
     """Get all the posts from a user"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Post does not exist'
+    }
     try:
         posts = Post.query.filter_by(creator=int(user_id))
         response_object = {
