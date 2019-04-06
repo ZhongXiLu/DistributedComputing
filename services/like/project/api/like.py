@@ -9,9 +9,10 @@ from project import db
 import requests
 from flask_httpauth import HTTPBasicAuth
 
-auth = HTTPBasicAuth
+auth = HTTPBasicAuth()
 
 like_blueprint = Blueprint('like', __name__, url_prefix='/likes')
+
 
 @auth.verify_password
 def verify_password(user_id_or_token, password):
