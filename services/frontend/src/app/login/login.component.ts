@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { TokenService } from './token.service';
 import { tokenKey } from '@angular/core/src/view';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
     event.preventDefault();
     const password = (<HTMLInputElement>document.getElementById("inputPassword")).value;
     const username = (<HTMLInputElement>document.getElementById("inputUsername")).value;
-    this.http.post('http://127.0.0.1:5000/api/users/token', {
+    // TODO: check url for login
+    this.http.post(environment.userServiceUrl + '/verify_credentials', {
       username: username,
       password: password
     }).subscribe(
