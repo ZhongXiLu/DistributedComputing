@@ -1,6 +1,6 @@
 .login{
     height: 100vh;
-    background-image: url("/assets/register.jpg");
+    background-image: url("/assets/background.jpg");
     background-size: cover;
 }
 .login-row{
