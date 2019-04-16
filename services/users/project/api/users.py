@@ -1,6 +1,7 @@
 # services/users/project/api/users.py
 
 import requests
+from requests.exceptions import RequestException, HTTPError
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 
@@ -23,6 +24,18 @@ def verify_password(user_id_or_token, password):
     return True
 
 
+def send_request(method: str, service: str, route: str, **kwargs):
+    func = getattr(requests, method.lower())
+    try:
+        response = func(f'http://{service}:5000/{route}', **kwargs)
+        response_object = response.json()
+        response_code = response.status_code
+    except RequestException as e:
+        response_object = {'status': 'fail', 'message': f'{service} service down.', 'error_type': e.__class__.__name__}
+        response_code = 503
+    return response_object, response_code
+
+
 @users_blueprint.route('/users/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
@@ -33,8 +46,21 @@ def ping_pong():
 
 @users_blueprint.route('/users/ping2', methods=['GET'])
 def ping2():
-    ret = requests.get('http://authentication:5000/authentication/ping')
-    return jsonify(ret.json())
+    try:
+        ret = requests.get('http://authentication:5000/ping', timeout=0.05)
+        ret = ret.json()
+    except (ConnectionError, RequestException, TimeoutError):
+        ret = {'status': 'fail', 'message': 'authentication service down'}
+
+    except RequestException as e:
+        ret = {'status': 'fail', 'message': f'{e}'}
+    return jsonify(ret)
+
+
+@users_blueprint.route('/users/ping3', methods=['GET'])
+def ping3():
+    ret, code = send_request('get', 'authentication', 'ping', timeout=0.05)
+    return jsonify(ret), code
 
 
 @users_blueprint.route('/users', methods=['POST'])
@@ -47,21 +73,38 @@ def add_user():
     if not post_data:
         return jsonify(response_object), 400
     username = post_data.get('username')
+    password = post_data.get('password')
     email = post_data.get('email')
     try:
         user = User.query.filter_by(email=email).first()
         if not user:
-            db.session.add(User(username=username, email=email))
+            user = User(username=username, email=email)
+            db.session.add(user)
+            db.session.flush()
+            db.session.refresh(user)
+
+            ret, status_code = send_request(
+                'post', 'authentication', 'passwords', timeout=1.5, json={'user_id': user.id, 'password': password})
+            if status_code == 503:
+                response_object = ret
+                raise RequestException()
+            elif status_code != 201:
+                raise RequestException()
+
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'{email} was added!'
+            response_object['user_id'] = user.id
             return jsonify(response_object), 201
         else:
             response_object['message'] = 'Sorry. That email already exists.'
             return jsonify(response_object), 400
-    except exc.IntegrityError:
+    except (exc.IntegrityError, RequestException) as e:
         db.session.rollback()
-        return jsonify(response_object), 400
+        if isinstance(e, RequestException):
+            return jsonify(response_object), 503
+        else:
+            return jsonify(response_object), 400
 
 
 @users_blueprint.route('/users/<user_id>', methods=['GET'])
