@@ -68,7 +68,6 @@ def contains_bad_word():
     post_data = request.get_json()
     response_object = {
         'status': 'fail',
-        'message': 'Invalid payload.'
     }
     if not post_data:
         return jsonify(response_object), 400

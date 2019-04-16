@@ -47,11 +47,24 @@ def create_post():
     tags = post_data.get('tags')
 
     try:
+        # Check for bad words
+        headers = {'content-type': 'application/json'}
+        data = {
+            'sentence': str(content)
+        }
+        response = requests.post('http://anti-cyberbullying:5000/anti_cyberbullying/contains_bad_word', data=json.dumps(data), headers=headers)
+        result = json.loads(response.text)
+        if result['result']:    # contains bad word
+            response_object['message'] = f'Post contains bad word: {result["bad_word"]}'
+            return jsonify(response_object), 201
+
+        # Create post
         post = Post(creator=creator, content=content)
         db.session.add(post)
         db.session.commit()
+
         if tags:
-            headers = {'content-type': 'application/json'}
+            # Add user tags
             data = {
                 'post_id': post.id,
                 'user_ids': tags

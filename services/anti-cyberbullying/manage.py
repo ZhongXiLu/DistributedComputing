@@ -30,10 +30,9 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    # db.session.add(Post(creator='0', content='Hello World!'))
-    # db.session.add(Post(creator='0', content='Hello World again!'))
-    # db.session.add(Post(creator='1', content='Some other post'))
-    # db.session.add(Post(creator='69', content='Yet another another post :)'))
+    with open('swearWords.txt', 'r') as file:
+        for line in file:
+            db.session.add(BadWord(word=line.lower()))
     db.session.commit()
 
 

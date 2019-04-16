@@ -1,5 +1,6 @@
 
 
+import json
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 
@@ -46,6 +47,17 @@ def create_comment():
     content = post_data.get('content')
 
     try:
+        # Check for bad words
+        headers = {'content-type': 'application/json'}
+        data = {
+            'sentence': str(content)
+        }
+        response = requests.post('http://anti-cyberbullying:5000/anti_cyberbullying/contains_bad_word', data=json.dumps(data), headers=headers)
+        result = json.loads(response.text)
+        if result['result']:    # contains bad word
+            response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
+            return jsonify(response_object), 201
+
         db.session.add(Comment(post_id=post_id, creator=user_id, content=content))
         db.session.commit()
         response_object['status'] = 'success'
