@@ -221,3 +221,33 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - mynetwork
+
+  anti-cyberbullying:
+    build:
+      context: ./services/anti-cyberbullying
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/anti-cyberbullying:/usr/src/app'
+    ports:
+      - 5008:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@badwords-db:5432/badwords_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@badwords-db:5432/badwords_test
+    depends_on:
+      - badwords-db
+    networks:
+      - mynetwork
+
+  badwords-db:
+    build:
+      context: ./services/anti-cyberbullying/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5441:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
