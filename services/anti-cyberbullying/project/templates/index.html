@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anti-Cyberbullying Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+    <br><br>
+
+    <div class="container">
+        <h1>Anti-Cyberbullying Service</h1>
+
+        <br><br>
+
+        <h2>Add a new bad word</h2>
+
+        <form action="http://localhost:5008/anti_cyberbullying" method="POST">
+            <div class="form-group">
+                <label for="word">Bad word</label>
+                <input type="text" class="form-control" name="word" placeholder="Enter bad word (seperate with a space)">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <br><br>
+
+        <h2>All bad words</h2>
+
+        <ul class="list-group">
+            {% for word in words %}
+                <li class="list-group-item">{{ word['word'] }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>

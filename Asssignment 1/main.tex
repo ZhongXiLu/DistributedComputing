@@ -192,14 +192,24 @@ This section will go more into these microservices by precisely defining their R
     \end{description}
     \begin{description}
         \item[]
-        \item[In:] POST addwords (wordlist)
+        \item[In:] POST anti\_cyberbullying (words seperated with a space)
         \item[Out:] /
         \item[Logic:] Words from wordlist get merged with existing words in DB
         \item[]
 
-        \item[In:] POST containsbadwords (sentence)
+        \item[In:] GET anti\_cyberbullying
+        \item[Out:] /
+        \item[Logic:] Homepage for the anti\_cyberbullying service
+        \item[]
+
+        \item[In:] GET anti\_cyberbullying/bad\_words
+        \item[Out:] All the bad words
+        \item[Logic:] Get all the bad words from the database
+        \item[]
+
+        \item[In:] POST anti\_cyberbullying/contains\_bad\_word (sentence)
         \item[Out:] True if the provided sentence contains one or more bad words, false otherwise
-        \item[Logic:]
+        \item[Logic:] Check if there's a bad word in the sentence
     \end{description}
 \end{description}
 

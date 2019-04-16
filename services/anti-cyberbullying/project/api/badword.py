@@ -3,7 +3,7 @@
 import requests
 import json
 import re
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, render_template
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
 
@@ -32,25 +32,29 @@ def ping_pong():
     })
 
 
+@anti_cyberbullying_blueprint.route('', methods=['GET'])
+def index():
+    words = [word.to_json() for word in BadWord.query.all()]
+    return render_template("index.html", words=words)
+
+
 @anti_cyberbullying_blueprint.route('', methods=['POST'])
 def create_bad_word():
-    """Add new bad words"""
-    post_data = request.get_json()
+    """Add a new bad word"""
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
-    if not post_data:
-        return jsonify(response_object), 400
-
-    words = post_data.get('words')
 
     try:
+        words = str(request.form.get('word')).lower().split(' ')
         for word in words:
-            db.session.add(BadWord(word=re.sub(r'[\W_]+', '', word.lower())))
+            if BadWord.query.filter_by(word=word).count() == 0:
+                db.session.add(BadWord(word=re.sub(r'[\W_]+', '', word)))
+
         db.session.commit()
         response_object['status'] = 'success'
-        response_object['message'] = 'bad words were successfully created'
+        response_object['message'] = 'Bad words were successfully added'
         return jsonify(response_object), 201
 
     except:
@@ -92,7 +96,7 @@ def contains_bad_word():
 
 # TODO: request to remove bad word from database?
 
-@anti_cyberbullying_blueprint.route('', methods=['GET'])
+@anti_cyberbullying_blueprint.route('/bad_words', methods=['GET'])
 def get_bad_words():
     """Get all the bad words"""
     response_object = {
