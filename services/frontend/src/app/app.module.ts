@@ -11,6 +11,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AdminComponent } from './admin/admin.component';
+import { NewsfeedComponent } from './newsfeed/newsfeed.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { AdminComponent } from './admin/admin.component';
     HomeComponent,
     ProfileComponent,
     NavbarComponent,
-    AdminComponent
+    AdminComponent,
+    NewsfeedComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

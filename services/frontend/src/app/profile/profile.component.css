@@ -1,85 +1,73 @@
-
-
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-   body
-   {
-        background-image: url("/assets/nature.jpg");
-        overflow-x: hidden;
-
-   }
-   .nature{
-       padding: 0!important;
-       margin-top:-5rem;
-   }
-
-   .points{
-       background: white;
-        padding: 1rem;
-   }
-   .form-control{
-       width: 30%;
-       text-align: center;
-       margin-left: 35%;
-   }
-   button{
-    margin-top: 1rem;
-   }
-   .fb-profile img.fb-image-lg{
-       z-index: 0;
-       width: 100%;  
-       margin-bottom: 10px;
-   }
-   
-   .fb-image-profile
-   {
-       margin: -90px 10px 0px 50px;
-       z-index: 9;
-       width: 20%; 
-   }
-   
-   @media (max-width:768px)
-   {
-       
-   .fb-profile-text>h1{
-       font-weight: 700;
-       font-size:16px;
-   }
-   
-   .fb-image-profile
-   {
-       margin: -45px 10px 0px 25px;
-       z-index: 9;
-       width: 20%; 
-   }
-   }
-   .points{
-       text-align: center
-   }
-   button{
-    margin-right: 1rem;
-   }
-   .people img{
-       border-radius: 100%;
-       width: 100%;
-   }
-   .points .col-md-4{
-    padding: 0;
-    margin: 0;
+.profile-header{
+    text-align: center;
+    display: block;
 }
-.col-md-4 img{
-    width: 100%;
-}
-.card img{
-    width: 100%;
+.profile-header img{
+    width: 200px;
     height: 200px;
 }
-.card{
-    width: 100%!important;
+.profile-header button{
+    margin-right:.5rem;
+}
+.profile-header input{
+    width:30%;
+    margin: 0 auto;
+    margin-top:2rem;
+}
+.card a{
+    text-decoration: none;
+    font-size:11px;
+    color: #28a745;
 }
 .posts{
+    margin-top: 2rem;
+    padding: 1rem;
     background: #f4f4f4;
-    padding: 2rem;
+}
+.timestampComment{
+    font-size: 10px;
+}
+.separate{
+    width: 50%;
+}
+.card button{
+    margin-right: .1rem;
+    font-size: 9px;
+}
+.card button{
+    margin-right: .1rem;
+}
+.card input{
+    margin-top: .2rem;
+    padding: .1rem;
+}
+.search{
+    margin-top: .2rem;
+    padding: .5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+}
+.addContainer{
+    margin-top: 1rem;
+    text-align: center;
+    background: #f4f4f4;
+    margin-bottom: -2rem;
+}
+.add{
+    margin-top: 1rem;
+    border-radius: 100%;
+    background: #28a745;
+    color: white;
+    text-align: center;
+    border: 0;
+    padding: .6rem;
+    padding-right: .6rem;
+    padding-left: .6rem;
+    margin: 0 auto;
+    width: 4%;
+}
+.btn-danger{
+    margin-top: 1rem;
+    margin-left: 5rem;
 }
