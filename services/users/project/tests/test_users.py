@@ -19,6 +19,27 @@ def add_user(username, email):
 class TestUserService(BaseTestCase):
     """Tests for the Users Service."""
 
+    """
+    (temporary) 'manual' tests since dependence on authentication service:
+    Add user: expect 201
+        curl -i -X POST -H "Content-Type: application/json" -d '{"username":"test1","password":"pw1","email":"e1@mail.com"}' http://localhost:5001/users
+    Add user: expect 400
+        curl -i -X POST -H "Content-Type: application/json" -d '{"username":"test1","email":"e1@mail.com"}' http://localhost:5001/users
+    Add user when authentication service offline: expect 503
+        curl -i -X POST -H "Content-Type: application/json" -d '{"username":"test1","password":"pw1","email":"e1@mail.com"}' http://localhost:5001/users
+    
+    Login: expect 200
+        curl -i -X POST -H "Content-Type: application/json" -d '{"password":"pw1","email":"e1@mail.com"}' http://localhost:5001/login
+    Login: expect 400
+        curl -i -X POST -H "Content-Type: application/json" -d '{"email":"e1@mail.com"}' http://localhost:5001/login
+    Login: expect 401
+        curl -i -X POST -H "Content-Type: application/json" -d '{"password":"pw2","email":"e1@mail.com"}' http://localhost:5001/login
+    Login: expect 404
+        curl -i -X POST -H "Content-Type: application/json" -d '{"password":"pw1","email":"NonExisting@mail.com"}' http://localhost:5001/login
+    Login when authentication service offline: expect 503
+        curl -i -X POST -H "Content-Type: application/json" -d '{"password":"pw1","email":"e1@mail.com"}' http://localhost:5001/login
+    """
+
     def test_users(self):
         """Ensure the /ping route behaves correctly."""
         response = self.client.get('/users/ping')

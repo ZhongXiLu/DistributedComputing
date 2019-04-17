@@ -79,6 +79,7 @@ def add_user():
         'status': 'fail',
         'message': 'Invalid payload.'
     }
+    response_code = 400
     if not post_data:
         return jsonify(response_object), 400
     username = post_data.get('username')
@@ -94,6 +95,7 @@ def add_user():
 
             response_obj = send_request(
                 'post', 'authentication', 'passwords', timeout=1.5, json={'user_id': user.id, 'password': password})
+            response_code = response_obj.status_code
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()
@@ -110,10 +112,7 @@ def add_user():
             return jsonify(response_object), 400
     except (exc.IntegrityError, RequestException) as e:
         db.session.rollback()
-        if isinstance(e, RequestException):
-            return jsonify(response_object), 503
-        else:
-            return jsonify(response_object), 400
+        return jsonify(response_object), response_code
 
 
 @users_blueprint.route('/users/<user_id>', methods=['GET'])
