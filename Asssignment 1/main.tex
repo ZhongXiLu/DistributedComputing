@@ -174,13 +174,20 @@ This section will go more into these microservices by precisely defining their R
         \item[Logic:] Add advertisement to DB
         \item[]
         
-        \item[In:] GET ads/user\_id
-        \item[Out:] Advertisement (contents)
-        \item[Logic:] Increment view count of advertisement
+        \item[In:] GET ads
+        \item[Out:] /
+        \item[Logic:] Homepage for the ads service
         \item[]
-        
-		\item[In:] GET ads (may be used for administrator view)
-        \item[Out:] List of all advertisements (target user class(es), contents)
+
+        \item[In:] GET ads/filename
+        \item[Out:] Advertisement
+        \item[Logic:] Get a specific advertisement based on the filename
+        \item[]
+
+        \item[In:] GET ads/user/user\_id
+        \item[Out:] Advertisements
+        \item[Logic:] Increment view count of advertisement
+ contents)
     \end{description}
 \end{description}
 

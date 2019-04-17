@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advertisement Service</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+    <br><br>
+
+    <div class="container">
+        <h1>Advertisement Service</h1>
+
+        <br><br>
+
+        <h2>Add a new advertisement</h2>
+
+        <form action="http://localhost:5009/ads" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="word">Category</label>
+                <input type="text" class="form-control" id="category" name="category" placeholder="Enter a category">
+            </div>
+            <div class="form-group">
+                <label for="image">Select image</label>
+                <input type="file" class="form-control-file" id="image" name="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <br><br>
+
+        <h2>All advertisements</h2>
+
+        <table class="table table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Category</th>
+              <th scope="col">Image Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for image in images %}
+            <tr>
+              <th scope="row">{{ image.id }}</th>
+              <td>{{ image.category }}</td>
+              <td><a href="http://localhost:5009/ads/{{ image.image }}">{{ image.image }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

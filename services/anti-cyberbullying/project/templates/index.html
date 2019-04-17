@@ -28,11 +28,22 @@
 
         <h2>All bad words</h2>
 
-        <ul class="list-group">
+        <table class="table table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Bad word</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for word in words %}
-                <li class="list-group-item">{{ word['word'] }}</li>
+            <tr>
+              <th scope="row">{{ word.id }}</th>
+              <td>{{ word.word}}</td>
+            </tr>
             {% endfor %}
-        </ul>
+          </tbody>
+        </table>
     </div>
 
 </body>

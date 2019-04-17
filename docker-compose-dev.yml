@@ -100,6 +100,7 @@ services:
     depends_on:
       - posts-db
       - tag
+      - anti-cyberbullying
     networks:
       - mynetwork
 
@@ -207,6 +208,7 @@ services:
       - DATABASE_TEST_URL=postgres://postgres:postgres@comments-db:5432/comments_test
     depends_on:
       - comments-db
+      - anti-cyberbullying
     networks:
       - mynetwork
 
@@ -246,6 +248,36 @@ services:
       dockerfile: Dockerfile
     ports:
       - 5441:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
+
+  ad:
+    build:
+      context: ./services/ad
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/ad:/usr/src/app'
+    ports:
+      - 5009:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@ads-db:5432/ads_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@ads-db:5432/ads_test
+    depends_on:
+      - ads-db
+    networks:
+      - mynetwork
+
+  ads-db:
+    build:
+      context: ./services/ad/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5442:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

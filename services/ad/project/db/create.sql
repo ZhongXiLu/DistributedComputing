@@ -1,0 +1,2 @@
+CREATE DATABASE ads_dev;
+CREATE DATABASE ads_test;
