@@ -1,16 +1,17 @@
 
 
 import json
+import requests
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
+from requests.exceptions import RequestException, HTTPError
+from util.send_request import *
+from flask_httpauth import HTTPBasicAuth
 
 from project.api.models import Comment
 from project import db
 
 comment_blueprint = Blueprint('comment', __name__, url_prefix='/comments')
-
-import requests
-from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
 
@@ -48,13 +49,15 @@ def create_comment():
 
     try:
         # Check for bad words
-        headers = {'content-type': 'application/json'}
-        data = {
-            'sentence': str(content)
-        }
-        response = requests.post('http://anti-cyberbullying:5000/anti_cyberbullying/contains_bad_word', data=json.dumps(data), headers=headers)
-        result = json.loads(response.text)
-        if result['result']:    # contains bad word
+        response_obj = send_request(
+            'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=1.5, json={'sentence': str(content)})
+        if response_obj.status_code == 503:
+            response_object = response_obj.json
+            raise RequestException()
+        elif response_obj.status_code != 201:
+            raise RequestException()
+        result = response_obj.json
+        if result['status'] == "success" and result['result']:    # contains bad word
             response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
             return jsonify(response_object), 201
 

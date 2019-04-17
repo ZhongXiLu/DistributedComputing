@@ -5,6 +5,8 @@ import json
 import time
 from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPBasicAuth
+from requests.exceptions import RequestException, HTTPError
+from util.send_request import *
 
 newsfeed_blueprint = Blueprint('newsfeed', __name__, url_prefix='/newsfeed')
 
@@ -38,16 +40,26 @@ def get_newsfeed(user_id):
         posts = []
 
         # Get the followed users
-        headers = {'content-type': 'application/json'}
-
         # TODO: check url
-        response = requests.get(f'http://follow:5000/follows/user/{user_id}', headers=headers)
-        data = json.loads(response.data.decode())
+        response_obj = send_request('get', 'follow', f'follows/user/{user_id}', timeout=1.5)
+        if response_obj.status_code == 503:
+            response_object = response_obj.json
+            raise RequestException()
+        elif response_obj.status_code != 201:
+            raise RequestException()
+
+        data = response_obj.json
 
         # Get posts of followed users
         for followedUser in data['data']['users']:  # TODO: check 'users'
-            response = requests.get(f'http://post:5000/posts/user/{followedUser}', headers=headers)
-            data = response.json()
+            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=1.5)
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code != 201:
+                raise RequestException()
+
+            data = response_obj.json
             posts += data['data']['posts']
 
         # Sort posts (newest first)

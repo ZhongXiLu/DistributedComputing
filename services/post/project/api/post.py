@@ -4,14 +4,14 @@ import requests
 import json
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
+from flask_httpauth import HTTPBasicAuth
+from requests.exceptions import RequestException, HTTPError
+from util.send_request import *
 
 from project.api.models import Post
 from project import db
 
 post_blueprint = Blueprint('post', __name__, url_prefix='/posts')
-
-import requests
-from flask_httpauth import HTTPBasicAuth
 
 auth = HTTPBasicAuth()
 
@@ -48,13 +48,15 @@ def create_post():
 
     try:
         # Check for bad words
-        headers = {'content-type': 'application/json'}
-        data = {
-            'sentence': str(content)
-        }
-        response = requests.post('http://anti-cyberbullying:5000/anti_cyberbullying/contains_bad_word', data=json.dumps(data), headers=headers)
-        result = json.loads(response.text)
-        if result['result']:    # contains bad word
+        response_obj = send_request(
+            'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=1.5, json={'sentence': str(content)})
+        if response_obj.status_code == 503:
+            response_object = response_obj.json
+            raise RequestException()
+        elif response_obj.status_code != 201:
+            raise RequestException()
+        result = response_obj.json
+        if result['status'] == "success" and result['result']:    # contains bad word
             response_object['message'] = f'Post contains bad word: {result["bad_word"]}'
             return jsonify(response_object), 201
 
@@ -69,12 +71,16 @@ def create_post():
                 'post_id': post.id,
                 'user_ids': tags
             }
-            response = requests.post('http://tag:5000/tags', data=json.dumps(data), headers=headers)
-            if response.status_code != 201:
-                raise Exception("Failed adding tags to post")
+            response_obj = send_request('post', 'tag', 'tags', timeout=1.5, json=data)
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code != 201:
+                response_object['message'] = 'Failed adding tags to post'
+                raise RequestException()
 
         response_object['status'] = 'success'
-        response_object['message'] = 'post was successfully created'
+        response_object['message'] = 'Post was successfully created'
         return jsonify(response_object), 201
 
     except:
