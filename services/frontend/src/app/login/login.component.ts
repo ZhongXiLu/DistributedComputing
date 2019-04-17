@@ -24,8 +24,8 @@ export class LoginComponent implements OnInit {
     event.preventDefault();
     const password = (<HTMLInputElement>document.getElementById("inputPassword")).value;
     const username = (<HTMLInputElement>document.getElementById("inputUsername")).value;
-    // TODO: check url for login
-    this.http.post(environment.userServiceUrl + '/verify_credentials', {
+    // TODO: make username email
+    this.http.post(environment.userServiceUrl + '/login', {
       username: username,
       password: password
     }).subscribe(

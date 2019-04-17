@@ -23,6 +23,7 @@ def verify_password(user_id_or_token, password):
         return False
     return True
 
+
 @post_blueprint.route('/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
