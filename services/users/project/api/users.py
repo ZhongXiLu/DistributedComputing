@@ -24,16 +24,25 @@ def verify_password(user_id_or_token, password):
     return True
 
 
+class ResponseObj:
+    def __init__(self, response, json, status_code):
+        self.response = response
+        self.json = json
+        self.status_code = status_code
+
+
 def send_request(method: str, service: str, route: str, **kwargs):
     func = getattr(requests, method.lower())
     try:
         response = func(f'http://{service}:5000/{route}', **kwargs)
-        response_object = response.json()
-        response_code = response.status_code
+        if response:
+            response_object = ResponseObj(response, response.json(), response.status_code)
+        else:
+            response_object = ResponseObj(response, None, response.status_code)
     except RequestException as e:
-        response_object = {'status': 'fail', 'message': f'{service} service down.', 'error_type': e.__class__.__name__}
-        response_code = 503
-    return response_object, response_code
+        response_json = {'status': 'fail', 'message': f'{service} service down.', 'error_type': e.__class__.__name__}
+        response_object = ResponseObj(None, response_json, 503)
+    return response_object
 
 
 @users_blueprint.route('/users/ping', methods=['GET'])
@@ -59,8 +68,8 @@ def ping2():
 
 @users_blueprint.route('/users/ping3', methods=['GET'])
 def ping3():
-    ret, code = send_request('get', 'authentication', 'ping', timeout=0.05)
-    return jsonify(ret), code
+    response_obj = send_request('get', 'authentication', 'ping', timeout=0.05)
+    return jsonify(response_obj.json), response_obj.status_code
 
 
 @users_blueprint.route('/users', methods=['POST'])
@@ -83,12 +92,12 @@ def add_user():
             db.session.flush()
             db.session.refresh(user)
 
-            ret, status_code = send_request(
+            response_obj = send_request(
                 'post', 'authentication', 'passwords', timeout=1.5, json={'user_id': user.id, 'password': password})
-            if status_code == 503:
-                response_object = ret
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
                 raise RequestException()
-            elif status_code != 201:
+            elif response_obj.status_code != 201:
                 raise RequestException()
 
             db.session.commit()
@@ -143,3 +152,43 @@ def get_all_users():
         }
     }
     return jsonify(response_object), 200
+
+
+@users_blueprint.route('/login', methods=['POST'])
+def login():
+    """Given email & pw, get token"""
+    post_data = request.get_json()
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+    response_code = 400
+    if not post_data:
+        return jsonify(response_object), 400
+    email = post_data.get('email')
+    password = post_data.get('password')
+    if not email or not password:
+        return jsonify(response_object), 400
+    try:
+        response_code = 404
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            response_object["sdfqsdf"] = "qsdfqsdf"
+            return jsonify(response_object), 404
+        else:
+            response_obj = send_request(
+                'get', 'authentication', 'token', timeout=1, auth=(user.id, password))
+            response_code = response_obj.status_code
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code == 401:
+                response_object['message'] = "Wrong credentials."
+                raise RequestException()
+            elif response_obj.status_code != 200:
+                raise RequestException()
+
+            response_object = response_obj.json
+            return jsonify(response_object), 200
+    except (ValueError, RequestException) as e:
+        return jsonify(response_object), response_code

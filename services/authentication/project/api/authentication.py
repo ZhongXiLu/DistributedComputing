@@ -167,7 +167,7 @@ def get_auth_token():
     return jsonify({
         'status': 'success',
         'token': token.decode('ascii')
-    })
+    }), 200
 
 
 @auth.verify_password
