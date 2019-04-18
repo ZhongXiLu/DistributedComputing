@@ -30,11 +30,11 @@ const routes: Routes =
     component: AdminComponent
   },
   {
-    path:'newsfeed/:username',
+    path:'newsfeed',
     component: NewsfeedComponent
   },
   {
-    path:'chat/:username',
+    path:'chat',
     component: ChatComponent
   }
 ];
