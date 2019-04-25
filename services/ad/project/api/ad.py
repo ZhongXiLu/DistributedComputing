@@ -52,8 +52,6 @@ def create_ad():
         'message': 'Invalid payload.'
     }
 
-    category = re.sub(r'[\W_]+', '', str(request.form.get('category')).lower())
-
     # Save image to local filesystem
     file = request.files['image']
     uploadDir = os.path.abspath(os.path.basename('uploads'))
@@ -61,7 +59,11 @@ def create_ad():
         os.makedirs(uploadDir)
     filename = os.path.join(uploadDir, file.filename)
     file.save(filename)
-    db.session.add(Ad(category=category, image=file.filename))
+
+    categories = str(request.form.get('category')).lower().split(' ')
+    for category in categories:
+        newCategory = re.sub(r'[\W_]+', '', str(category).lower())
+        db.session.add(Ad(category=newCategory, image=file.filename))
 
     db.session.commit()
     response_object['status'] = 'success'
