@@ -51,15 +51,19 @@ def create_comment():
         # Check for bad words
         response_obj = send_request(
             'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=1.5, json={'sentence': str(content)})
-        if response_obj.status_code == 503:
-            response_object = response_obj.json
-            raise RequestException()
-        elif response_obj.status_code != 201:
+        if response_obj.status_code != 201:
             raise RequestException()
         result = response_obj.json
         if result['status'] == "success" and result['result']:    # contains bad word
             response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
             return jsonify(response_object), 201
+
+        # Update user categories (for ads)
+        response_obj = send_request(
+            'post', 'ad', f'ads/user/{user_id}', timeout=1.5, json={'sentence': str(content)})
+        if response_obj.status_code != 201:
+            response_object['message'] = 'failed contacting the ads service'
+            raise RequestException()
 
         db.session.add(Comment(post_id=post_id, creator=user_id, content=content))
         db.session.commit()

@@ -19,3 +19,20 @@ class Ad(db.Model):
             'image': self.image,
             'category': self.category
         }
+
+
+class UserCategory(db.Model):
+    __tablename__ = 'user_categories'
+
+    user_id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(128), nullable=False, primary_key=True)
+
+    def __init__(self, user_id, category):
+        self.user_id = user_id
+        self.category = category
+
+    def to_json(self):
+        return {
+            'user_id': self.user_id,
+            'category': self.category
+        }

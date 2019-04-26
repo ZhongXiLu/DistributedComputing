@@ -8,7 +8,7 @@ from flask import Blueprint, jsonify, request, render_template, send_from_direct
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
 
-from project.api.models import Ad
+from project.api.models import Ad, UserCategory
 from project import db
 
 ad_blueprint = Blueprint('ad', __name__, url_prefix='/ads')
@@ -71,22 +71,60 @@ def create_ad():
     return jsonify(response_object), 201
 
 
+@ad_blueprint.route('/user/<user_id>', methods=['POST'])
+def update_category(user_id):
+    """Update (if necessary) the categories of a user (personalized ads)"""
+    post_data = request.get_json()
+    response_object = {
+        'status': 'fail',
+    }
+    if not post_data:
+        return jsonify(response_object), 400
+
+    sentence = post_data.get('sentence')
+
+    try:
+        response_object['result'] = False
+
+        categories = [ad.category for ad in Ad.query.distinct(Ad.category)]
+        words = sentence.lower().split(' ')
+        for word in words:
+            if re.sub(r'[\W_]+', '', str(word).lower()) in categories:
+                # sentence contains category word
+                if UserCategory.query.filter_by(user_id=user_id, category=word).count() == 0:
+                    db.session.add(UserCategory(user_id=user_id, category=word))
+
+        db.session.commit()
+        response_object['status'] = 'success'
+        return jsonify(response_object), 201
+
+    except:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
+
 @ad_blueprint.route('/user/<user_id>', methods=['GET'])
 def get_personalized_ads(user_id):
     """Get ads specifically targeted to a user if any"""
-    # TODO
-
-    # Now just return every ad
     response_object = {
         'status': 'fail',
         'message': 'User has no personalized ads'
     }
     try:
-        ads = Ad.query.all()
+        categories = UserCategory.query.filter_by(user_id=user_id)
+        ads = []
+        if categories:
+            # User has user-specific ads
+            for category in categories:
+                ads += Ad.query.filter_by(category=category.category)
+        else:
+            # User has no categories yet, so return all
+            ads = Ad.query.all()
+
         response_object = {
             'status': 'success',
             'data': {
-                'posts': [ad.to_json() for ad in ads]
+                'ads': [ad.to_json() for ad in ads]
             }
         }
         return jsonify(response_object), 200
