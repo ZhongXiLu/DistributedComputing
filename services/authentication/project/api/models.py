@@ -22,10 +22,12 @@ class Password(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(128), nullable=False)
     auth_allowed = db.Column(db.Boolean(), default=True, nullable=False)
+    is_admin = db.Column(db.Boolean(), default=False, nullable=False)
 
-    def __init__(self, user_id, password):
+    def __init__(self, user_id, password, is_admin=False):
         self.user_id = user_id
         self.set_password(password)
+        self.is_admin = is_admin
 
     def set_password(self, password):
         random_val = str(SystemRandom().getrandbits(32*8))  # generate a salt with 32 random bytes

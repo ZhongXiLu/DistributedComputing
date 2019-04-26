@@ -2,6 +2,7 @@
 
 import requests
 from util.send_request import *
+from util.verify_password import verify_password
 from requests.exceptions import RequestException, HTTPError
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
@@ -17,12 +18,12 @@ from flask_httpauth import HTTPBasicAuth
 auth = HTTPBasicAuth()
 
 
-@auth.verify_password
-def verify_password(user_id_or_token, password):
-    response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
-    if response.status_code == 401:
-        return False
-    return True
+# @auth.verify_password
+# def verify_password(user_id_or_token, password):
+#     response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
+#     if response.status_code == 401:
+#         return False
+#     return True
 
 
 # class ResponseObj:

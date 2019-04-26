@@ -19,6 +19,7 @@ Add password:
 [POST]: /passwords
 user_id  # type: int
 password  # type: string
+is_admin  # type: bool (optional)
 Returns: user_id
 
 Update password 
@@ -77,6 +78,7 @@ def add_password():
         return jsonify(response_object), 400
     user_id = post_data.get('user_id')
     password = post_data.get('password')
+    is_admin = post_data.get('is_admin')
 
     try:
         user_id = int(str(user_id))
@@ -85,14 +87,16 @@ def add_password():
     if password is None:
         return jsonify(response_object), 400
 
+    if is_admin is None:
+        is_admin = False
+
     try:
         pw = Password.query.filter_by(user_id=user_id).first()
         if not pw:
-            db.session.add(Password(user_id=user_id, password=str(password)))
+            db.session.add(Password(user_id=user_id, password=str(password), is_admin=is_admin))
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'{user_id}\'s password was added!'
-
             return jsonify(response_object), 201
         else:
             response_object['message'] = f'User {user_id} already exists.'
@@ -170,6 +174,28 @@ def get_auth_token():
     }), 200
 
 
+@authentication_blueprint.route('/is_admin', methods=['PUT'])
+def is_admin():
+    put_data = request.get_json()
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid payload.'
+    }
+    if not put_data:
+        return jsonify(response_object), 400
+    user_id = put_data.get('user_id')
+    try:
+        user_id = int(str(user_id))
+    except (ValueError, TypeError):
+        return jsonify(response_object), 400
+
+    pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
+    response_object['status'] = 'success'
+    response_object['message'] = 'successfully got is_admin'
+    response_object['is_admin'] = pw.is_admin
+    return jsonify(response_object), 200
+
+
 @auth.verify_password
 def verify_password(user_id_or_token, password):
     # Try to authenticate with token
@@ -184,5 +210,7 @@ def verify_password(user_id_or_token, password):
             return False
     g.pw = pw
     return True
+
+
 
 
