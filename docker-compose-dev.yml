@@ -283,3 +283,33 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - mynetwork
+
+  notification:
+    build:
+      context: ./services/notification
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/notification:/usr/src/app'
+    ports:
+      - 5010:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@notifications-db:5432/notifications_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@notifications-db:5432/notifications_test
+    depends_on:
+      - notifications-db
+    networks:
+      - mynetwork
+
+  notifications-db:
+    build:
+      context: ./services/notification/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5443:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork
