@@ -2,6 +2,7 @@
 
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
+from util.send_request import *
 
 from project.api.models import Like
 from project import db
@@ -45,6 +46,19 @@ def create_like():
     user_id = post_data.get('user_id')
 
     try:
+        # Send notification to creator of post
+        try:
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=1.5)
+            creator = response_obj.json['data']['creator']
+
+            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=1.5)
+            username = response_obj.json['data']['username']
+
+            send_request('post', 'notification', 'notifications', timeout=1.5,
+                         json={'content': f'{username} has liked your post', 'recipients': [creator]})
+        except:
+            response_object['warning'] = 'failed creating a notification'
+
         db.session.add(Like(post_id=post_id, user_id=user_id))
         db.session.commit()
         response_object['status'] = 'success'

@@ -50,8 +50,8 @@ def get_newsfeed(user_id):
 
         data = response_obj.json
 
-        # Get posts of followed users
-        for followedUser in data['data']['users']:  # TODO: check 'users'
+        # Get posts of followed users + include own posts
+        for followedUser in data['data']['users'] + [user_id]:  # TODO: check 'users'
             response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=1.5)
             if response_obj.status_code == 503:
                 response_object = response_obj.json

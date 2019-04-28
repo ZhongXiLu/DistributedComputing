@@ -2,6 +2,7 @@
 
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
+from util.send_request import *
 
 from project.api.models import Tag
 from project import db
@@ -44,6 +45,19 @@ def create_tags():
     user_ids = post_data.get('user_ids')
 
     try:
+        # Send notification to the tagged person
+        try:
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=1.5)
+            creator = response_obj.json['data']['creator']
+
+            response_obj = send_request('get', 'users', f'users/{creator}', timeout=1.5)
+            username = response_obj.json['data']['username']
+
+            send_request('post', 'notification', 'notifications', timeout=1.5,
+                         json={'content': f'{username} has tagged you in their post', 'recipients': user_ids})
+        except:
+            response_object['warning'] = 'failed creating a notification'
+
         for user_id in user_ids:
             db.session.add(Tag(post_id=post_id, user_id=user_id))
         db.session.commit()

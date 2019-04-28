@@ -101,6 +101,7 @@ services:
       - posts-db
       - tag
       - anti-cyberbullying
+      - ad
     networks:
       - mynetwork
 
@@ -209,6 +210,7 @@ services:
     depends_on:
       - comments-db
       - anti-cyberbullying
+      - ad
     networks:
       - mynetwork
 
