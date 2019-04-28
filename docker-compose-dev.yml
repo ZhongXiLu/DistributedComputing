@@ -345,3 +345,33 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - mynetwork
+
+  friend:
+    build:
+      context: ./services/friend
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/friend:/usr/src/app'
+    ports:
+      - 5012:5000
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=project.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@notifications-db:5432/notifications_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@notifications-db:5432/notifications_test
+    depends_on:
+      - notifications-db
+    networks:
+      - mynetwork
+
+  friends-db:
+    build:
+      context: ./services/friend/project/db
+      dockerfile: Dockerfile
+    ports:
+      - 5445:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - mynetwork

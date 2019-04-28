@@ -55,7 +55,7 @@ def delete_follow(follower_id, followee_id):
     """Delete a follower followee relation"""
     response_object = {
         'status': 'fail',
-        'message': 'Invalid payload.'
+        # 'message': 'Invalid payload.'
     }
     try:
         follower = Follower.query.filter_by(follower_id=follower_id, followee_id=followee_id).first()

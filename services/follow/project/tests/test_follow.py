@@ -13,7 +13,7 @@ def add_follow(follower_id, followee_id):
     return follow
 
 
-class TestLikeService(BaseTestCase):
+class TestFollowService(BaseTestCase):
     """Tests for the Follow Service."""
 
     def test_add_follow(self):
