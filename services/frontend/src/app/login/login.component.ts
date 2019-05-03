@@ -26,14 +26,12 @@ export class LoginComponent implements OnInit {
     const username = (<HTMLInputElement>document.getElementById("inputUsername")).value;
     // TODO: make username email
     this.http.post(environment.userServiceUrl + '/login', {
-      username: username,
+      email: username,
       password: password
     }).subscribe(
       res => {
-        this.token = res;
-        this.responseHolder = res
-        console.log(this.responseHolder.response);
-        this.tokens.token = this.responseHolder.response
+        console.log(res);
+	localStorage.setItem('token', res.token);
         localStorage.setItem('username', username);
         if (this.responseHolder.admin==""){
           this.router.navigate(['/']);
@@ -45,7 +43,7 @@ export class LoginComponent implements OnInit {
         
       },
       err => {
-        console.log("Error occured");
+        console.log(err);
       }
     );
 
