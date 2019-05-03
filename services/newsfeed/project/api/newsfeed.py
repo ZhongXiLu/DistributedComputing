@@ -40,7 +40,7 @@ def get_newsfeed(user_id):
         posts = []
 
         # Get all users the user follows
-        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=1.5)
+        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3)
         if response_obj.status_code == 503:
             response_object = response_obj.json
             raise RequestException()
@@ -51,7 +51,7 @@ def get_newsfeed(user_id):
 
         # Get posts of followed users + include own posts
         for followedUser in data['followees'] + [user_id]:
-            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=1.5)
+            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3)
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()

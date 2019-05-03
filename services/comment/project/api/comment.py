@@ -50,7 +50,7 @@ def create_comment():
     try:
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
-                                    timeout=1.5, json={'sentence': str(content)})
+                                    timeout=3, json={'sentence': str(content)})
         if response_obj.status_code != 201:
             raise RequestException()
         result = response_obj.json
@@ -59,19 +59,19 @@ def create_comment():
             return jsonify(response_object), 201
 
         # Update user categories (for ads)
-        response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=1.5, json={'sentence': str(content)})
+        response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)})
         if response_obj.status_code != 201:
             response_object['warning'] = 'failed contacting the ads service'
 
         # Send notification to creator of post
         try:
-            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=1.5)
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3)
             creator = response_obj.json['data']['creator']
 
-            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=1.5)
+            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3)
             username = response_obj.json['data']['username']
 
-            send_request('post', 'notification', 'notifications', timeout=1.5,
+            send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has commented on your post', 'recipients': [creator]})
         except:
             response_object['warning'] = 'failed creating a notification'

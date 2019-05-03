@@ -58,7 +58,7 @@ def ping_pong():
 @users_blueprint.route('/users/ping2', methods=['GET'])
 def ping2():
     try:
-        ret = requests.get('http://authentication:5000/ping', timeout=0.05)
+        ret = requests.get('http://authentication:5000/ping', timeout=3)
         ret = ret.json()
     except (ConnectionError, RequestException, TimeoutError):
         ret = {'status': 'fail', 'message': 'authentication service down'}
@@ -70,7 +70,7 @@ def ping2():
 
 @users_blueprint.route('/users/ping3', methods=['GET'])
 def ping3():
-    response_obj = send_request('get', 'authentication', 'ping', timeout=0.05)
+    response_obj = send_request('get', 'authentication', 'ping', timeout=3)
     return jsonify(response_obj.json), response_obj.status_code
 
 
@@ -96,7 +96,7 @@ def add_user():
             db.session.refresh(user)
 
             response_obj = send_request(
-                'post', 'authentication', 'passwords', timeout=1.5, json={'user_id': user.id, 'password': password})
+                'post', 'authentication', 'passwords', timeout=3, json={'user_id': user.id, 'password': password})
             response_code = response_obj.status_code
             if response_obj.status_code == 503:
                 response_object = response_obj.json
@@ -204,7 +204,7 @@ def login():
             return jsonify(response_object), 404
         else:
             response_obj = send_request(
-                'get', 'authentication', 'token', timeout=1, auth=(user.id, password))
+                'get', 'authentication', 'token', timeout=3, auth=(user.id, password))
             response_code = response_obj.status_code
             if response_obj.status_code == 503:
                 response_object = response_obj.json

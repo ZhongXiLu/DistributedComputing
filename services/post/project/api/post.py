@@ -50,7 +50,7 @@ def create_post():
     try:
         # Check for bad words
         response_obj = send_request(
-            'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=1.5, json={'sentence': str(content)})
+            'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=3, json={'sentence': str(content)})
         if response_obj.status_code != 201:
             raise RequestException()
         result = response_obj.json
@@ -60,7 +60,7 @@ def create_post():
 
         # Update user categories (for ads)
         response_obj = send_request(
-            'post', 'ad', f'ads/user/{creator}', timeout=1.5, json={'sentence': str(content)})
+            'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)})
         if response_obj.status_code != 201:
             response_object['message'] = 'failed contacting the ads service'
             raise RequestException()
@@ -86,7 +86,7 @@ def create_post():
                 'post_id': post.id,
                 'user_ids': user_tags_ids
             }
-            response_obj = send_request('post', 'tag', 'tags', timeout=1.5, json=data)
+            response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data)
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()
