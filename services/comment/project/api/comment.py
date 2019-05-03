@@ -1,27 +1,29 @@
 
-
+import os
 import json
 import requests
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 from flask_httpauth import HTTPBasicAuth
 
 from project.api.models import Comment
 from project import db
+
 
 comment_blueprint = Blueprint('comment', __name__, url_prefix='/comments')
 
 auth = HTTPBasicAuth()
 
 
-@auth.verify_password
-def verify_password(user_id_or_token, password):
-    response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
-    if response.status_code == 401:
-        return False
-    return True
+# @auth.verify_password
+# def verify_password(user_id_or_token, password):
+#     response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
+#     if response.status_code == 401:
+#         return False
+#     return True
 
 
 @comment_blueprint.route('/ping', methods=['GET'])
@@ -31,8 +33,8 @@ def ping_pong():
         'message': 'pong!'
     })
 
-
 @comment_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_comment():
     """Create a new comment on a post"""
     post_data = request.get_json()
@@ -50,7 +52,7 @@ def create_comment():
     try:
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
-                                    timeout=3, json={'sentence': str(content)})
+                                    timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
         if response_obj.status_code != 201:
             raise RequestException()
         result = response_obj.json
@@ -59,20 +61,22 @@ def create_comment():
             return jsonify(response_object), 201
 
         # Update user categories (for ads)
-        response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)})
+        response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)},
+                                    auth=(auth.username(), None))
         if response_obj.status_code != 201:
             response_object['warning'] = 'failed contacting the ads service'
 
         # Send notification to creator of post
         try:
-            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3)
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(auth.username(), None))
             creator = response_obj.json['data']['creator']
 
-            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3)
+            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(auth.username(), None))
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
-                         json={'content': f'{username} has commented on your post', 'recipients': [creator]})
+                         json={'content': f'{username} has commented on your post', 'recipients': [creator]},
+                         auth=(auth.username(), None))
         except:
             response_object['warning'] = 'failed creating a notification'
 
@@ -115,6 +119,7 @@ def get_comment(comment_id):
 
 
 @comment_blueprint.route('/<comment_id>', methods=['DELETE'])
+@login_decorator
 def delete_comment(comment_id):
     """Delete a comment on a specific post"""
     response_object = {

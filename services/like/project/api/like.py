@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from util.send_request import *
+from util.verify_password import login_decorator
 
 from project.api.models import Like
 from project import db
@@ -32,6 +33,7 @@ def ping_pong():
 
 
 @like_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_like():
     """Create a new like on a post"""
     post_data = request.get_json()
@@ -48,14 +50,15 @@ def create_like():
     try:
         # Send notification to creator of post
         try:
-            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3)
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(auth.username(), None))
             creator = response_obj.json['data']['creator']
 
-            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3)
+            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(auth.username(), None))
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
-                         json={'content': f'{username} has liked your post', 'recipients': [creator]})
+                         json={'content': f'{username} has liked your post', 'recipients': [creator]},
+                         auth=(auth.username(), None))
         except:
             response_object['warning'] = 'failed creating a notification'
 
@@ -71,6 +74,7 @@ def create_like():
 
 
 @like_blueprint.route('/posts/<post_id>', methods=['DELETE'])
+@login_decorator
 def delete_like(post_id):
     """Undo a like on a specific post"""
     post_data = request.get_json()
