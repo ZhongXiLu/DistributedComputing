@@ -143,6 +143,32 @@ def get_single_user(user_id):
         return jsonify(response_object), 404
 
 
+@users_blueprint.route('/users/name/<username>', methods=['GET'])
+def get_single_user_by_name(username):
+    """Get single user details by username"""
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+    try:
+        user = User.query.filter_by(username=str(username)).first()
+        if not user:
+            return jsonify(response_object), 404
+        else:
+            response_object = {
+                'status': 'success',
+                'data': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'active': user.active
+                }
+            }
+            return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+
+
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_users():
     """Get all users"""

@@ -71,10 +71,20 @@ def create_post():
         db.session.commit()
 
         if tags:
+            # Get user id's by username
+            user_tags_ids = []
+            for tag in tags:
+                response_obj = send_request('get', 'users', f'users/name/{tag}', timeout=3)
+                if response_obj.status_code != 200:
+                    continue
+                result = response_obj.json
+                if result['status'] == "success":
+                    user_tags_ids.append(result['data']['id'])
+
             # Add user tags
             data = {
                 'post_id': post.id,
-                'user_ids': tags
+                'user_ids': user_tags_ids
             }
             response_obj = send_request('post', 'tag', 'tags', timeout=1.5, json=data)
             if response_obj.status_code == 503:
