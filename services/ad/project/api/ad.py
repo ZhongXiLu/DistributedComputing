@@ -7,6 +7,7 @@ import re
 from flask import Blueprint, jsonify, request, render_template, send_from_directory
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
+from util.verify_password import login_decorator
 
 from project.api.models import Ad, UserCategory
 from project import db
@@ -17,12 +18,12 @@ ad_blueprint = Blueprint('ad', __name__, url_prefix='/ads')
 auth = HTTPBasicAuth()
 
 
-@auth.verify_password
-def verify_password(user_id_or_token, password):
-    response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
-    if response.status_code == 401:
-        return False
-    return True
+# @auth.verify_password
+# def verify_password(user_id_or_token, password):
+#     response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
+#     if response.status_code == 401:
+#         return False
+#     return True
 
 
 @ad_blueprint.route('/ping', methods=['GET'])
@@ -45,6 +46,7 @@ def send_file(filename):
 
 
 @ad_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_ad():
     """Add a new ad"""
     response_object = {
@@ -72,6 +74,7 @@ def create_ad():
 
 
 @ad_blueprint.route('/user/<user_id>', methods=['POST'])
+@login_decorator
 def update_category(user_id):
     """Update (if necessary) the categories of a user (personalized ads)"""
     post_data = request.get_json()
@@ -104,6 +107,7 @@ def update_category(user_id):
 
 
 @ad_blueprint.route('/user/<user_id>', methods=['GET'])
+@login_decorator
 def get_personalized_ads(user_id):
     """Get ads specifically targeted to a user if any"""
     response_object = {

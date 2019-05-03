@@ -117,7 +117,7 @@ def get_comment(comment_id):
 
 
 @comment_blueprint.route('/<comment_id>', methods=['DELETE'])
-# @auth.login_required
+@login_decorator
 def delete_comment(comment_id):
     """Delete a comment on a specific post"""
     response_object = {

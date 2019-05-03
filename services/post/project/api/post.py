@@ -7,6 +7,7 @@ from sqlalchemy import exc
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 
 from project.api.models import Post
 from project import db
@@ -33,6 +34,7 @@ def ping_pong():
 
 
 @post_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_post():
     """Create a new post"""
     post_data = request.get_json()
@@ -130,6 +132,7 @@ def get_post(post_id):
 
 
 @post_blueprint.route('/<post_id>', methods=['DELETE'])
+@login_decorator
 def delete_post(post_id):
     """Delete a specific post"""
     response_object = {

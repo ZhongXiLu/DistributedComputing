@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from util.send_request import *
+from util.verify_password import login_decorator
 
 from project.api.models import Like
 from project import db
@@ -32,6 +33,7 @@ def ping_pong():
 
 
 @like_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_like():
     """Create a new like on a post"""
     post_data = request.get_json()
@@ -71,6 +73,7 @@ def create_like():
 
 
 @like_blueprint.route('/posts/<post_id>', methods=['DELETE'])
+@login_decorator
 def delete_like(post_id):
     """Undo a like on a specific post"""
     post_data = request.get_json()

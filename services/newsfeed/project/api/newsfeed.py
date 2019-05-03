@@ -7,6 +7,7 @@ from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 
 newsfeed_blueprint = Blueprint('newsfeed', __name__, url_prefix='/newsfeed')
 
@@ -30,7 +31,7 @@ def ping_pong():
 
 
 @newsfeed_blueprint.route('/<user_id>', methods=['GET'])
-@auth.login_required
+@login_decorator
 def get_newsfeed(user_id):
     """Get the newsfeed of a user (most recent posts of the followers)"""
     response_object = {

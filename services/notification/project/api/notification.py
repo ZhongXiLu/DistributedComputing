@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 from flask_httpauth import HTTPBasicAuth
 
 from project.api.models import Notification
@@ -33,6 +34,7 @@ def ping_pong():
 
 
 @notification_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_notification():
     """Create a new notification for users"""
     post_data = request.get_json()
@@ -87,6 +89,7 @@ def get_notification(notification_id):
 
 
 @notification_blueprint.route('/<notification_id>', methods=['PUT'])
+@login_decorator
 def mark_notification_as_read(notification_id):
     """Mark a notification as read"""
     response_object = {
@@ -108,6 +111,7 @@ def mark_notification_as_read(notification_id):
 
 
 @notification_blueprint.route('/user/<user_id>', methods=['GET'])
+@login_decorator
 def get_notifications_user(user_id):
     """Get all the unread notifications of a user"""
     response_object = {
