@@ -3,6 +3,7 @@ from sqlalchemy import exc
 from util.verify_password import verify_password
 from project.api.models import Friend
 from project import db
+from util.verify_password import login_decorator
 
 import requests
 from flask_httpauth import HTTPBasicAuth
@@ -21,6 +22,7 @@ def ping_pong():
 
 
 @friend_blueprint.route('request', methods=['POST'])
+@login_decorator
 def create_friend():
     """Create friend request"""
     post_data = request.get_json()
@@ -54,6 +56,7 @@ def create_friend():
 
 
 @friend_blueprint.route('accept', methods=['put'])
+@login_decorator
 def accept_friend():
     """Accept friend request"""
     put_data = request.get_json()
@@ -84,6 +87,7 @@ def accept_friend():
 
 
 @friend_blueprint.route('/<friend1_id>/<friend2_id>', methods=['DELETE'])
+@login_decorator
 def delete_friend(friend1_id, friend2_id):
     """Delete a friendship"""
     response_object = {

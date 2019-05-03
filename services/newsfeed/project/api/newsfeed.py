@@ -7,6 +7,7 @@ from flask import Blueprint, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 
 newsfeed_blueprint = Blueprint('newsfeed', __name__, url_prefix='/newsfeed')
 
@@ -30,7 +31,7 @@ def ping_pong():
 
 
 @newsfeed_blueprint.route('/<user_id>', methods=['GET'])
-@auth.login_required
+@login_decorator
 def get_newsfeed(user_id):
     """Get the newsfeed of a user (most recent posts of the followers)"""
     response_object = {
@@ -41,7 +42,8 @@ def get_newsfeed(user_id):
         posts = []
 
         # Get all users the user follows
-        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3)
+        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3,
+                                    auth=(auth.username(), None))
         if response_obj.status_code == 503:
             response_object = response_obj.json
             raise RequestException()
@@ -52,7 +54,8 @@ def get_newsfeed(user_id):
 
         # Get posts of followed users + include own posts
         for followedUser in data['followees'] + [user_id]:
-            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3)
+            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3,
+                                        auth=(auth.username(), None))
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()

@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from util.send_request import *
+from util.verify_password import login_decorator
 
 from project.api.models import Tag
 from project import db
@@ -31,6 +32,7 @@ def ping_pong():
 
 
 @tag_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_tags():
     """Create new tags on a post"""
     post_data = request.get_json()

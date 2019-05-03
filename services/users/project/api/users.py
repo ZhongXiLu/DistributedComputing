@@ -215,8 +215,8 @@ def login():
             elif response_obj.status_code != 200:
                 raise RequestException()
 
-            response_object["user_id"] = user.id
             response_object = response_obj.json
+            response_object["user_id"] = user.id
             return jsonify(response_object), 200
     except (ValueError, RequestException) as e:
         return jsonify(response_object), response_code

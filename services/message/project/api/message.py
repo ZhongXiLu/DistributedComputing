@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from sqlalchemy.orm import Query
+from util.verify_password import login_decorator
 
 from util.verify_password import login_decorator
 from project.api.models import Message

@@ -7,6 +7,7 @@ from sqlalchemy import exc
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 
 from project.api.models import Post
 from project import db
@@ -33,6 +34,7 @@ def ping_pong():
 
 
 @post_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_post():
     """Create a new post"""
     post_data = request.get_json()
@@ -49,8 +51,8 @@ def create_post():
 
     try:
         # Check for bad words
-        response_obj = send_request(
-            'post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word', timeout=3, json={'sentence': str(content)})
+        response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
+                                    timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
         if response_obj.status_code != 201:
             raise RequestException()
         result = response_obj.json
@@ -60,7 +62,8 @@ def create_post():
 
         # Update user categories (for ads)
         response_obj = send_request(
-            'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)})
+            'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)},
+            auth=(auth.username(), None))
         if response_obj.status_code != 201:
             response_object['message'] = 'failed contacting the ads service'
             raise RequestException()
@@ -74,7 +77,8 @@ def create_post():
             # Get user id's by username
             user_tags_ids = []
             for tag in tags:
-                response_obj = send_request('get', 'users', f'users/name/{tag}', timeout=3)
+                response_obj = send_request('get', 'users', f'users/name/{tag}', timeout=3,
+                                            auth=(auth.username(), None))
                 if response_obj.status_code != 200:
                     continue
                 result = response_obj.json
@@ -86,7 +90,8 @@ def create_post():
                 'post_id': post.id,
                 'user_ids': user_tags_ids
             }
-            response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data)
+            response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data,
+                                        auth=(auth.username(), None))
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()
@@ -130,6 +135,7 @@ def get_post(post_id):
 
 
 @post_blueprint.route('/<post_id>', methods=['DELETE'])
+@login_decorator
 def delete_post(post_id):
     """Delete a specific post"""
     response_object = {

@@ -6,6 +6,7 @@ import re
 from flask import Blueprint, jsonify, request, render_template
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
+from util.verify_password import login_decorator
 
 from project.api.models import BadWord
 from project import db
@@ -39,6 +40,7 @@ def index():
 
 
 @anti_cyberbullying_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_bad_word():
     """Add a new bad word"""
     response_object = {
@@ -96,6 +98,7 @@ def contains_bad_word():
 # TODO: request to remove bad word from database?
 
 @anti_cyberbullying_blueprint.route('/bad_words', methods=['GET'])
+@login_decorator
 def get_bad_words():
     """Get all the bad words"""
     response_object = {
