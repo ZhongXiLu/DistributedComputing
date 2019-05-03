@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -13,17 +14,26 @@ export class ProfileComponent implements OnInit {
    }
 
   ngOnInit() {
-const username = localStorage.getItem('username');
-	console.log(username);
-	this.http.get('http://localhost:5001/users/name/'+'test1').subscribe(
+        const id = localStorage.getItem('id');
+	console.log(id);
+	this.http.get('http://localhost:5001/users/'+id).subscribe(
         res => {
         console.log(res);
-	this.username = res.data.username;
+	const response = res
+	this.username = response.data.username;
 	console.log(this.username);
       },
       err => {
         console.log(err);
       }); 
+
+      this.http.get(environment.postServiceUrl+'/user/'+id).subscribe(
+        res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      });
   }
 
 }
