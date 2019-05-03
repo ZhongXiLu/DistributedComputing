@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from sqlalchemy.orm import Query
 
-from util.verify_password import verify_password
+from util.verify_password import login_decorator
 from project.api.models import Message
 from project import db
 
@@ -22,8 +22,11 @@ def ping_pong():
     })
 
 
+from project import create_app
+app = create_app()
+
 @message_blueprint.route('', methods=['POST'])
-@auth.login_required
+@login_decorator
 def create_message():
     """Create message"""
     post_data = request.get_json()
@@ -35,9 +38,9 @@ def create_message():
         return jsonify(response_object), 400
 
     contents = post_data.get('contents')
-    sender_id = auth.username()
+    sender_id = post_data.get('sender_id')
     receiver_id = post_data.get('receiver_id')
-    if contents is None or receiver_id is None:
+    if contents is None or sender_id is None or receiver_id is None:
         return jsonify(response_object), 400
 
     try:
@@ -51,12 +54,12 @@ def create_message():
         return jsonify(response_object), 400
 
 
-@message_blueprint.route('<int:correspondent_id>/<int:amount>', methods=['GET'])
-@auth.login_required
-def get_messages(correspondent_id, amount=None):
+@message_blueprint.route('<int:user_id>/<int:correspondent_id>/<int:amount>', methods=['GET'])
+@login_decorator
+def get_messages(user_id, correspondent_id, amount=None):
     """Get messages in conversation between receiver and sender sorted by timestamp"""
-    q1 = Message.query.filter_by(sender_id=auth.username(), receiver_id=correspondent_id)
-    q2 = Message.query.filter_by(sender_id=correspondent_id, receiver_id=auth.username())
+    q1 = Message.query.filter_by(sender_id=user_id, receiver_id=correspondent_id)
+    q2 = Message.query.filter_by(sender_id=correspondent_id, receiver_id=user_id)
     q3 = q1.union(q2).order_by(Message.time_sent)  # type: Query
     messages = q3.all() if amount is None else q3.limit(amount).all()
     q3.update({Message.is_read: True}, synchronize_session=False)
@@ -68,11 +71,11 @@ def get_messages(correspondent_id, amount=None):
     }), 200
 
 
-@message_blueprint.route('unread', methods=['GET'])
+@message_blueprint.route('<int:user_id>/unread', methods=['GET'])
 @auth.login_required
-def get_unread():
+def get_unread(user_id):
     """Get all unread messages where the user is the receiver"""
-    messages = Message.query.filter_by(receiver_id=auth.username(), is_read=False)\
+    messages = Message.query.filter_by(receiver_id=user_id, is_read=False)\
         .order_by(Message.sender_id, Message.time_sent).all()
     return jsonify({
         'status': 'success',

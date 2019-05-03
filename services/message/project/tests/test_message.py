@@ -1,9 +1,27 @@
-# import json
-# import unittest
-#
-# from project import db
-# from project.api.models import Friend
-# from project.tests.base import BaseTestCase
+import json
+import unittest
+
+from project import db
+from project.api.models import Message
+from project.tests.base import BaseTestCase
+
+
+class TestMessageService(BaseTestCase):
+    def test_add_message(self):
+        """Ensure a new message can be added to the database"""
+        with self.client:
+            response = self.client.post(
+                '/message',
+                data=json.dumps({
+                    'contents': 'message contents',
+                    'sender_id': 1,
+                    'receiver_id': 2,
+                }),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 201)
+            self.assertIn('success', data['status'])
 #
 #
 # def add_friend(friend_initiator_id, friend_acceptor_id):
