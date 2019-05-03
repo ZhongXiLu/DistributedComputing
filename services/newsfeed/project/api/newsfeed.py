@@ -48,6 +48,7 @@ def get_newsfeed(user_id):
             response_object = response_obj.json
             raise RequestException()
         elif response_obj.status_code != 201:
+            response_object['message'] = 'failed contacting the follow service'
             raise RequestException()
 
         data = response_obj.json
@@ -60,6 +61,7 @@ def get_newsfeed(user_id):
                 response_object = response_obj.json
                 raise RequestException()
             elif response_obj.status_code != 201:
+                response_object['message'] = 'failed contacting the follo service'
                 raise RequestException()
 
             data = response_obj.json

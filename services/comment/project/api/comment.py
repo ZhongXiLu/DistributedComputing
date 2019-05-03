@@ -53,12 +53,13 @@ def create_comment():
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
                                     timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
-        if response_obj.status_code != 201:
-            raise RequestException()
-        result = response_obj.json
-        if result['status'] == "success" and result['result']:    # contains bad word
-            response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
-            return jsonify(response_object), 201
+        if response_obj.status_code == 201:
+            result = response_obj.json
+            if result['status'] == "success" and result['result']:    # contains bad word
+                response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
+                return jsonify(response_object), 201
+        else:
+            response_object['message'] = 'failed contacting the anti-cyberbullying service'
 
         # Update user categories (for ads)
         response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)},
