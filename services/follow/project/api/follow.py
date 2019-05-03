@@ -6,6 +6,7 @@ from util.verify_password import verify_password
 from project.api.models import Follower
 from project import db
 from util.send_request import *
+from util.verify_password import login_decorator
 
 import requests
 from flask_httpauth import HTTPBasicAuth
@@ -24,6 +25,7 @@ def ping_pong():
 
 
 @follow_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_follow():
     """Create follower-followee relation"""
     post_data = request.get_json()
@@ -42,11 +44,12 @@ def create_follow():
     try:
         # Send notification to followee
         try:
-            response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3)
+            response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3, auth=(auth.username(), None))
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
-                         json={'content': f'{username} has followed you', 'recipients': [followee_id]})
+                         json={'content': f'{username} has followed you', 'recipients': [followee_id]},
+                         auth=(auth.username(), None))
         except:
             response_object['warning'] = 'failed creating a notification'
 
@@ -62,6 +65,7 @@ def create_follow():
 
 
 @follow_blueprint.route('/<follower_id>/<followee_id>', methods=['DELETE'])
+@login_decorator
 def delete_follow(follower_id, followee_id):
     """Delete a follower followee relation"""
     response_object = {

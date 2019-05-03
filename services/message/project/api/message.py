@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from sqlalchemy.orm import Query
+from util.verify_password import login_decorator
 
 from util.verify_password import verify_password
 from project.api.models import Message
@@ -23,7 +24,7 @@ def ping_pong():
 
 
 @message_blueprint.route('', methods=['POST'])
-@auth.login_required
+@login_decorator
 def create_message():
     """Create message"""
     post_data = request.get_json()
@@ -52,7 +53,7 @@ def create_message():
 
 
 @message_blueprint.route('<int:correspondent_id>/<int:amount>', methods=['GET'])
-@auth.login_required
+@login_decorator
 def get_messages(correspondent_id, amount=None):
     """Get messages in conversation between receiver and sender sorted by timestamp"""
     q1 = Message.query.filter_by(sender_id=auth.username(), receiver_id=correspondent_id)
@@ -69,7 +70,7 @@ def get_messages(correspondent_id, amount=None):
 
 
 @message_blueprint.route('unread', methods=['GET'])
-@auth.login_required
+@login_decorator
 def get_unread():
     """Get all unread messages where the user is the receiver"""
     messages = Message.query.filter_by(receiver_id=auth.username(), is_read=False)\
