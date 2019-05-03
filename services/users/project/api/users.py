@@ -200,7 +200,7 @@ def login():
         response_code = 404
         user = User.query.filter_by(email=email).first()
         if not user:
-            response_object["sdfqsdf"] = "qsdfqsdf"
+            # response_object["sdfqsdf"] = "qsdfqsdf"
             return jsonify(response_object), 404
         else:
             response_obj = send_request(
@@ -215,6 +215,7 @@ def login():
             elif response_obj.status_code != 200:
                 raise RequestException()
 
+            response_object["user_id"] = user.id
             response_object = response_obj.json
             return jsonify(response_object), 200
     except (ValueError, RequestException) as e:
