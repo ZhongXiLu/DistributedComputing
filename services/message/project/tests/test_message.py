@@ -6,6 +6,13 @@ from project.api.models import Message
 from project.tests.base import BaseTestCase
 
 
+def add_message(contents, sender_id, receiver_id):
+    message = Message(contents=contents, sender_id=sender_id, receiver_id=receiver_id)
+    db.session.add(message)
+    db.session.commit()
+    return message
+
+
 class TestMessageService(BaseTestCase):
     def test_add_message(self):
         """Ensure a new message can be added to the database"""
@@ -22,6 +29,34 @@ class TestMessageService(BaseTestCase):
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
             self.assertIn('success', data['status'])
+
+    def test_get_messages(self):
+        """Ensure get messages returns all correct messages"""
+        add_message('0', 1, 2)
+        add_message('1', 1, 2)
+        add_message('2', 2, 1)
+        add_message('3', 1, 2)
+        add_message('4', 2, 1)
+        add_message('5', 1, 3)
+        add_message('6', 3, 2)
+        with self.client:
+            response = self.client.get('/message/1/2')
+            data = json.loads(response.data.decode())
+            contents = [x['contents'] for x in data['messages']]
+            for i in range(5):
+                self.assertIn(str(i), contents[i])
+            for i in range(5, 7):
+                self.assertNotIn(str(i), contents)
+            # for msg in data['messages']:
+            #     self.assertEqual(msg['is_read'], False)
+
+            response = self.client.get('/message/1/2/2')
+            data = json.loads(response.data.decode())
+            contents = [x['contents'] for x in data['messages']]
+            self.assertIn('3', contents[0])
+            self.assertIn('4', contents[1])
+            for msg in data['messages']:
+                self.assertEqual(msg['is_read'], True)
 #
 #
 # def add_friend(friend_initiator_id, friend_acceptor_id):

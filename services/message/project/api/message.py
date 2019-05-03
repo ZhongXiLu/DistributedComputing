@@ -54,25 +54,28 @@ def create_message():
         return jsonify(response_object), 400
 
 
+@message_blueprint.route('<int:user_id>/<int:correspondent_id>', defaults={'amount': None}, methods=['GET'])
 @message_blueprint.route('<int:user_id>/<int:correspondent_id>/<int:amount>', methods=['GET'])
 @login_decorator
 def get_messages(user_id, correspondent_id, amount=None):
     """Get messages in conversation between receiver and sender sorted by timestamp"""
     q1 = Message.query.filter_by(sender_id=user_id, receiver_id=correspondent_id)
     q2 = Message.query.filter_by(sender_id=correspondent_id, receiver_id=user_id)
-    q3 = q1.union(q2).order_by(Message.time_sent)  # type: Query
-    messages = q3.all() if amount is None else q3.limit(amount).all()
-    q3.update({Message.is_read: True}, synchronize_session=False)
+    q3 = q1.union(q2)  # type: Query
+    q4 = q3.order_by(Message.time_sent.desc())
+    messages = q4.all() if amount is None else q4.limit(amount).all()
+    q1.update({Message.is_read: True}, synchronize_session=False)
+    q2.update({Message.is_read: True}, synchronize_session=False)
     db.session.commit()
 
     return jsonify({
         'status': 'success',
-        'messages': [m.to_json() for m in messages]
+        'messages': [m.to_json() for m in reversed(messages)]
     }), 200
 
 
 @message_blueprint.route('<int:user_id>/unread', methods=['GET'])
-@auth.login_required
+@login_decorator
 def get_unread(user_id):
     """Get all unread messages where the user is the receiver"""
     messages = Message.query.filter_by(receiver_id=user_id, is_read=False)\

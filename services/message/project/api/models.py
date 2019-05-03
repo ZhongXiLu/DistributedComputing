@@ -24,4 +24,5 @@ class Message(db.Model):
             'sender_id': self.sender_id,
             'receiver_id': self.receiver_id,
             'is_read': self.is_read,
+            'time_sent': self.time_sent
         }
