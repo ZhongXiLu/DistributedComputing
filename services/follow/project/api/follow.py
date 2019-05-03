@@ -5,6 +5,7 @@ from sqlalchemy import exc
 from util.verify_password import verify_password
 from project.api.models import Follower
 from project import db
+from util.send_request import *
 
 import requests
 from flask_httpauth import HTTPBasicAuth
@@ -39,6 +40,16 @@ def create_follow():
         return jsonify(response_object), 400
 
     try:
+        # Send notification to followee
+        try:
+            response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3)
+            username = response_obj.json['data']['username']
+
+            send_request('post', 'notification', 'notifications', timeout=3,
+                         json={'content': f'{username} has followed you', 'recipients': [followee_id]})
+        except:
+            response_object['warning'] = 'failed creating a notification'
+
         db.session.add(Follower(follower_id=follower_id, followee_id=followee_id))
         db.session.commit()
         response_object['status'] = 'success'
