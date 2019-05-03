@@ -1,27 +1,29 @@
 
-
+import os
 import json
 import requests
 from flask import Blueprint, jsonify, request
 from sqlalchemy import exc
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
+from util.verify_password import login_decorator
 from flask_httpauth import HTTPBasicAuth
 
 from project.api.models import Comment
 from project import db
+
 
 comment_blueprint = Blueprint('comment', __name__, url_prefix='/comments')
 
 auth = HTTPBasicAuth()
 
 
-@auth.verify_password
-def verify_password(user_id_or_token, password):
-    response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
-    if response.status_code == 401:
-        return False
-    return True
+# @auth.verify_password
+# def verify_password(user_id_or_token, password):
+#     response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
+#     if response.status_code == 401:
+#         return False
+#     return True
 
 
 @comment_blueprint.route('/ping', methods=['GET'])
@@ -31,8 +33,8 @@ def ping_pong():
         'message': 'pong!'
     })
 
-
 @comment_blueprint.route('', methods=['POST'])
+@login_decorator
 def create_comment():
     """Create a new comment on a post"""
     post_data = request.get_json()
@@ -115,6 +117,7 @@ def get_comment(comment_id):
 
 
 @comment_blueprint.route('/<comment_id>', methods=['DELETE'])
+# @auth.login_required
 def delete_comment(comment_id):
     """Delete a comment on a specific post"""
     response_object = {

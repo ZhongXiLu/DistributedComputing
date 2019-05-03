@@ -30,6 +30,7 @@ def ping_pong():
 
 
 @newsfeed_blueprint.route('/<user_id>', methods=['GET'])
+@auth.login_required
 def get_newsfeed(user_id):
     """Get the newsfeed of a user (most recent posts of the followers)"""
     response_object = {
