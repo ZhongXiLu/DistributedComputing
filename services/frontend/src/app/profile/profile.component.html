@@ -11,50 +11,31 @@
     <div class="row posts">
       <h2>Posts</h2>
       <div class="row justify-content-center">
-        <div class="row">
+        <div class="row" *ngFor="let post of posts">
           <div class="col-12 mb-3">
           <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Angela:</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <h5 class="card-title">{{username}}</h5>
+                <p class="card-text">{{post.content}}</p>
+                <input type="text" id="id" class="hide" value={{post.id}}>
                 <div class="timestampComment">By Angela on 11 April 12:50</div>
                 <button class="btn btn-info">Angie</button>
                 <button class="btn btn-info">Leandre</button>
                 <button class="btn btn-info">Anoushe</button>
-                <button class="btn btn-danger pull-right">Like</button>
+                <button class="btn btn-danger pull-right" (click)="like($event)">Like</button>
                 <br>
                 <a class="card-link">11 April 2019</a>
                 <a class="card-link">25 <span class="glyphicon glyphicon-search"></span> Likes</a>
-                <a class="card-link">2 Comments</a>
+                <div *ngFor="let comment of comments[post.id]" class="inline">
+                		<a class="card-link">{{comment.content}}</a>
+                		<button class="btn btn-danger pull-right" (click)="delete(post.id)">Delete</button>
+                		<hr>
+                </div>
                 <hr>
                 <p>I liked this article</p>
-                <span class="timestampComment">By Angie on 12 April 12:50</span>
+                <span class="timestampComment">{{post.created_date}}</span>
                 <hr class="separate">
-                <input class="form-control" type="text" placeholder="Comment">
-              </div>
-          </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 mb-3">
-          <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Angela:</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <div class="timestampComment">By Angela on 11 April 12:50</div>
-                <button class="btn btn-info">Angie</button>
-                <button class="btn btn-info">Leandre</button>
-                <button class="btn btn-info">Anoushe</button>
-                <button class="btn btn-danger pull-right">Like</button>
-                <br>
-                <a class="card-link">11 April 2019</a>
-                <a class="card-link">25 <span class="glyphicon glyphicon-search"></span> Likes</a>
-                <a class="card-link">2 Comments</a>
-                <hr>
-                <p>I liked this article</p>
-                <span class="timestampComment">By Angie on 12 April 12:50</span>
-                <hr class="separate">
-                <input class="form-control" type="text" placeholder="Comment">
+                <input class="form-control" type="text" placeholder="Comment" id="comment" (keydown)="submitComment($event)">
               </div>
           </div>
           </div>

@@ -34,7 +34,7 @@ def ping_pong():
 
 
 @post_blueprint.route('', methods=['POST'])
-#@login_decorator
+@login_decorator
 def create_post():
     """Create a new post"""
     post_data = request.get_json()

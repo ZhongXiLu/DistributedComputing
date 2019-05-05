@@ -31,8 +31,9 @@ export class LoginComponent implements OnInit {
     }).subscribe(
       res => {
         console.log(res);
-	localStorage.setItem('token', res.token);
-        localStorage.setItem('id', res.user_id);
+	this.responseHolder = res;
+	localStorage.setItem('token', this.responseHolder.token);
+        localStorage.setItem('id', this.responseHolder.user_id);
         
         this.router.navigate(['/admin']);
         
