@@ -32,7 +32,12 @@ app = create_app()
 @message_blueprint.route('', methods=['POST'])
 @login_decorator
 def create_message():
-    """Create message"""
+    """
+    Creates a new message.
+    Notifies:
+        anti-cyberbullying,
+        ad
+    """
     post_data = request.get_json()
     response_object = {
         'status': 'fail',
@@ -53,18 +58,17 @@ def create_message():
         response_object['status'] = 'success'
         response_object['message'] = 'message was successfully created'
 
-        try:
-            response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
-                                        timeout=3, json={'sentence': str(contents)},
-                                        auth=(g.user_id_or_token, g.password))
-            if response_obj.status_code == 201:
-                if response_obj.json['result']:
-                    response_object['message'] = f'Post contains bad words: {response_obj.json["bad_word"]}'
-            else:
-                response_object['message'] = 'failed contacting the anti-cyberbullying service'
+        # Check for bad words
+        r_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
+                             timeout=3, json={'sentence': str(contents)},
+                             auth=(g.user_id_or_token, g.password))
+        response_object['anti-cyberbullying'] = r_obj.json
 
-        except:
-            pass
+        # Update user categories for ads
+        r_obj = send_request('post', 'ad', f'ads/user/{sender_id}',
+                             timeout=3, json={'sentence': str(contents)},
+                             auth=(g.user_id_or_token, g.password))
+        response_object['ad'] = r_obj.json
 
         return jsonify(response_object), 201
     except Exception as e:
