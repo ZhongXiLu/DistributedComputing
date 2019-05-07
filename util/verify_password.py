@@ -1,5 +1,6 @@
 import os
 import requests
+from flask import g
 from flask_httpauth import HTTPBasicAuth
 from util.send_request import send_request
 
@@ -12,6 +13,8 @@ def verify_password(user_id_or_token, password):
         'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token, password))
     if response.status_code == 401:
         return False
+    g.user_id_or_token = user_id_or_token
+    g.password = password
     return True
 
 

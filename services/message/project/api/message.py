@@ -1,9 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
 from sqlalchemy.orm import Query
 from util.verify_password import login_decorator
 
 from util.verify_password import login_decorator
+from util.send_request import send_request
 from project.api.models import Message
 from project import db
 
@@ -24,7 +25,9 @@ def ping_pong():
 
 
 from project import create_app
+
 app = create_app()
+
 
 @message_blueprint.route('', methods=['POST'])
 @login_decorator
@@ -49,6 +52,20 @@ def create_message():
         db.session.commit()
         response_object['status'] = 'success'
         response_object['message'] = 'message was successfully created'
+
+        try:
+            response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
+                                        timeout=3, json={'sentence': str(contents)},
+                                        auth=(g.user_id_or_token, g.password))
+            if response_obj.status_code == 201:
+                if response_obj.json['result']:
+                    response_object['message'] = f'Post contains bad words: {response_obj.json["bad_word"]}'
+            else:
+                response_object['message'] = 'failed contacting the anti-cyberbullying service'
+
+        except:
+            pass
+
         return jsonify(response_object), 201
     except Exception as e:
         db.session.rollback()
@@ -79,10 +96,9 @@ def get_messages(user_id, correspondent_id, amount=None):
 @login_decorator
 def get_unread(user_id):
     """Get all unread messages where the user is the receiver"""
-    messages = Message.query.filter_by(receiver_id=user_id, is_read=False)\
+    messages = Message.query.filter_by(receiver_id=user_id, is_read=False) \
         .order_by(Message.sender_id, Message.time_sent).all()
     return jsonify({
         'status': 'success',
         'messages': [m.to_json() for m in messages]
     }), 200
-
