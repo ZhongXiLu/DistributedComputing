@@ -2,7 +2,7 @@
 
 import requests
 import json
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
@@ -15,14 +15,6 @@ from project import db
 post_blueprint = Blueprint('post', __name__, url_prefix='/posts')
 
 auth = HTTPBasicAuth()
-
-
-@auth.verify_password
-def verify_password(user_id_or_token, password):
-    response = requests.get('http://authentication:5000/verify_credentials', auth=(user_id_or_token, password))
-    if response.status_code == 401:
-        return False
-    return True
 
 
 @post_blueprint.route('/ping', methods=['GET'])
@@ -52,7 +44,7 @@ def create_post():
     try:
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
-                                    timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
+                                    timeout=3, json={'sentence': str(content)}, auth=(g.user_id_or_token, g.password))
         if response_obj.status_code == 201:
             result = response_obj.json
             if result['status'] == "success" and result['result']:    # contains bad word
@@ -64,7 +56,7 @@ def create_post():
         # Update user categories (for ads)
         response_obj = send_request(
             'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)},
-            auth=(auth.username(), None))
+            auth=(g.user_id_or_token, g.password))
         if response_obj.status_code != 201:
             response_object['warning'] = 'failed contacting the ads service'
 
@@ -78,7 +70,7 @@ def create_post():
             user_tags_ids = []
             for tag in tags:
                 response_obj = send_request('get', 'users', f'users/name/{tag}', timeout=3,
-                                            auth=(auth.username(), None))
+                                            auth=(g.user_id_or_token, g.password))
                 if response_obj.status_code != 200:
                     continue
                 result = response_obj.json
@@ -91,7 +83,7 @@ def create_post():
                 'user_ids': user_tags_ids
             }
             response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data,
-                                        auth=(auth.username(), None))
+                                        auth=(g.user_id_or_token, g.password))
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()
