@@ -59,14 +59,14 @@ def create_post():
                 response_object['message'] = f'Post contains bad word: {result["bad_word"]}'
                 return jsonify(response_object), 201
         else:
-            response_object['message'] = 'failed contacting the anti-cyberbullying service'
+            response_object['warning'] = 'failed contacting the anti-cyberbullying service'
 
         # Update user categories (for ads)
         response_obj = send_request(
             'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)},
             auth=(auth.username(), None))
         if response_obj.status_code != 201:
-            response_object['message'] = 'failed contacting the ads service'
+            response_object['warning'] = 'failed contacting the ads service'
 
         # Create post
         post = Post(creator=creator, content=content)

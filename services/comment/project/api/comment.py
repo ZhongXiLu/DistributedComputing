@@ -59,7 +59,7 @@ def create_comment():
                 response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
                 return jsonify(response_object), 201
         else:
-            response_object['message'] = 'failed contacting the anti-cyberbullying service'
+            response_object['warning'] = 'failed contacting the anti-cyberbullying service'
 
         # Update user categories (for ads)
         response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)},

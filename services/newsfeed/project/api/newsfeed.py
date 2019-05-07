@@ -42,26 +42,24 @@ def get_newsfeed(user_id):
         posts = []
 
         # Get all users the user follows
-        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3,
-                                    auth=(auth.username(), None))
+        response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3)
         if response_obj.status_code == 503:
             response_object = response_obj.json
             raise RequestException()
-        elif response_obj.status_code != 201:
-            response_object['message'] = 'failed contacting the follow service'
+        elif response_obj.status_code != 200:
+            response_object['warning'] = 'failed contacting the follow service'
             raise RequestException()
 
         data = response_obj.json
 
         # Get posts of followed users + include own posts
         for followedUser in data['followees'] + [user_id]:
-            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3,
-                                        auth=(auth.username(), None))
+            response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3)
             if response_obj.status_code == 503:
                 response_object = response_obj.json
                 raise RequestException()
-            elif response_obj.status_code != 201:
-                response_object['message'] = 'failed contacting the follo service'
+            elif response_obj.status_code != 200:
+                response_object['warning'] = 'failed contacting the post service'
                 raise RequestException()
 
             data = response_obj.json
