@@ -89,11 +89,11 @@ def delete_follow(follower_id, followee_id):
 def get_followees(follower_id):
     """Get all users the follower follows"""
     followees = Follower.query.filter_by(follower_id=follower_id).all()
-    return jsonify({'status': 'success', 'followees': [x.followee_id for x in followees]})
+    return jsonify({'status': 'success', 'followees': [x.followee_id for x in followees]}), 200
 
 
 @follow_blueprint.route('/followers/<followee_id>', methods=['GET'])
 def get_followers(followee_id):
     """Get all followers of the user"""
     followers = Follower.query.filter_by(followee_id=followee_id).all()
-    return jsonify({'status': 'success', 'followers': [x.follower_id for x in followers]})
+    return jsonify({'status': 'success', 'followers': [x.follower_id for x in followers]}), 200
