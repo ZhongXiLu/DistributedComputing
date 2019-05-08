@@ -57,12 +57,16 @@ def create_message():
             response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
                                         timeout=3, json={'sentence': str(contents)},
                                         auth=(g.user_id_or_token, g.password))
+            response_object['anti-cyberbullying'] = response_obj.json
             if response_obj.status_code == 201:
                 if response_obj.json['result']:
                     response_object['message'] = f'Post contains bad words: {response_obj.json["bad_word"]}'
-            else:
-                response_object['message'] = 'failed contacting the anti-cyberbullying service'
 
+            # Update user categories (for ads)
+            response_obj = send_request(
+                'post', 'ad', f'ads/user/{sender_id}', timeout=3, json={'sentence': str(contents)},
+                auth=(g.user_id_or_token, g.password))
+            response_object['ad'] = response_obj.json
         except:
             pass
 

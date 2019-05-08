@@ -43,16 +43,19 @@ def create_like():
         # Send notification to creator of post
         try:
             response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(auth.username(), None))
+            response_object['post'] = response_obj.json
             creator = response_obj.json['data']['creator']
 
             response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(auth.username(), None))
+            response_object['users'] = response_obj.json
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has liked your post', 'recipients': [creator]},
                          auth=(auth.username(), None))
+            response_object['notification'] = response_obj.json
         except:
-            response_object['warning'] = 'failed creating a notification'
+            pass
 
         db.session.add(Like(post_id=post_id, user_id=user_id))
         db.session.commit()

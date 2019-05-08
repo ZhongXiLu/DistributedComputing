@@ -43,15 +43,18 @@ def create_tags():
         # Send notification to the tagged person
         try:
             response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3)
+            response_object['post'] = response_obj.json
             creator = response_obj.json['data']['creator']
 
             response_obj = send_request('get', 'users', f'users/{creator}', timeout=3)
+            response_object['users'] = response_obj.json
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has tagged you in their post', 'recipients': user_ids})
+            response_object['notification'] = response_obj.json
         except:
-            response_object['warning'] = 'failed creating a notification'
+            pass
 
         for user_id in user_ids:
             db.session.add(Tag(post_id=post_id, user_id=user_id))
