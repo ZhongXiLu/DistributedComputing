@@ -7,6 +7,7 @@ export const environment = {
   userServiceUrl: 'http://localhost:5001',
   postServiceUrl: 'http://localhost:5002',
   followServiceUrl: 'http://localhost:5011',
+  notificationServiceUrl: 'http://localhost:5010',
   tagServiceUrl: 'http://localhost:5003',
   authServiceUrl: 'http://localhost:5004',
   likeServiceUrl: 'http://localhost:5005',
