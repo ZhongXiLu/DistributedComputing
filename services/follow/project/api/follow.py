@@ -46,7 +46,10 @@ def create_follow():
         try:
             response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3, auth=(auth.username(), None))
             response_object['users'] = response_obj.json
-            username = response_obj.json['data']['username']
+            try:
+                username = response_obj.json['data']['username']
+            except KeyError:
+                username = f'User {follower_id}'
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has followed you', 'recipients': [followee_id]},
