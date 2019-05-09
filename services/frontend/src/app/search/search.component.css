@@ -1,0 +1,23 @@
+button{
+    margin-right: .2rem;
+    background: #333;
+    color: white;
+    border: 0;
+    float: right;
+    margin-left:100%;
+}
+
+p{
+    float: left;
+}
+
+container{
+    text-align:center;
+}
+
+row{
+    padding-top: 12px;
+    display: inline-block;
+}
+
+

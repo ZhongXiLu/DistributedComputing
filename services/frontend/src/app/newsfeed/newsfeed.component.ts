@@ -8,11 +8,26 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./newsfeed.component.css']
 })
 export class NewsfeedComponent implements OnInit {
-
+  public responseHolder :any;
+  public dataHolder :any;
+  public posts = [];
+  public commentHolder :any;
+  public comments = {};
   constructor(private http: HttpClient) {
    }
 
-  ngOnInit() {
+  ngOnInit() { 
+        const id = localStorage.getItem("id")
+	let headers: HttpHeaders = new HttpHeaders();
+    	headers.append('Content-Type', 'application/x-www-form-urlencoded;   charset=UTF-8');
+    	headers.append('Authorization', localStorage.getItem("token"));
+        this.http.get(environment.newsfeedServiceUrl+'/newsfeed/'+id,{ headers}).subscribe(
+        res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      });
     
   }
 

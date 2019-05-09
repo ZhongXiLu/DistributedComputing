@@ -5,8 +5,10 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AdminComponent } from './admin/admin.component';
+import { SearchComponent } from './search/search.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { ChatComponent } from './chat/chat.component';
+
 const routes: Routes = 
 [
   {
@@ -36,6 +38,10 @@ const routes: Routes =
   {
     path:'chat',
     component: ChatComponent
+  },
+  {
+    path:'search',
+    component: SearchComponent
   }
 ];
 

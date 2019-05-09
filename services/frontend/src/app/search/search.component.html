@@ -1,0 +1,7 @@
+<div class="container"  *ngFor="let user of users">
+  <div class="row">
+        <p class="card-text">{{user.username}}</p>
+       <button class="btn btn-danger pull-right" (click)="follow(user.id)">Follow</button>
+  </div>  
+</div>
+

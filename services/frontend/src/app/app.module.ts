@@ -11,6 +11,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AdminComponent } from './admin/admin.component';
+import { SearchComponent } from './search/search.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { ChatComponent } from './chat/chat.component';
 
@@ -24,7 +25,8 @@ import { ChatComponent } from './chat/chat.component';
     NavbarComponent,
     AdminComponent,
     NewsfeedComponent,
-    ChatComponent
+    ChatComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
