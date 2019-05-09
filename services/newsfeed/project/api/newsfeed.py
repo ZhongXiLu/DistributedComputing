@@ -13,6 +13,7 @@ newsfeed_blueprint = Blueprint('newsfeed', __name__, url_prefix='/newsfeed')
 
 auth = HTTPBasicAuth()
 
+
 @newsfeed_blueprint.route('/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
@@ -35,11 +36,10 @@ def get_newsfeed(user_id):
         # Get all users the user follows
         response_obj = send_request('get', 'follow', f'follow/followees/{user_id}', timeout=3,
                                     auth=(g.user_id_or_token, g.password))
+        response_object['follow'] = response_obj.json
         if response_obj.status_code == 503:
-            response_object = response_obj.json
             raise RequestException()
         elif response_obj.status_code != 200:
-            response_object['warning'] = 'failed contacting the follow service'
             raise RequestException()
 
         data = response_obj.json
@@ -48,11 +48,10 @@ def get_newsfeed(user_id):
         for followedUser in data['followees'] + [user_id]:
             response_obj = send_request('get', 'post', f'posts/user/{followedUser}', timeout=3,
                                         auth=(g.user_id_or_token, g.password))
+            response_object['post'] = response_obj.json
             if response_obj.status_code == 503:
-                response_object = response_obj.json
                 raise RequestException()
             elif response_obj.status_code != 200:
-                response_object['warning'] = 'failed contacting the post service'
                 raise RequestException()
 
             data = response_obj.json

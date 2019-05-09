@@ -45,33 +45,34 @@ def create_comment():
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
                                     timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
+        response_object['anti-cyberbullying'] = response_obj.json
         if response_obj.status_code == 201:
             result = response_obj.json
             if result['status'] == "success" and result['result']:    # contains bad word
                 response_object['message'] = f'Comment contains bad word: {result["bad_word"]}'
                 return jsonify(response_object), 201
-        else:
-            response_object['warning'] = 'failed contacting the anti-cyberbullying service'
 
         # Update user categories (for ads)
         response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)},
                                     auth=(auth.username(), None))
-        if response_obj.status_code != 201:
-            response_object['warning'] = 'failed contacting the ads service'
+        response_object['ad'] = response_obj.json
 
         # Send notification to creator of post
         try:
             response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(auth.username(), None))
+            response_object['post'] = response_obj.json
             creator = response_obj.json['data']['creator']
 
             response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(auth.username(), None))
+            response_object['users'] = response_obj.json
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has commented on your post', 'recipients': [creator]},
                          auth=(auth.username(), None))
+            response_object['notification'] = response_obj.json
         except:
-            response_object['warning'] = 'failed creating a notification'
+            pass
 
         db.session.add(Comment(post_id=post_id, creator=user_id, content=content))
         db.session.commit()

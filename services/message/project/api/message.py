@@ -63,6 +63,9 @@ def create_message():
                              timeout=3, json={'sentence': str(contents)},
                              auth=(g.user_id_or_token, g.password))
         response_object['anti-cyberbullying'] = r_obj.json
+        if r_obj.status_code == 201:
+            if r_obj.json['result']:
+                response_object['message'] = f'Post contains bad words: {r_obj.json["bad_word"]}'
 
         # Update user categories for ads
         r_obj = send_request('post', 'ad', f'ads/user/{sender_id}',

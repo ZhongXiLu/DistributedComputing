@@ -45,20 +45,18 @@ def create_post():
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
                                     timeout=3, json={'sentence': str(content)}, auth=(g.user_id_or_token, g.password))
+        response_object['anti-cyberbullying'] = response_obj.json
         if response_obj.status_code == 201:
             result = response_obj.json
             if result['status'] == "success" and result['result']:    # contains bad word
                 response_object['message'] = f'Post contains bad word: {result["bad_word"]}'
                 return jsonify(response_object), 201
-        else:
-            response_object['warning'] = 'failed contacting the anti-cyberbullying service'
 
         # Update user categories (for ads)
         response_obj = send_request(
             'post', 'ad', f'ads/user/{creator}', timeout=3, json={'sentence': str(content)},
             auth=(g.user_id_or_token, g.password))
-        if response_obj.status_code != 201:
-            response_object['warning'] = 'failed contacting the ads service'
+        response_object['ad'] = response_obj.json
 
         # Create post
         post = Post(creator=creator, content=content)
@@ -84,11 +82,10 @@ def create_post():
             }
             response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data,
                                         auth=(g.user_id_or_token, g.password))
+            response_object['tag'] = response_obj.json
             if response_obj.status_code == 503:
-                response_object = response_obj.json
                 raise RequestException()
             elif response_obj.status_code != 201:
-                response_object['message'] = 'Failed adding tags to post'
                 raise RequestException()
 
         response_object['status'] = 'success'
