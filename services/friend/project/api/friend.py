@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
+
+from util.send_request import send_request
 from util.verify_password import verify_password
 from project.api.models import Friend
 from project import db
@@ -48,6 +50,22 @@ def create_friend():
         db.session.commit()
         response_object['status'] = 'success'
         response_object['message'] = 'friendship request was successfully created'
+
+        # Get name of initiator
+        r_obj = send_request('get', 'users', f'users/{friend_initiator_id}', timeout=3,
+                             auth=(g.user_id_or_token, g.password))
+        try:
+            friend_initiator_name = r_obj.json['data']['username']
+        except KeyError:
+            friend_initiator_name = f'User {friend_initiator_id}'
+
+        # Send notification to acceptor
+        r_obj = send_request('post', 'notification', 'notifications', timeout=3,
+                             json={'content': f'{friend_initiator_name} has sent you a friend invite',
+                                   'recipients': [friend_acceptor_id]},
+                             auth=(g.user_id_or_token, g.password))
+        response_object['notification'] = r_obj.json
+
         return jsonify(response_object), 201
     except Exception as e:
         db.session.rollback()
@@ -79,6 +97,22 @@ def accept_friend():
         db.session.commit()
         response_object['status'] = 'success'
         response_object['message'] = 'friendship request was successfully accepted'
+
+        # Get name of acceptor
+        r_obj = send_request('get', 'users', f'users/{friend_acceptor_id}', timeout=3,
+                             auth=(g.user_id_or_token, g.password))
+        try:
+            friend_acceptor_name = r_obj.json['data']['username']
+        except KeyError:
+            friend_acceptor_name = f'User {friend_initiator_id}'
+
+        # Send notification to initiator
+        r_obj = send_request('post', 'notification', 'notifications', timeout=3,
+                             json={'content': f'{friend_acceptor_name} has sent you a friend invite',
+                                   'recipients': [friend_initiator_id]},
+                             auth=(g.user_id_or_token, g.password))
+        response_object['notification'] = r_obj.json
+
         return jsonify(response_object), 200
     except Exception as e:
         db.session.rollback()
