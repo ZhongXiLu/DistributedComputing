@@ -159,7 +159,8 @@ def delete_password():
 def verify_credentials():
     return jsonify({
         'status': 'success',
-        'authorized': True
+        'authorized': True,
+        'user_id': g.user_id
     }), 200
 
 
@@ -199,6 +200,7 @@ def is_admin():
 @auth.verify_password
 def verify_password(user_id_or_token, password):
     # Try to authenticate with token
+    g.user_id = None
     pw = Password.verify_auth_token(user_id_or_token)
     if not pw:
         # Try to authenticate with user_id + pw
@@ -209,6 +211,7 @@ def verify_password(user_id_or_token, password):
         if not pw or not pw.verify_password(password):
             return False
     g.pw = pw
+    g.user_id = pw.user_id
     return True
 
 

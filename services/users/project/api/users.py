@@ -2,9 +2,9 @@
 
 import requests
 from util.send_request import *
-from util.verify_password import verify_password
+from util.verify_password import verify_password, login_decorator
 from requests.exceptions import RequestException, HTTPError
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
 
 from project.api.models import User
@@ -72,6 +72,18 @@ def ping2():
 def ping3():
     response_obj = send_request('get', 'authentication', 'ping', timeout=3)
     return jsonify(response_obj.json), response_obj.status_code
+
+
+@users_blueprint.route('/users/ping4', methods=['GET'])
+@login_decorator
+def ping4():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!',
+        'user_id_or_token': g.user_id_or_token,
+        'password': g.password,
+        'user_id': g.user_id,
+    })
 
 
 @users_blueprint.route('/users', methods=['POST'])

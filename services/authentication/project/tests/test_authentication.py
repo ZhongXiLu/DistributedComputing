@@ -111,6 +111,16 @@ class TestUserService(BaseTestCase):
 
             # self.client.get()
 
+    def test_get_token(self):
+        with self.client:
+            add_password(0, "asdf")
+
+            response = self.client.get(
+                '/verify_credentials'
+            )
+            print(response.data.decode())
+
+
     '''
     def test_single_user(self):
         """Ensure get single user behaves correctly."""

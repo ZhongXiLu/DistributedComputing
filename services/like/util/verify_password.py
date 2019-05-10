@@ -12,7 +12,15 @@ def verify_password(user_id_or_token, password):
     response = send_request(
         'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token, password))
     if response.status_code == 401:
+        g.reason = 'Wrong credentials'
         return False
+    elif response.status_code != 200:
+        g.reason = 'Other reason'
+        return False
+    try:
+        g.user_id = response.json['user_id']
+    except KeyError:
+        g.user_id = None
     g.user_id_or_token = user_id_or_token
     g.password = password
     return True
