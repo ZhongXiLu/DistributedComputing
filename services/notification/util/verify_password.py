@@ -10,6 +10,8 @@ auth = HTTPBasicAuth()
 @auth.verify_password
 def verify_password(user_id_or_token, password):
     if os.environ.get('TESTING') == "True":
+        g.user_id_or_token = ""
+        g.password = ""
         return True
     response = send_request(
         'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token, password))

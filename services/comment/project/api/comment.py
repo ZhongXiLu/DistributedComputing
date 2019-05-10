@@ -25,6 +25,7 @@ def ping_pong():
         'message': 'pong!'
     })
 
+
 @comment_blueprint.route('', methods=['POST'])
 @login_decorator
 def create_comment():
@@ -44,7 +45,7 @@ def create_comment():
     try:
         # Check for bad words
         response_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
-                                    timeout=3, json={'sentence': str(content)}, auth=(auth.username(), None))
+                                    timeout=3, json={'sentence': str(content)}, auth=(g.user_id_or_token, g.password))
         response_object['anti-cyberbullying'] = response_obj.json
         if response_obj.status_code == 201:
             result = response_obj.json
@@ -54,22 +55,22 @@ def create_comment():
 
         # Update user categories (for ads)
         response_obj = send_request('post', 'ad', f'ads/user/{user_id}', timeout=3, json={'sentence': str(content)},
-                                    auth=(auth.username(), None))
+                                    auth=(g.user_id_or_token, g.password))
         response_object['ad'] = response_obj.json
 
         # Send notification to creator of post
         try:
-            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(auth.username(), None))
+            response_obj = send_request('get', 'post', f'posts/{post_id}', timeout=3, auth=(g.user_id_or_token, g.password))
             response_object['post'] = response_obj.json
             creator = response_obj.json['data']['creator']
 
-            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(auth.username(), None))
+            response_obj = send_request('get', 'users', f'users/{user_id}', timeout=3, auth=(g.user_id_or_token, g.password))
             response_object['users'] = response_obj.json
             username = response_obj.json['data']['username']
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has commented on your post', 'recipients': [creator]},
-                         auth=(auth.username(), None))
+                         auth=(g.user_id_or_token, g.password))
             response_object['notification'] = response_obj.json
         except:
             pass
