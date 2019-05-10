@@ -83,10 +83,6 @@ def create_post():
             response_obj = send_request('post', 'tag', 'tags', timeout=3, json=data,
                                         auth=(g.user_id_or_token, g.password))
             response_object['tag'] = response_obj.json
-            if response_obj.status_code == 503:
-                raise RequestException()
-            elif response_obj.status_code != 201:
-                raise RequestException()
 
         response_object['status'] = 'success'
         response_object['message'] = 'Post was successfully created'

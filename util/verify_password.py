@@ -22,4 +22,5 @@ def is_admin(user_id):
     response = send_request('put', 'authentication', 'is_admin', timeout=3, json={'user_id': user_id})
     return response.json['is_admin']
 
-login_decorator = auth.login_required if os.environ.get('TESTING') == "False" else lambda func: func
+login_decorator = auth.login_required
+# login_decorator = auth.login_required if os.environ.get('TESTING') == "False" else lambda func: func
