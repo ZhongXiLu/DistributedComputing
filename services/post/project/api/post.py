@@ -1,9 +1,9 @@
 
 
-import requests
-import json
+import requests, json, time
+from collections import Counter
 from flask import Blueprint, jsonify, request, g
-from sqlalchemy import exc
+from sqlalchemy import exc, func
 from flask_httpauth import HTTPBasicAuth
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
@@ -115,6 +115,28 @@ def get_post(post_id):
                 }
             }
             return jsonify(response_object), 200
+    except ValueError:
+        return jsonify(response_object), 404
+
+
+@post_blueprint.route('/stats', methods=['GET'])
+def get_post_stats():
+    """Get the post statistics"""
+    response_object = {
+        'status': 'fail',
+        'message': 'Post does not exist'
+    }
+    try:
+        posts = ["{}/{}/{}".format(post.created_date.day, post.created_date.month, post.created_date.year) for post in Post.query.all()]
+        nr_of_posts_per_day = Counter(posts)
+
+        response_object = {
+            'status': 'success',
+            'data': {
+                'stats': nr_of_posts_per_day
+            }
+        }
+        return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
 

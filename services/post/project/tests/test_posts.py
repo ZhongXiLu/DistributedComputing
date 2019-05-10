@@ -3,6 +3,7 @@
 import json
 import unittest
 import requests
+from datetime import date
 
 from project import db
 from project.api.models import Post
@@ -134,24 +135,19 @@ class TestPostService(BaseTestCase):
             self.assertIn('Post does not exist', data['message'])
             self.assertIn('fail', data['status'])
 
-    # def test_add_tags_to_post(self):
-    #     """Ensure all the tags are correctly added to a post"""
-    #     with self.client:
-    #         response = self.client.post(
-    #             '/posts',
-    #             data=json.dumps({
-    #                 'creator': '0',
-    #                 'content': 'Hello World!',
-    #                 'tags': ['1', '2', '3']
-    #             }),
-    #             content_type='application/json',
-    #         )
-    #         data = json.loads(response.data.decode())
-    #         self.assertEqual(response.status_code, 201)
-    #         self.assertIn('success', data['status'])
-    #
-    #         response = requests.get('http://tag:5000/tags/posts/0')
-    #         self.assertEqual(response.status_code, 200)
+    def test_post_stats(self):
+        """Test the post statistics"""
+        user_id = 0
+        posts = ['Hello World!', 'I love Flask!', 'Some other very interesting post']
+        for post in posts:
+            add_post(user_id, post)
+
+        with self.client:
+            response = self.client.get(f'/posts/stats')
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 200)
+            today = date.today().strftime("%d/%-m/%Y")
+            self.assertEqual(data['data']['stats'][today], len(posts))
 
 
 if __name__ == '__main__':
