@@ -44,7 +44,7 @@ def create_follow():
     try:
         # Send notification to followee
         try:
-            response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3, auth=(auth.username(), None))
+            response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3, auth=(g.user_id_or_token, g.password))
             response_object['users'] = response_obj.json
             try:
                 username = response_obj.json['data']['username']
@@ -53,7 +53,7 @@ def create_follow():
 
             send_request('post', 'notification', 'notifications', timeout=3,
                          json={'content': f'{username} has followed you', 'recipients': [followee_id]},
-                         auth=(auth.username(), None))
+                         auth=(g.user_id_or_token, g.password))
             response_object['notification'] = response_obj.json
         except:
             response_object['warning'] = 'failed creating a notification'
