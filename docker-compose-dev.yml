@@ -14,13 +14,6 @@ services:
       - './services/frontend:/usr/src/app'
     ports:
       - 4200:4200
-    depends_on:
-      - users
-      - authentication
-      - post
-      - comment
-      - tag
-      - like
     networks:
       - mynetwork
 
@@ -67,8 +60,6 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
-    depends_on:
-      - users-db
     networks:
       - mynetwork
 
@@ -99,9 +90,6 @@ services:
       - DATABASE_TEST_URL=postgres://postgres:postgres@posts-db:5432/posts_test
     depends_on:
       - posts-db
-      - tag
-      - anti-cyberbullying
-      - ad
     networks:
       - mynetwork
 
@@ -128,9 +116,6 @@ services:
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
-    depends_on:
-      #- follow
-      - post
     networks:
       - mynetwork
 
@@ -209,8 +194,6 @@ services:
       - DATABASE_TEST_URL=postgres://postgres:postgres@comments-db:5432/comments_test
     depends_on:
       - comments-db
-      - anti-cyberbullying
-      - ad
     networks:
       - mynetwork
 
@@ -329,8 +312,6 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@notifications-db:5432/notifications_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@notifications-db:5432/notifications_test
-    depends_on:
-      - notifications-db
     networks:
       - mynetwork
 
@@ -359,8 +340,6 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@notifications-db:5432/notifications_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@notifications-db:5432/notifications_test
-    depends_on:
-      - notifications-db
     networks:
       - mynetwork
 
@@ -389,8 +368,6 @@ services:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@notifications-db:5432/notifications_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@notifications-db:5432/notifications_test
-    depends_on:
-      - notifications-db
     networks:
       - mynetwork
 
