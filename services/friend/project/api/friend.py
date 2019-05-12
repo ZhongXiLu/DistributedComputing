@@ -143,6 +143,16 @@ def delete_friend(friend1_id, friend2_id):
     return jsonify(response_object), 400
 
 
+@friend_blueprint.route('/<user_id>/requests', methods=['GET'])
+def get_friend_requests(user_id):
+    """Get all friends requests sent to the user"""
+    friend_requests = Friend.query.filter_by(friend_acceptor_id=user_id, is_accepted=False)
+    return jsonify({
+        'status': 'success',
+        'friends_requests': [x.friend_initiator_id for x in friend_requests],
+    })
+
+
 @friend_blueprint.route('/<user_id>', methods=['GET'])
 def get_friends(user_id):
     """Get all friends of the user"""
