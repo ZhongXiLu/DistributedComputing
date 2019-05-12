@@ -2,7 +2,7 @@
 
 import requests
 from util.send_request import *
-from util.verify_password import verify_password, login_decorator
+from util.verify_password import verify_password, login_decorator, is_admin
 from requests.exceptions import RequestException, HTTPError
 from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
@@ -228,6 +228,12 @@ def login():
                 raise RequestException()
 
             response_object = response_obj.json
+
+            try:
+                response_object["is_admin"] = is_admin(user.id)
+            except:
+                response_object["is_admin"] = False
+
             response_object["user_id"] = user.id
             return jsonify(response_object), 200
     except (ValueError, RequestException) as e:
