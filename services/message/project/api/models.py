@@ -20,6 +20,7 @@ class Message(db.Model):
 
     def to_json(self):
         return {
+            'id': self.id,
             'contents': self.contents,
             'sender_id': self.sender_id,
             'receiver_id': self.receiver_id,
