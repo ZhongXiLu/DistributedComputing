@@ -18,12 +18,30 @@ export class NewsfeedComponent implements OnInit {
 
   ngOnInit() { 
         const id = localStorage.getItem("id")
-	let headers: HttpHeaders = new HttpHeaders();
-    	headers.append('Content-Type', 'application/x-www-form-urlencoded;   charset=UTF-8');
-    	headers.append('Authorization', localStorage.getItem("token"));
-        this.http.get(environment.newsfeedServiceUrl+'/newsfeed/'+id,{ headers}).subscribe(
+	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+
+        this.http.get(environment.newsfeedServiceUrl+'/newsfeed/'+id,{ headers:headers}).subscribe(
         res => {
-        console.log(res);
+        this.responseHolder = res;
+	this.posts = this.responseHolder.data.posts;
+      for (let post of this.posts){
+	this.http.get(environment.commentServiceUrl+'/comments/posts/'+post.id).subscribe(
+        res => {
+      	this.commentHolder = res;
+	this.comments[post.id]=this.commentHolder.data.comments;
+	}); 
+	}
+      },
+      err => {
+        console.log(err);
+      });
+
+
+      this.http.get(environment.adServiceUrl+'/ads/user/'+id,{ headers}).subscribe(
+        res => {
+        console.log(res)
       },
       err => {
         console.log(err);
@@ -33,16 +51,16 @@ export class NewsfeedComponent implements OnInit {
 
    submit(event) {
 	event.preventDefault();
+	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
     	const message = (<HTMLInputElement>document.getElementById("message")).value;
     	const creator = localStorage.getItem("id")
-   	let headers: HttpHeaders = new HttpHeaders();
-    	headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    	headers.append('Authorization', localStorage.getItem("token"));
+   	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
         this.http.post(environment.postServiceUrl + '/posts', {
         content: message,
         creator: creator,
         tags: [1,2]
-    }, { headers}).subscribe(
+    }, { headers:headers}).subscribe(
       res => {
         console.log(res);
       },
@@ -51,5 +69,43 @@ export class NewsfeedComponent implements OnInit {
       }
     );
   }
+
+  like(id){
+    	const user_id = localStorage.getItem("id")
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.post(environment.likeServiceUrl + '/likes', {
+        post_id: id,
+        user_id: user_id
+    }, { headers:headers}).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );	
+}
+
+comment(id){
+    	const creator = localStorage.getItem("id");
+	const comment= (<HTMLInputElement>document.getElementById("comment")).value;
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.post(environment.commentServiceUrl + '/comments', {
+        post_id: 1,
+        user_id: creator,
+        content: comment
+    }, { headers:headers}).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+   }
 
 }

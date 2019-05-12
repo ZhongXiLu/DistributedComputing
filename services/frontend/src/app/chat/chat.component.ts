@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenService } from '../login/token.service';
+import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -10,30 +11,53 @@ export class ChatComponent implements OnInit {
   welcome = ""
   public responseHolder : any
   constructor(private http: HttpClient, private tokens: TokenService) {
-    const token = tokens.token;
-    const headers = new HttpHeaders({
-      Authorization: token
-});
-    this.http.post(
-      "http://127.0.0.1:5000/api/users/authentication",
-      {
-        username: localStorage.getItem('username'),
-        token: token,
-      }
-      
-   ).subscribe(
-    res => {
-      console.log(res);
-      this.responseHolder = res
-      this.welcome = this.responseHolder.data
-    },
-    err => {
-      console.log("Error occured");
-    }
-  );
+    
    }
 
   ngOnInit() {
+    	this.interval = setInterval(()=>{ 
+	   this.retrieveMessages();
+	},1000);
   }
+
+ retrieveMessages(){
+    	const creator = localStorage.getItem("id");
+	const correspondent_id = 2
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.get(environment.messageServiceUrl + '/message/'+creator+'/'+correspondent_id,{ headers:headers}).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
+ send(){
+    	const creator = localStorage.getItem("id");
+	const correspondent_id = 2;
+	const message= (<HTMLInputElement>document.getElementById("message")).value;
+   	const token = localStorage.getItem("token");
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.post(environment.messageServiceUrl,
+        { 
+	contents:message,
+	sender_id: creator,
+	receiver_id: correspondent_id
+
+	},{ headers:headers}).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
 
 }

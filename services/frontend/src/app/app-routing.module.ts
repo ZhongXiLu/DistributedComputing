@@ -8,12 +8,13 @@ import { AdminComponent } from './admin/admin.component';
 import { SearchComponent } from './search/search.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { ChatComponent } from './chat/chat.component';
+import { Guard } from './guard';
 
 const routes: Routes = 
 [
   {
     path:'',
-    component: HomeComponent
+    component: HomeComponent, canActivate:[Guard]
   },
   {
     path:'register',
@@ -25,19 +26,19 @@ const routes: Routes =
   },
   {
     path:'profile/:username',
-    component: ProfileComponent
+    component: ProfileComponent, canActivate:[Guard]
   },
   {
     path:'admin',
-    component: AdminComponent
+    component: AdminComponent, canActivate:[Guard]
   },
   {
     path:'newsfeed',
-    component: NewsfeedComponent
+    component: NewsfeedComponent, canActivate:[Guard]
   },
   {
     path:'chat',
-    component: ChatComponent
+    component: ChatComponent, canActivate:[Guard]
   },
   {
     path:'search',

@@ -57,14 +57,14 @@ export class ProfileComponent implements OnInit {
     	const id= (<HTMLInputElement>document.getElementById("id")).value;
     	const creator = localStorage.getItem("id");
 	const comment= (<HTMLInputElement>document.getElementById("comment")).value;
-   	let headers: HttpHeaders = new HttpHeaders();
-    	headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    	headers.append('Authorization', localStorage.getItem("token"));
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
         this.http.post(environment.commentServiceUrl + '/comments', {
         post_id: id,
         user_id: creator,
         content: comment
-    }, { headers}).subscribe(
+    }, { headers:headers}).subscribe(
       res => {
         console.log(res);
       },
@@ -74,10 +74,10 @@ export class ProfileComponent implements OnInit {
     );
    }
  delete(id){
-   	let headers: HttpHeaders = new HttpHeaders();
-    	headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    	headers.append('Authorization', localStorage.getItem("token"));
-        this.http.delete(environment.commentServiceUrl + '/comments/'+id, { headers}).subscribe(
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.delete(environment.commentServiceUrl + '/comments/'+id, { headers:headers}).subscribe(
       res => {
         console.log(res);
       },

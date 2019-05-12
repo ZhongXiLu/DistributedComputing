@@ -12,6 +12,7 @@ export const environment = {
   authServiceUrl: 'http://localhost:5004',
   likeServiceUrl: 'http://localhost:5005',
   commentServiceUrl: 'http://localhost:5006',
+  messageServiceUrl: 'http://localhost:5013',
   newsfeedServiceUrl: 'http://localhost:5007',
   antiCyberbullyingServiceUrl: 'http://localhost:5008',
   adServiceUrl: 'http://localhost:5009'
