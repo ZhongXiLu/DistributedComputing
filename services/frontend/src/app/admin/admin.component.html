@@ -5,12 +5,13 @@
       <a class="btn btn-primary" href="#" role="button">Anti-Cyberbullying Service</a>
       <a class="btn btn-primary" href="#" role="button">Advertisement Service</a>
     </div>
-      <ul *ngFor="let item of users" class="list-group">
+      <ul *ngFor="let user of users" class="list-group">
         <li class="list-group-item">
-        {{ item }}
-        <button type="submit" class="btn btn-danger" value={{item}} (click)="submit($event)">Delete</button>
+        {{ user.username }}
+        <button type="submit" class="btn btn-danger" value={{item}} (click)="submit(user.id)">Delete</button>
         <button type="button" class="btn btn-warning">Block</button>
         </li>
-      </ul>   
+      </ul>
+      
   </div>
 

@@ -37,23 +37,18 @@
               <div class="col-12 mb-3">
               <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">{{post.creator}}</h5>
                     <p class="card-text">{{post.content}}</p>
-                    <div class="timestampComment">By Zhong Xi on 11 April 12:50</div>
+                    <div class="timestampComment">By Zhong Xi {{post.created_date}}</div>
                     <button class="btn btn-info">Angie</button>
                     <button class="btn btn-info">Leandre</button>
                     <button class="btn btn-info">Anoushe</button>
                     <button class="btn btn-danger pull-right" (click)="like(post.id)">Like</button>
                     <br>
-                    <a class="card-link">11 April 2019</a>
-                    <a class="card-link">25 <span class="glyphicon glyphicon-search"></span> Likes</a>
-                    <div *ngFor="let comment of comments[post.id]" class="inline">
-                		<a class="card-link">{{comment.content}}</a>
+                    <hr>
+                    <div class="row" *ngFor="let comment of comments[post.id]" class="inline">
+                		<p style="display:block">{{comment.content}}</p>
                 		<hr>
                 	</div>
-                    <hr>
-                    <p>I liked this article</p>
-                    <span class="timestampComment">By Angie on 12 April 12:50</span>
                     <hr class="separate">
                     <input class="form-control" id="comment" type="text" placeholder="Comment">
                     <button class="btn btn-danger pull-right" (click)="comment(post.id)">Comment</button>

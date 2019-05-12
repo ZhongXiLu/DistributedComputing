@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 export class ChatComponent implements OnInit {
   welcome = ""
   public responseHolder : any
+  interval = 0;
   constructor(private http: HttpClient, private tokens: TokenService) {
     
    }
@@ -43,7 +44,7 @@ export class ChatComponent implements OnInit {
    	const token = localStorage.getItem("token");
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
-        this.http.post(environment.messageServiceUrl,
+        this.http.post(environment.messageServiceUrl+'/message',
         { 
 	contents:message,
 	sender_id: creator,

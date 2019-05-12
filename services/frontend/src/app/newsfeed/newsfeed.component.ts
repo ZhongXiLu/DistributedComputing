@@ -30,6 +30,7 @@ export class NewsfeedComponent implements OnInit {
 	this.http.get(environment.commentServiceUrl+'/comments/posts/'+post.id).subscribe(
         res => {
       	this.commentHolder = res;
+	console.log(this.commentHolder);
 	this.comments[post.id]=this.commentHolder.data.comments;
 	}); 
 	}

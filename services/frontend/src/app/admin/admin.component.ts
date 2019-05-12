@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-admin',
@@ -8,19 +9,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AdminComponent implements OnInit {
   public responseHolder :any
-  public users = []
+  public users = [];
   constructor(private http: HttpClient) { 
-    this.http.post('http://127.0.0.1:5000/api/users/all', {
-      username: '',
-      password: '',
-    }).subscribe(
+    this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
-        
-        this.responseHolder = res
-        this.responseHolder.users.forEach(element => {
-          this.users.push(element.username);
-          console.log(element.username)
-      });
+        this.responseHolder = res;
+	this.users = this.responseHolder.data.users;
+	console.log(this.users);
       },
       err => {
         console.log("Error occured");
