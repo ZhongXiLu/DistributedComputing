@@ -2,7 +2,7 @@
 import os
 import json
 import requests
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
 from requests.exceptions import RequestException, HTTPError
 from util.send_request import *
