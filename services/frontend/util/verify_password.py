@@ -9,10 +9,16 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(user_id_or_token, password):
+<<<<<<< HEAD
+    g.user_id_or_token = ""
+    g.password = ""
+    return True
+=======
     if os.environ.get('TESTING') == "True":
         g.user_id_or_token = ""
         g.password = ""
         return True
+>>>>>>> 03446a44f611430624a0b3497427c5c5d1c20bdf
     response = send_request(
         'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token, password))
     if response.status_code == 401:
