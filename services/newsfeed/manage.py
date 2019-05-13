@@ -8,6 +8,7 @@ from project import create_app
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
 
+
 @cli.command()
 def test():
     """Runs the tests without code coverage"""
@@ -18,6 +19,16 @@ def test():
     if result.wasSuccessful():
         return 0
     return 1
+
+
+@cli.command('recreate_db')
+def recreate_db():
+    pass
+
+
+@cli.command('seed_db')
+def seed_db():
+    pass
 
 
 if __name__ == '__main__':

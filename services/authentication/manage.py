@@ -33,8 +33,8 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    db.session.add(Password(user_id=0, password="pazzw0rd1"))
-    db.session.add(Password(user_id=1, password="correct horse battery staple"))
+    db.session.add(Password(user_id=1, password=str("user")))
+    db.session.add(Password(user_id=2, password=str("admin"), is_admin=True))
     db.session.commit()
 
 

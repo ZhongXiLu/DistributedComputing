@@ -34,9 +34,10 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    db.session.add(User(username='michael', email="hermanmu@gmail.com"))
-    db.session.add(User(username='michaelherman', email="michael@mherman.org"))
+    db.session.add(User(username='user', email="user@user.com"))        # id=1
+    db.session.add(User(username='admin', email="admin@admin.com"))     # id=2
     db.session.commit()
+
 
 if __name__ == '__main__':
     cli()

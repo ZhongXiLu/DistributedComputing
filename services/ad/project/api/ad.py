@@ -1,13 +1,10 @@
 
 
-import os
-import requests
-import json
-import re
-from flask import Blueprint, jsonify, request, render_template, send_from_directory
+import os, requests, json, re
+from flask import Blueprint, jsonify, request, render_template, send_from_directory, g
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
-from util.verify_password import login_decorator
+from util.verify_password import login_decorator, is_admin
 
 from project.api.models import Ad, UserCategory
 from project import db
@@ -27,9 +24,22 @@ def ping_pong():
 
 
 @ad_blueprint.route('', methods=['GET'])
+@login_decorator
 def index():
-    images = [ad.to_json() for ad in Ad.query.all()]
-    return render_template("index.html", images=images)
+    response_object = {
+        'status': 'fail',
+        'message': 'Unauthorized access: user is not an admin'
+    }
+
+    try:
+        admin = is_admin(g.user_id)
+        if admin:
+            images = [ad.to_json() for ad in Ad.query.all()]
+            return render_template("index.html", images=images)
+        else:
+            return jsonify(response_object), 401
+    except:
+        return jsonify(response_object), 401
 
 
 @ad_blueprint.route('/<filename>', methods=['GET'])

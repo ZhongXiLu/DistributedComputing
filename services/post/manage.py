@@ -37,7 +37,8 @@ def seed_db():
     # db.session.add(Post(creator='0', content='Hello World again!'))
     # db.session.add(Post(creator='1', content='Some other post'))
     # db.session.add(Post(creator='69', content='Yet another another post :)'))
-    db.session.commit()
+    # db.session.commit()
+    pass
 
 
 if __name__ == '__main__':

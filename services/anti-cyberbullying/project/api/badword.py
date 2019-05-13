@@ -1,12 +1,10 @@
 
 
-import requests
-import json
-import re
-from flask import Blueprint, jsonify, request, render_template
+import requests, json, re
+from flask import Blueprint, jsonify, request, render_template, g
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy import exc
-from util.verify_password import login_decorator
+from util.verify_password import login_decorator, is_admin
 
 from project.api.models import BadWord
 from project import db
@@ -27,8 +25,20 @@ def ping_pong():
 
 @anti_cyberbullying_blueprint.route('', methods=['GET'])
 def index():
-    words = [word.to_json() for word in BadWord.query.all()]
-    return render_template("index.html", words=words)
+    response_object = {
+        'status': 'fail',
+        'message': 'Unauthorized access: user is not an admin'
+    }
+
+    try:
+        admin = is_admin(g.user_id)
+        if admin:
+            words = [word.to_json() for word in BadWord.query.all()]
+            return render_template("index.html", words=words)
+        else:
+            return jsonify(response_object), 401
+    except:
+        return jsonify(response_object), 401
 
 
 @anti_cyberbullying_blueprint.route('', methods=['POST'])

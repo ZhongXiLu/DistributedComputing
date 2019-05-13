@@ -35,7 +35,8 @@ def seed_db():
     """Seeds the database."""
     # TODO: add some default ads
     # db.session.add(Ad(word=line.lower()))
-    db.session.commit()
+    # db.session.commit()
+    pass
 
 
 if __name__ == '__main__':
