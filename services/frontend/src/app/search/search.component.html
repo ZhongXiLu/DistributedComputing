@@ -12,8 +12,8 @@
 <div class="container">
   <ul *ngFor="let request of requests" class="list-group">
     <li class="list-group-item">
-    {{ request.username }}
-    <button type="submit" class="btn btn-danger" value={{item}} (click)="accept(request.id)">Accept</button>
+    {{ request}}
+    <button type="submit" class="btn btn-danger" value={{item}} (click)="accept(request)">Accept</button>
     </li>
    </ul>  
 </div>
@@ -22,9 +22,9 @@
 <div class="container">
   <ul *ngFor="let friend of friends" class="list-group">
     <li class="list-group-item">
-    {{ friend.username }}
-    <button type="submit" class="btn btn-danger" value={{item}} (click)="delete(friend.id)">Delete</button>
-      <a class="nav-link" href="/chat">Chat</a>
+    {{ friend }}
+    <button type="submit" class="btn btn-danger" (click)="delete(friend)">Delete</button>
+     <button type="submit" class="btn btn-warning" (click)="setConversation(friend)">Chat</button>
     </li>
    </ul>  
 </div>

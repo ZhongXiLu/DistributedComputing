@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -14,7 +15,7 @@ export class SearchComponent implements OnInit {
   public friends = [];
   public requestsHolder :any
   public requests = [];
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private router:Router) { 
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
         this.responseHolder = res;
@@ -97,7 +98,7 @@ accept(id){
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
 
-        this.http.put(environment.friendServiceUrl + '/friend/request', {
+        this.http.put(environment.friendServiceUrl + '/friend/accept', {
         friend_initiator_id: id,
         friend_acceptor_id: friend_acceptor_id
     }, { headers:headers}).subscribe(
@@ -123,6 +124,11 @@ delete(id){
         console.log(err);
       }
     );
+   }
+
+setConversation(friend){
+	localStorage.setItem('friend', friend);
+	this.router.navigate(['/chat']);
    }
 
 }

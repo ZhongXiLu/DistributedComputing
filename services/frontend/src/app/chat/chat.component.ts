@@ -24,11 +24,11 @@ export class ChatComponent implements OnInit {
 
  retrieveMessages(){
     	const creator = localStorage.getItem("id");
-	const correspondent_id = 2
+	const correspondent_id = localStorage.getItem("friend");
    	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
-        this.http.get(environment.messageServiceUrl + '/message/'+creator+'/'+1,{ headers:headers}).subscribe(
+        this.http.get(environment.messageServiceUrl + '/message/'+creator+'/'+correspondent_id,{ headers:headers}).subscribe(
       res => {
         this.messageHolder = res;
 	this.messages = this.messageHolder.messages;
@@ -42,7 +42,7 @@ export class ChatComponent implements OnInit {
 
  send(){
     	const creator = localStorage.getItem("id");
-	const correspondent_id = 2;
+	const correspondent_id = localStorage.getItem("friend");
 	const message= (<HTMLInputElement>document.getElementById("message")).value;
    	const token = localStorage.getItem("token");
 	const encoded = btoa(token.toString()+(':k').toString())

@@ -2,7 +2,9 @@
     <div class="row">
       <div class="col-md-10 chat">
         <div class="conversation1" *ngFor="let message of messages">
-            <p>{{ message.contents }}</p>
+            <p class="big">{{ message.contents }}</p>
+            <p class="small">Sent by {{ message.sender_id }}</p>
+            <p class="small">{{ message.time_sent }}</p>
         </div>
         <div class="container">
           <div class="form">
