@@ -39,6 +39,10 @@
                   <div class="card-body">
                     <p class="card-text">{{post.content}}</p>
                     <div class="timestampComment"> {{post.created_date}}</div>
+                    <div class="row" *ngFor="let tag of tags[post.id]" class="inline">
+                    <button class="btn btn-info">{{tag.id}}</button>
+                    <hr>
+                    </div>
                     <button class="btn btn-info">Angie</button>
                     <button class="btn btn-info">Leandre</button>
                     <button class="btn btn-info">Anoushe</button>

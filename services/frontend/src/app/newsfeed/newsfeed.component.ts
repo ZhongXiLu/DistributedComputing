@@ -13,6 +13,8 @@ export class NewsfeedComponent implements OnInit {
   public posts = [];
   public commentHolder :any;
   public comments = {};
+  public tagsHolder :any;
+  public tags = {};
   constructor(private http: HttpClient) {
    }
 
@@ -32,6 +34,13 @@ export class NewsfeedComponent implements OnInit {
       	this.commentHolder = res;
 	console.log(this.commentHolder);
 	this.comments[post.id]=this.commentHolder.data.comments;
+	});
+	
+	this.http.get(environment.tagServiceUrl+'/tags/posts/'+post.id).subscribe(
+        res => {
+      	this.tagsHolder = res;
+	console.log(this.tagsHolder);
+	this.tags[post.id]=this.tagsHolder.data.tags;
 	}); 
 	}
       },

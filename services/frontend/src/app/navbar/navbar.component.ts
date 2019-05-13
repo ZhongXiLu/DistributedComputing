@@ -14,14 +14,17 @@ export class NavbarComponent implements OnInit {
   public notifications = [];
   constructor(private http: HttpClient, private router:Router) { 
     const id = localStorage.getItem('id');
-    this.http.get(environment.notificationServiceUrl+'/notifications/user/'+id).subscribe(
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.get(environment.notificationServiceUrl+'/notifications/user/'+id, { headers:headers}).subscribe(
       res => {
         this.responseHolder = res;
 	this.notifications = this.responseHolder.data.notifications;
 	console.log(this.responseHolder);
       },
       err => {
-        console.log("Error occured");
+        console.log(err);
       }
     );
   }
@@ -32,5 +35,20 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  read(id){
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.put(environment.notificationServiceUrl+'/notifications/'+id,{ hello:"hi"}, { headers:headers}).subscribe(
+      res => {
+	console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  }
+
 
 }
