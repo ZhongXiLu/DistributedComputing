@@ -9,13 +9,18 @@ import { environment } from '../../environments/environment';
 })
 export class AdminComponent implements OnInit {
   public responseHolder :any
+  public statsHolder :any
   public users = [];
+  public stats = [];
+  public numberUsers = 0;
+  public numberPosts = 0;
   constructor(private http: HttpClient) { 
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
         this.responseHolder = res;
 	this.users = this.responseHolder.data.users;
 	console.log(this.users);
+	this.numberUsers = this.users.length;
       },
       err => {
         console.log("Error occured");
@@ -24,12 +29,24 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.http.get(environment.postServiceUrl+'/posts/stats').subscribe(
+      res => {
+        this.statsHolder = res;
+	this.stats = this.statsHolder.data.stats;
+	console.log(this.stats);
+        this.numberPosts = Object.keys(this.stats).length;
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
     
   }
 
   submit(event){
     const username = event.target.value;
-    this.http.post('http://127.0.0.1:5000/api/users/delete', {
+    this.http.post(environment.userServiceUrl+'/users', {
       username: username
     }).subscribe(
       res => {

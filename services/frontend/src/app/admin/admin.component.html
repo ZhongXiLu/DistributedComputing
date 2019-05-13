@@ -5,6 +5,8 @@
       <a class="btn btn-primary" href="#" role="button">Anti-Cyberbullying Service</a>
       <a class="btn btn-primary" href="#" role="button">Advertisement Service</a>
     </div>
+      <h5 style="text-align: center;">{{ numberUsers }} Number of users in the system and {{numberPosts}} written posts today</h5>
+      
       <ul *ngFor="let user of users" class="list-group">
         <li class="list-group-item">
         {{ user.username }}

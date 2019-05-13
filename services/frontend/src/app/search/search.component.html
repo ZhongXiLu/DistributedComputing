@@ -1,7 +1,31 @@
-<div class="container"  *ngFor="let user of users">
-  <div class="row">
-        <p class="card-text">{{user.username}}</p>
-       <button class="btn btn-danger pull-right" (click)="follow(user.id)">Follow</button>
-  </div>  
+<div class="container">
+  <ul *ngFor="let user of users" class="list-group">
+    <li class="list-group-item">
+    {{ user.username }}
+    <button type="submit" class="btn btn-danger" value={{item}} (click)="follow(user.id)">Follow</button>
+    <button type="button" class="btn btn-warning" (click)="beFriend(user.id)">Friend</button>
+    </li>
+   </ul>  
+</div>
+<h6 style="text-align: center">Friends request</h6>
+<hr>
+<div class="container">
+  <ul *ngFor="let request of requests" class="list-group">
+    <li class="list-group-item">
+    {{ request.username }}
+    <button type="submit" class="btn btn-danger" value={{item}} (click)="accept(request.id)">Accept</button>
+    </li>
+   </ul>  
+</div>
+<h6 style="text-align: center">My friends</h6>
+<hr>
+<div class="container">
+  <ul *ngFor="let friend of friends" class="list-group">
+    <li class="list-group-item">
+    {{ friend.username }}
+    <button type="submit" class="btn btn-danger" value={{item}} (click)="delete(friend.id)">Delete</button>
+      <a class="nav-link" href="/chat">Chat</a>
+    </li>
+   </ul>  
 </div>
 

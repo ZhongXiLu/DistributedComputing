@@ -55,12 +55,14 @@ export class NewsfeedComponent implements OnInit {
 	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
     	const message = (<HTMLInputElement>document.getElementById("message")).value;
+	const tags = (<HTMLInputElement>document.getElementById("tags")).value;
+	const tagsArray = tags.split(",");
     	const creator = localStorage.getItem("id")
    	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
         this.http.post(environment.postServiceUrl + '/posts', {
         content: message,
         creator: creator,
-        tags: [1,2]
+        tags: tagsArray
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);

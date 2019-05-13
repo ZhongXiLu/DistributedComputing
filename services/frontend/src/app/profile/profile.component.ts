@@ -86,4 +86,18 @@ export class ProfileComponent implements OnInit {
       }
     );
    }
+
+deletePost(id){
+   	const token = localStorage.getItem("token")
+	const encoded = btoa(token.toString()+(':k').toString())
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.delete(environment.postServiceUrl + '/posts/'+id, { headers:headers}).subscribe(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+   }
 }
