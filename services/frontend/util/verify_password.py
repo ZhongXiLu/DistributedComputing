@@ -8,19 +8,18 @@ auth = HTTPBasicAuth()
 
 
 @auth.verify_password
-def verify_password(user_id_or_token, password):
-<<<<<<< HEAD
-    g.user_id_or_token = ""
-    g.password = ""
-    return True
-=======
+def verify_password(user_id_or_token_or_username, password):
     if os.environ.get('TESTING') == "True":
         g.user_id_or_token = ""
         g.password = ""
         return True
->>>>>>> 03446a44f611430624a0b3497427c5c5d1c20bdf
+
+    response_obj = send_request('get', 'users', f'users/name/{user_id_or_token_or_username}', timeout=3)
+    if response_obj.status_code == 200:
+        user_id_or_token_or_username = response_obj.json['data']['id']
+
     response = send_request(
-        'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token, password))
+        'get', 'authentication', 'verify_credentials', timeout=3, auth=(user_id_or_token_or_username, password))
     if response.status_code == 401:
         g.reason = 'Wrong credentials'
         return False
@@ -31,7 +30,7 @@ def verify_password(user_id_or_token, password):
         g.user_id = response.json['user_id']
     except KeyError:
         g.user_id = None
-    g.user_id_or_token = user_id_or_token
+    g.user_id_or_token = user_id_or_token_or_username
     g.password = password
     return True
 
