@@ -1,6 +1,7 @@
 
 import os
 import unittest
+from shutil import copyfile
 
 from flask.cli import FlaskGroup
 
@@ -33,10 +34,15 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    # TODO: add some default ads
-    # db.session.add(Ad(word=line.lower()))
-    # db.session.commit()
-    pass
+    uploadDir = os.path.abspath(os.path.basename('uploads'))
+    if not os.path.exists(uploadDir):
+        os.makedirs(uploadDir)
+
+    for file in os.listdir("ads"):
+        copyfile(os.path.join("ads", file), os.path.join("uploads", file))
+        category = file.split('.')[0]
+        db.session.add(Ad(category=category, image=file))
+    db.session.commit()
 
 
 if __name__ == '__main__':
