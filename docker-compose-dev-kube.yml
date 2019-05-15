@@ -7,6 +7,7 @@ networks:
 services:
 
   frontend:
+    image: ${DOCKER_USERNAME}/frontend:latest
     build:
       context: ./services/frontend
       dockerfile: Dockerfile-dev
@@ -18,6 +19,7 @@ services:
       - mynetwork
 
   users:
+    image: ${DOCKER_USERNAME}/users:latest
     build:
       context: ./services/users
       dockerfile: Dockerfile-dev
@@ -36,6 +38,7 @@ services:
       - mynetwork
 
   users-db:
+    image: ${DOCKER_USERNAME}/users-db:latest
     build:
       context: ./services/users/project/db
       dockerfile: Dockerfile
@@ -48,6 +51,7 @@ services:
       - mynetwork
 
   authentication:
+    image: ${DOCKER_USERNAME}/authentication:latest
     build:
       context: ./services/authentication
       dockerfile: Dockerfile-dev
@@ -64,6 +68,7 @@ services:
       - mynetwork
 
   authentication-db:
+    image: ${DOCKER_USERNAME}/authentication-db:latest
     build:
       context: ./services/authentication/project/db
       dockerfile: Dockerfile
@@ -76,6 +81,7 @@ services:
       - mynetwork
 
   post:
+    image: ${DOCKER_USERNAME}/post:latest
     build:
       context: ./services/post
       dockerfile: Dockerfile-dev
@@ -94,6 +100,7 @@ services:
       - mynetwork
 
   posts-db:
+    image: ${DOCKER_USERNAME}/posts-db:latest
     build:
       context: ./services/post/project/db
       dockerfile: Dockerfile
@@ -106,6 +113,7 @@ services:
       - mynetwork
 
   newsfeed:
+    image: ${DOCKER_USERNAME}/newsfeed:latest
     build:
       context: ./services/newsfeed
       dockerfile: Dockerfile-dev
@@ -120,6 +128,7 @@ services:
       - mynetwork
 
   tag:
+    image: ${DOCKER_USERNAME}/tag:latest
     build:
       context: ./services/tag
       dockerfile: Dockerfile-dev
@@ -138,6 +147,7 @@ services:
       - mynetwork
 
   tags-db:
+    image: ${DOCKER_USERNAME}/tags-db:latest
     build:
       context: ./services/tag/project/db
       dockerfile: Dockerfile
@@ -150,6 +160,7 @@ services:
       - mynetwork
 
   like:
+    image: ${DOCKER_USERNAME}/like:latest
     build:
       context: ./services/like
       dockerfile: Dockerfile-dev
@@ -168,6 +179,7 @@ services:
       - mynetwork
 
   likes-db:
+    image: ${DOCKER_USERNAME}/likes-db:latest
     build:
       context: ./services/like/project/db
       dockerfile: Dockerfile
@@ -180,6 +192,7 @@ services:
       - mynetwork
 
   comment:
+    image: ${DOCKER_USERNAME}/comment:latest
     build:
       context: ./services/comment
       dockerfile: Dockerfile-dev
@@ -198,6 +211,7 @@ services:
       - mynetwork
 
   comments-db:
+    image: ${DOCKER_USERNAME}/comments-db:latest
     build:
       context: ./services/comment/project/db
       dockerfile: Dockerfile
@@ -210,6 +224,7 @@ services:
       - mynetwork
 
   anti-cyberbullying:
+    image: ${DOCKER_USERNAME}/anti-cyberbullying:latest
     build:
       context: ./services/anti-cyberbullying
       dockerfile: Dockerfile-dev
@@ -228,6 +243,7 @@ services:
       - mynetwork
 
   badwords-db:
+    image: ${DOCKER_USERNAME}/badwords-db:latest
     build:
       context: ./services/anti-cyberbullying/project/db
       dockerfile: Dockerfile
@@ -240,6 +256,7 @@ services:
       - mynetwork
 
   ad:
+    image: ${DOCKER_USERNAME}/ad:latest
     build:
       context: ./services/ad
       dockerfile: Dockerfile-dev
@@ -258,6 +275,7 @@ services:
       - mynetwork
 
   ads-db:
+    image: ${DOCKER_USERNAME}/ads-db:latest
     build:
       context: ./services/ad/project/db
       dockerfile: Dockerfile
@@ -270,6 +288,7 @@ services:
       - mynetwork
 
   notification:
+    image: ${DOCKER_USERNAME}/notification:latest
     build:
       context: ./services/notification
       dockerfile: Dockerfile-dev
@@ -288,6 +307,7 @@ services:
       - mynetwork
 
   notifications-db:
+    image: ${DOCKER_USERNAME}/notifications-db:latest
     build:
       context: ./services/notification/project/db
       dockerfile: Dockerfile
@@ -300,6 +320,7 @@ services:
       - mynetwork
 
   follow:
+    image: ${DOCKER_USERNAME}/follow:latest
     build:
       context: ./services/follow
       dockerfile: Dockerfile-dev
@@ -316,6 +337,7 @@ services:
       - mynetwork
 
   follow-db:
+    image: ${DOCKER_USERNAME}/follow-db:latest
     build:
       context: ./services/follow/project/db
       dockerfile: Dockerfile
@@ -328,6 +350,7 @@ services:
       - mynetwork
 
   friend:
+    image: ${DOCKER_USERNAME}/friend:latest
     build:
       context: ./services/friend
       dockerfile: Dockerfile-dev
@@ -344,6 +367,7 @@ services:
       - mynetwork
 
   friends-db:
+    image: ${DOCKER_USERNAME}/friends-db:latest
     build:
       context: ./services/friend/project/db
       dockerfile: Dockerfile
@@ -356,6 +380,7 @@ services:
       - mynetwork
 
   message:
+    image: ${DOCKER_USERNAME}/message:latest
     build:
       context: ./services/message
       dockerfile: Dockerfile-dev
@@ -372,6 +397,7 @@ services:
       - mynetwork
 
   messages-db:
+    image: ${DOCKER_USERNAME}/messages-db:latest
     build:
       context: ./services/message/project/db
       dockerfile: Dockerfile
@@ -384,6 +410,7 @@ services:
       - mynetwork
 
   poll:
+    image: ${DOCKER_USERNAME}/poll:latest
     build:
       context: ./services/poll
       dockerfile: Dockerfile-dev
