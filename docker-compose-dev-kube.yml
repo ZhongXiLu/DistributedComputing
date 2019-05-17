@@ -11,8 +11,6 @@ services:
     build:
       context: ./services/frontend
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/frontend:/usr/src/app'
     ports:
       - 4200:4200
     networks:
@@ -23,8 +21,6 @@ services:
     build:
       context: ./services/users
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/users:/usr/src/app'
     ports:
       - 5001:5000
     environment:
@@ -55,8 +51,6 @@ services:
     build:
       context: ./services/authentication
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/authentication:/usr/src/app'
     ports:
       - 5004:5000
     environment:
@@ -85,8 +79,6 @@ services:
     build:
       context: ./services/post
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/post:/usr/src/app'
     ports:
       - 5002:5000
     environment:
@@ -117,8 +109,6 @@ services:
     build:
       context: ./services/newsfeed
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/newsfeed:/usr/src/app'
     ports:
       - 5007:5000
     environment:
@@ -132,8 +122,6 @@ services:
     build:
       context: ./services/tag
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/tag:/usr/src/app'
     ports:
       - 5003:5000
     environment:
@@ -164,8 +152,6 @@ services:
     build:
       context: ./services/like
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/like:/usr/src/app'
     ports:
       - 5005:5000
     environment:
@@ -196,8 +182,6 @@ services:
     build:
       context: ./services/comment
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/comment:/usr/src/app'
     ports:
       - 5006:5000
     environment:
@@ -228,8 +212,6 @@ services:
     build:
       context: ./services/anti-cyberbullying
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/anti-cyberbullying:/usr/src/app'
     ports:
       - 5008:5000
     environment:
@@ -260,8 +242,6 @@ services:
     build:
       context: ./services/ad
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/ad:/usr/src/app'
     ports:
       - 5009:5000
     environment:
@@ -292,8 +272,6 @@ services:
     build:
       context: ./services/notification
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/notification:/usr/src/app'
     ports:
       - 5010:5000
     environment:
@@ -324,8 +302,6 @@ services:
     build:
       context: ./services/follow
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/follow:/usr/src/app'
     ports:
       - 5011:5000
     environment:
@@ -354,8 +330,6 @@ services:
     build:
       context: ./services/friend
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/friend:/usr/src/app'
     ports:
       - 5012:5000
     environment:
@@ -384,8 +358,6 @@ services:
     build:
       context: ./services/message
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/message:/usr/src/app'
     ports:
       - 5013:5000
     environment:
@@ -414,8 +386,6 @@ services:
     build:
       context: ./services/poll
       dockerfile: Dockerfile-dev
-    volumes:
-      - './services/poll:/usr/src/app'
     ports:
       - 5014:5000
     networks:

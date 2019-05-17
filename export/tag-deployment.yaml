@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: tag
+  name: tag
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: tag
+    spec:
+      containers:
+      - env:
+        - name: APP_SETTINGS
+          value: project.config.DevelopmentConfig
+        - name: DATABASE_TEST_URL
+          value: postgres://postgres:postgres@tags-db:5432/tags_test
+        - name: DATABASE_URL
+          value: postgres://postgres:postgres@tags-db:5432/tags_dev
+        - name: FLASK_ENV
+          value: development
+        image: zhongxilu/tag:latest
+        name: tag
+        ports:
+        - containerPort: 5000
+        resources: {}
+      restartPolicy: Always
+status: {}

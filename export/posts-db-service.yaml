@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: posts-db
+  name: posts-db
+spec:
+  ports:
+  - name: "5436"
+    port: 5436
+    targetPort: 5432
+  selector:
+    io.kompose.service: posts-db
+status:
+  loadBalancer: {}

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: comments-db
+  name: comments-db
+spec:
+  ports:
+  - name: "5440"
+    port: 5440
+    targetPort: 5432
+  selector:
+    io.kompose.service: comments-db
+status:
+  loadBalancer: {}

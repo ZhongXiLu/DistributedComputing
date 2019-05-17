@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ads-db
+  name: ads-db
+spec:
+  ports:
+  - name: "5442"
+    port: 5442
+    targetPort: 5432
+  selector:
+    io.kompose.service: ads-db
+status:
+  loadBalancer: {}
