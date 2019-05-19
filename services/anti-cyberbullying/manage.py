@@ -35,7 +35,7 @@ def seed_db():
     """Seeds the database."""
     with open('swearWords.txt', 'r') as file:
         for line in file:
-            db.session.add(BadWord(word=line.lower()))
+            db.session.add(BadWord(word=line.lower().rstrip()))
     db.session.commit()
 
 
