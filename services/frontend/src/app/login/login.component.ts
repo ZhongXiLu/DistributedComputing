@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
       },
       err => {
         console.log(err);
+ 	const danger = (<HTMLInputElement>document.getElementById("danger"));
+        danger.innerHTML=err;
       }
     );
 
