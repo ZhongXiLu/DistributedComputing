@@ -119,7 +119,7 @@ def get_personalized_ads(user_id):
     try:
         categories = UserCategory.query.filter_by(user_id=user_id)
         ads = []
-        if categories:
+        if categories.count() > 0:
             # User has user-specific ads
             for category in categories:
                 ads += Ad.query.filter_by(category=category.category)
