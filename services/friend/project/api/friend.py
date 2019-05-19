@@ -40,7 +40,7 @@ def create_friend():
     if friend_initiator_id is None or friend_acceptor_id is None:
         return jsonify(response_object), 400
 
-    if friend_initiator_id == friend_acceptor_id:
+    if int(friend_initiator_id) == int(friend_acceptor_id):
         response_object['message'] = 'You cannot friend yourself'
         return jsonify(response_object), 400
 
