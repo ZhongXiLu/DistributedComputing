@@ -51,20 +51,22 @@ def create_friend():
         response_object['status'] = 'success'
         response_object['message'] = 'friendship request was successfully created'
 
-        # Get name of initiator
-        r_obj = send_request('get', 'users', f'users/{friend_initiator_id}', timeout=3,
-                             auth=(g.user_id_or_token, g.password))
         try:
-            friend_initiator_name = r_obj.json['data']['username']
-        except KeyError:
-            friend_initiator_name = f'User {friend_initiator_id}'
+            response_obj = send_request('get', 'users', f'users/{friend_initiator_id}', timeout=3, auth=(g.user_id_or_token, g.password))
+            response_object['users'] = response_obj.json
+            username = f'User {friend_initiator_id}'
+            try:
+                username = response_obj.json['data']['username']
+            except:
+                pass
 
-        # Send notification to acceptor
-        r_obj = send_request('post', 'notification', 'notifications', timeout=3,
-                             json={'content': f'{friend_initiator_name} has sent you a friend invite',
-                                   'recipients': [friend_acceptor_id]},
-                             auth=(g.user_id_or_token, g.password))
-        response_object['notification'] = r_obj.json
+            response_obj = send_request('post', 'notification', 'notifications', timeout=3,
+                                           json={'content': f'{username} has sent you a friend invite',
+                                                 'recipients': [friend_acceptor_id]},
+                                           auth=(g.user_id_or_token, g.password))
+            response_object['notification'] = response_obj.json
+        except:
+            response_object['warning'] = 'failed creating a notification'
 
         return jsonify(response_object), 201
     except Exception as e:

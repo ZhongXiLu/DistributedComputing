@@ -94,7 +94,7 @@ class TestFriendService(BaseTestCase):
                 '/friend/1'
             )
             data = json.loads(response.data.decode())
-            print(data)
+            # print(data)
             self.assertEqual(response.status_code, 200)
             self.assertEqual(sorted(data['friends']), sorted([0, 2]))
 

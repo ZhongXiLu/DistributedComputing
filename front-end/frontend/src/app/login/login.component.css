@@ -1,9 +1,0 @@
-.login{
-    height: 100vh;
-    background-image: url("/assets/background.jpg");
-    background-size: cover;
-}
-.login-row{
-    width: 80%;
-    margin: 0 auto;
-}

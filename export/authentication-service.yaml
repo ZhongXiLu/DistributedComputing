@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: authentication
+  name: authentication
+spec:
+  ports:
+  - name: "5004"
+    port: 5004
+    targetPort: 5000
+  selector:
+    io.kompose.service: authentication
+status:
+  loadBalancer: {}

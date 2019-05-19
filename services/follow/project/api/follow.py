@@ -46,14 +46,16 @@ def create_follow():
         try:
             response_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3, auth=(g.user_id_or_token, g.password))
             response_object['users'] = response_obj.json
+
+            username = f'User {follower_id}'
             try:
                 username = response_obj.json['data']['username']
-            except KeyError:
-                username = f'User {follower_id}'
+            except:
+                pass
 
-            send_request('post', 'notification', 'notifications', timeout=3,
-                         json={'content': f'{username} has followed you', 'recipients': [followee_id]},
-                         auth=(g.user_id_or_token, g.password))
+            response_obj = send_request('post', 'notification', 'notifications', timeout=3,
+                                        json={'content': f'{username} has followed you', 'recipients': [followee_id]},
+                                        auth=(g.user_id_or_token, g.password))
             response_object['notification'] = response_obj.json
         except:
             response_object['warning'] = 'failed creating a notification'
@@ -62,21 +64,6 @@ def create_follow():
         db.session.commit()
         response_object['status'] = 'success'
         response_object['message'] = 'follower was successfully created'
-
-        # Get name of follower
-        r_obj = send_request('get', 'users', f'users/{follower_id}', timeout=3,
-                             auth=(g.user_id_or_token, g.password))
-        try:
-            follower_name = r_obj.json['data']['username']
-        except KeyError:
-            follower_name = f'User {follower_id}'
-
-        # Send notification to acceptor
-        r_obj = send_request('post', 'notification', 'notifications', timeout=3,
-                             json={'content': f'{follower_name} has started following you',
-                                   'recipients': [followee_id]},
-                             auth=(g.user_id_or_token, g.password))
-        response_object['notification'] = r_obj.json
 
         return jsonify(response_object), 201
     except Exception as e:

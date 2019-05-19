@@ -382,3 +382,14 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - mynetwork
+
+  poll:
+    build:
+      context: ./services/poll
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/poll:/usr/src/app'
+    ports:
+      - 5014:5000
+    networks:
+      - mynetwork
