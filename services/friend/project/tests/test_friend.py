@@ -39,6 +39,22 @@ class TestFriendService(BaseTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn('success', data['status'])
 
+    def test_friend_self(self):
+        """Ensure you cannot friend yourself."""
+        with self.client:
+            response = self.client.post(
+                '/friend/request',
+                data=json.dumps({
+                    'friend_initiator_id': 0,
+                    'friend_acceptor_id': 0
+                }),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('fail', data['status'])
+            self.assertIn('You cannot friend yourself', data['message'])
+
     def test_add_duplicate_friend(self):
         """Ensure no duplicate friends can be added."""
         add_friend(0, 1)

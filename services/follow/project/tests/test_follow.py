@@ -31,6 +31,22 @@ class TestFollowService(BaseTestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn('success', data['status'])
 
+    def test_follow_self(self):
+        """Ensure you cannot follow yourself"""
+        with self.client:
+            response = self.client.post(
+                '/follow',
+                data=json.dumps({
+                    'follower_id': 0,
+                    'followee_id': 0
+                }),
+                content_type='application/json',
+            )
+            data = json.loads(response.data.decode())
+            self.assertEqual(response.status_code, 400)
+            self.assertIn('fail', data['status'])
+            self.assertIn('You cannot follow yourself', data['message'])
+
     def test_delete_follow(self):
         """Ensure a follower-followee relation can be deleted"""
         add_follow(0, 1)
