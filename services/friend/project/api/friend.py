@@ -40,6 +40,10 @@ def create_friend():
     if friend_initiator_id is None or friend_acceptor_id is None:
         return jsonify(response_object), 400
 
+    if int(friend_initiator_id) == int(friend_acceptor_id):
+        response_object['message'] = 'You cannot friend yourself'
+        return jsonify(response_object), 400
+
     try:
         if Friend.query.filter_by(friend_initiator_id=friend_acceptor_id,
                                   friend_acceptor_id=friend_initiator_id).count():

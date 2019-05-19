@@ -41,6 +41,10 @@ def create_follow():
     if follower_id is None or followee_id is None:
         return jsonify(response_object), 400
 
+    if int(follower_id) == int(followee_id):
+        response_object['message'] = 'You cannot follow yourself'
+        return jsonify(response_object), 400
+
     try:
         # Send notification to followee
         try:

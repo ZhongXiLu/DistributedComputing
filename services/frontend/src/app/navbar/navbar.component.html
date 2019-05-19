@@ -9,6 +9,9 @@
         <li class="nav-item">
           <a class="nav-link" href="/profile/0">My profile</a>
         </li>
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" href="/chat">Chat</a>-->
+<!--        </li>-->
         <li class="nav-item">
           <a class="nav-link" href="/search">Search</a>
         </li>
@@ -20,16 +23,22 @@
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
+<<<<<<< HEAD
           <a class="nav-link dropdown-toggle notification" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Notifications
             <span class="badge">{{notificationsLength}}</span>
+=======
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Notifications <span class="badge badge-success" *ngIf="notifications.length > 0">{{notifications.length}}</span>
+>>>>>>> 5119a2cf460ee368fa3110b23b0ffe9c839546d8
           </a>
+          <!-- TODO: for some reason only shows first notification -->
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" *ngFor="let notification of notifications">
             <a class="dropdown-item" (click)="read(notification.id)">{{notification.content}}</a>
           </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="!!logout()">Logout</a>
+          <a href="" class="nav-link" (click)="!!logout()">Logout</a>
         </li>
       </ul>
     </div>
