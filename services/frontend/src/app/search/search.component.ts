@@ -57,14 +57,14 @@ export class SearchComponent implements OnInit {
   }
 
  follow(id){
-    	const follower = localStorage.getItem("id")
-   	let headers: HttpHeaders = new HttpHeaders();
-    	headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-    	headers.append('Authorization', localStorage.getItem("token"));
+    	const follower = localStorage.getItem("id");
+   	const token = localStorage.getItem("token");
+	const encoded = btoa(token.toString()+(':k').toString());
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
         this.http.post(environment.followServiceUrl + '/follow', {
         follower_id: follower,
         followee_id: id
-    }, { headers}).subscribe(
+    }, { headers:headers}).subscribe(
       res => {
         console.log(res);
       },
