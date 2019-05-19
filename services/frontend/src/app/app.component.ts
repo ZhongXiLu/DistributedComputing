@@ -10,6 +10,7 @@ export class AppComponent {
   
   constructor(){
     this.token = localStorage.getItem("token");
+    console.log(this.token);
   } 
     
 }

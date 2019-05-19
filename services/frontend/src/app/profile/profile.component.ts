@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-profile',
@@ -15,11 +16,33 @@ export class ProfileComponent implements OnInit {
   public commentHolder :any;
   public comments = {};
   public try = ["hello","hi"];
-  constructor(private http: HttpClient) 
-{
+  public usersHolder :any
+  public users = [];
+  public usersObject = {};
+  public tagsHolder :any;
+  public tags = {};
+  public likesLength : number
+  public likesHolder :any;
+  public likes = {};
+  constructor(private http: HttpClient, public nav: Navbar) 
+   {
+      this.http.get(environment.userServiceUrl+'/users').subscribe(
+      res => {
+        this.usersHolder = res;
+	this.users = this.usersHolder.data.users;
+	console.log(this.users);
+        for (let obj of this.users){
+           this.usersObject[obj.id]=obj.username;
+        }
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
    }
 
-  ngOnInit() {
+  ngOnInit() { 
+        this.nav.show();
         const id = localStorage.getItem('id');
 	console.log(id);
 	this.http.get('http://localhost:5001/users/'+id).subscribe(
@@ -45,6 +68,20 @@ export class ProfileComponent implements OnInit {
 	this.comments[post.id]=this.commentHolder.data.comments;
 	console.log(this.comments);
 	}); 
+        this.http.get(environment.tagServiceUrl+'/tags/posts/'+post.id).subscribe(
+        res => {
+      	this.tagsHolder = res;
+	console.log(this.tagsHolder);
+	this.tags[post.id]=this.tagsHolder.data.tags;
+	}); 
+
+	this.http.get(environment.likeServiceUrl+'/likes/posts/'+post.id).subscribe(
+        res => {
+      	this.likesHolder = res;
+	console.log(this.likesHolder);
+	this.likes[post.id]=this.likesHolder.data.likes;
+        this.likesLength = this.likesHolder.data.likes.length;
+	}); 
 	}
       },
       err => {
@@ -53,10 +90,9 @@ export class ProfileComponent implements OnInit {
  
   }
 
-   submitComment(event){
-    	const id= (<HTMLInputElement>document.getElementById("id")).value;
+   submitComment(id){
     	const creator = localStorage.getItem("id");
-	const comment= (<HTMLInputElement>document.getElementById("comment")).value;
+	const comment= (<HTMLInputElement>document.getElementById(id)).value;
    	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);

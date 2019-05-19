@@ -2,10 +2,6 @@
     <div class="row profile-header">
       <img src="/assets/avatar.png">
       <p>{{username}}</p>
-      <button class="btn btn-success">500 calories burnt</button>
-      <button class="btn btn-success">2Km traveled</button>
-      <br><br>
-      <button class="btn btn-secondary">Add friend</button>
     </div>
     <div class="row posts">
       <div class="row justify-content-center">
@@ -15,21 +11,22 @@
               <div class="card-body">
                 <button class="btn btn-danger pull-right" (click)="deletePost(post.id)">Delete post</button>
                 <p class="card-text">{{post.content}}</p>
-                <input type="text" id="id" class="hide" value={{post.id}}>
+                <a href="">{{likesLength}} likes</a>
                 <div class="timestampComment">By {{username}} {{post.created_date}}</div>
-                <button class="btn btn-info">Angie</button>
-                <button class="btn btn-info">Leandre</button>
-                <button class="btn btn-info">Anoushe</button>
-                <br>
+                <div *ngFor="let tag of tags[post.id]">
+                    <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
+                </div>
                 <div *ngFor="let comment of comments[post.id]" class="inline">
                 		<a class="card-link">{{comment.content}}</a>
-                		<button class="btn btn-danger pull-right" (click)="delete(post.id)">Delete</button>
+                		<br>
+                		<a>written by {{usersObject[comment.creator]}}</a>
+                		<button class="btn btn-danger pull-right" (click)="delete(comment.id)">Delete</button>
                 		<hr>
                 </div>
                 <hr>
                 <hr class="separate">
-                <input class="form-control" type="text" placeholder="Comment" id="comment">
-                <button class="btn btn-danger pull-right" (click)="submitComment($event)">Comment</button>
+                <input class="form-control" type="text" placeholder="Comment" id={{post.id}} >
+                <button class="btn btn-danger pull-right" (click)="submitComment(post.id)">Comment</button>
               </div>
           </div>
           </div>

@@ -5,8 +5,8 @@
         <tr>
           <!--   ADS       -->
           <td style="width: 50%" class="align-top">
-            <div class="row">
-              <img width=400 height=400 src="..." class="rounded mx-auto d-block border border-success" alt="Some advertisement">
+            <div class="row" *ngFor="let ad of ads">
+              <img width=400 height=400 src="{{imageRoot}}/ads/{{ad.image}}" class="rounded mx-auto d-block border border-success" alt="Some advertisement">
             </div>
           </td>
 
@@ -37,24 +37,23 @@
               <div class="col-12 mb-3">
               <div class="card">
                   <div class="card-body">
+                    <p class="card-text">Created by {{usersObject[post.creator]}}</p>
                     <p class="card-text">{{post.content}}</p>
+                    <a href="">{{likesLength}} likes</a>
                     <div class="timestampComment"> {{post.created_date}}</div>
-                    <div class="row" *ngFor="let tag of tags[post.id]" class="inline">
-                    <button class="btn btn-info">{{tag.id}}</button>
-                    <hr>
+                  
+                    <div *ngFor="let tag of tags[post.id]">
+                      <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
                     </div>
-                    <button class="btn btn-info">Angie</button>
-                    <button class="btn btn-info">Leandre</button>
-                    <button class="btn btn-info">Anoushe</button>
                     <button class="btn btn-danger pull-right" (click)="like(post.id)">Like</button>
                     <br>
                     <hr>
                     <div class="row" *ngFor="let comment of comments[post.id]" class="inline">
-                		<p style="display:block">{{comment.content}}</p>
+                		<p style="display:block">{{comment.content}} written by {{usersObject[comment.creator]}}</p>
                 		<hr>
                 	</div>
                     <hr class="separate">
-                    <input class="form-control" id="comment" type="text" placeholder="Comment">
+                    <input class="form-control" id={{post.id}} type="text" placeholder="Comment">
                     <button class="btn btn-danger pull-right" (click)="comment(post.id)">Comment</button>
                   </div>
               </div>

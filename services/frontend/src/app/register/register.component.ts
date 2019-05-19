@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-register',
@@ -9,12 +10,13 @@ import { environment } from '../../environments/environment';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
-  constructor(private http: HttpClient, private router: Router) {
+  public errorMessage : any
+  constructor(private http: HttpClient, private router: Router, public nav: Navbar) {
 
   }
 
   ngOnInit() {
+    this.nav.hide();
   }
 
   submit(event) {
@@ -32,7 +34,10 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']);
       },
       err => {
+        this.errorMessage = err.error;
         console.log(err);
+        const danger = (<HTMLInputElement>document.getElementById("danger"));
+        danger.innerHTML=this.errorMessage.message;
       }
     );
 

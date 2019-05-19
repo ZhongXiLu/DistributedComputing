@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-newsfeed',
@@ -15,10 +16,35 @@ export class NewsfeedComponent implements OnInit {
   public comments = {};
   public tagsHolder :any;
   public tags = {};
-  constructor(private http: HttpClient) {
+  public likesLength : number
+  public likesHolder :any;
+  public likes = {};
+  public adsHolder :any;
+  public ads = [];
+  public usersHolder :any
+  public users = [];
+  public usersObject = {};
+  public cyberHolder :any
+  public imageRoot = environment.adServiceUrl; 
+
+  constructor(private http: HttpClient, public nav: Navbar) {
+     this.http.get(environment.userServiceUrl+'/users').subscribe(
+      res => {
+        this.usersHolder = res;
+	this.users = this.usersHolder.data.users;
+	console.log(this.users);
+        for (let obj of this.users){
+           this.usersObject[obj.id]=obj.username;
+        }
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
    }
 
   ngOnInit() { 
+        this.nav.show();
         const id = localStorage.getItem("id")
 	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
@@ -28,6 +54,7 @@ export class NewsfeedComponent implements OnInit {
         res => {
         this.responseHolder = res;
 	this.posts = this.responseHolder.data.posts;
+        console.log(this.posts);
       for (let post of this.posts){
 	this.http.get(environment.commentServiceUrl+'/comments/posts/'+post.id).subscribe(
         res => {
@@ -42,6 +69,14 @@ export class NewsfeedComponent implements OnInit {
 	console.log(this.tagsHolder);
 	this.tags[post.id]=this.tagsHolder.data.tags;
 	}); 
+
+	this.http.get(environment.likeServiceUrl+'/likes/posts/'+post.id).subscribe(
+        res => {
+      	this.likesHolder = res;
+	console.log(this.likesHolder);
+	this.likes[post.id]=this.likesHolder.data.likes;
+        this.likesLength = this.likesHolder.data.likes.length;
+	}); 
 	}
       },
       err => {
@@ -51,7 +86,8 @@ export class NewsfeedComponent implements OnInit {
 
       this.http.get(environment.adServiceUrl+'/ads/user/'+id,{ headers}).subscribe(
         res => {
-        console.log(res)
+        this.adsHolder = res;
+	this.ads=this.adsHolder.data.ads;
       },
       err => {
         console.log(err);
@@ -75,6 +111,12 @@ export class NewsfeedComponent implements OnInit {
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        this.cyberHolder = res["anti-cyberbullying"].result;
+        console.log(this.cyberHolder);
+        if(this.cyberHolder){
+         const danger = (<HTMLInputElement>document.getElementById("danger"));
+         danger.innerHTML="Your post did not pass the cyber bulling text";
+        }
       },
       err => {
         console.log(err);
@@ -102,12 +144,12 @@ export class NewsfeedComponent implements OnInit {
 
 comment(id){
     	const creator = localStorage.getItem("id");
-	const comment= (<HTMLInputElement>document.getElementById("comment")).value;
+	const comment= (<HTMLInputElement>document.getElementById(id)).value;
    	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
         this.http.post(environment.commentServiceUrl + '/comments', {
-        post_id: 1,
+        post_id: id,
         user_id: creator,
         content: comment
     }, { headers:headers}).subscribe(

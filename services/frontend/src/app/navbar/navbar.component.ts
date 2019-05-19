@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,8 @@ export class NavbarComponent implements OnInit {
 
   public responseHolder :any
   public notifications = [];
-  constructor(private http: HttpClient, private router:Router) { 
+  public notificationsLength = 0;
+  constructor(private http: HttpClient, private router:Router, public nav: Navbar) { 
     const id = localStorage.getItem('id');
     const token = localStorage.getItem("token")
     const encoded = btoa(token.toString()+(':k').toString())
@@ -22,6 +24,7 @@ export class NavbarComponent implements OnInit {
         this.responseHolder = res;
 	this.notifications = this.responseHolder.data.notifications;
 	console.log(this.responseHolder);
+        this.notificationsLength = this.notifications.length;
       },
       err => {
         console.log(err);

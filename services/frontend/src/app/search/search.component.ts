@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-search',
@@ -15,12 +16,16 @@ export class SearchComponent implements OnInit {
   public friends = [];
   public requestsHolder :any
   public requests = [];
-  constructor(private http: HttpClient, private router:Router) { 
+  public usersObject = {};
+  constructor(private http: HttpClient, private router:Router,public nav: Navbar) { 
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
         this.responseHolder = res;
 	this.users = this.responseHolder.data.users;
 	console.log(this.users);
+        for (let obj of this.users){
+           this.usersObject[obj.id]=obj.username;
+        }
       },
       err => {
         console.log("Error occured");
@@ -29,7 +34,7 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.nav.show();
     const user = localStorage.getItem("id")
 
     this.http.get(environment.friendServiceUrl+'/friend/'+user+'/requests').subscribe(

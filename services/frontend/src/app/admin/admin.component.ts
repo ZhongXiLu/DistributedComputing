@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Navbar} from '../navbar';
 
 @Component({
   selector: 'app-admin',
@@ -14,7 +15,7 @@ export class AdminComponent implements OnInit {
   public stats = [];
   public numberUsers = 0;
   public numberPosts = 0;
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient,public nav: Navbar) { 
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
         this.responseHolder = res;
@@ -29,7 +30,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.nav.show();
     this.http.get(environment.postServiceUrl+'/posts/stats').subscribe(
       res => {
         this.statsHolder = res;
