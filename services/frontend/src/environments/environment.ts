@@ -2,8 +2,14 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+export const proxy = {
+    url: 'http://localhost:8001/api/v1/namespaces/default/services/'
+};
+
 export const environment = {
   production: false,
+
+  // for docker-compose
   userServiceUrl: 'http://localhost:5001',
   postServiceUrl: 'http://localhost:5002',
   followServiceUrl: 'http://localhost:5011',
@@ -17,6 +23,21 @@ export const environment = {
   newsfeedServiceUrl: 'http://localhost:5007',
   antiCyberbullyingServiceUrl: 'http://localhost:5008',
   adServiceUrl: 'http://localhost:5009'
+
+  // for kubernetes
+  // userServiceUrl: proxy.url + 'users/proxy',
+  // postServiceUrl: proxy.url + 'post/proxy',
+  // followServiceUrl: proxy.url + 'follow/proxy',
+  // notificationServiceUrl: proxy.url + 'notification/proxy',
+  // tagServiceUrl: proxy.url + 'tag/proxy',
+  // authServiceUrl: proxy.url + 'authentication/proxy',
+  // likeServiceUrl: proxy.url + 'like/proxy',
+  // commentServiceUrl: proxy.url + 'comment/proxy',
+  // messageServiceUrl: proxy.url + 'message/proxy',
+  // friendServiceUrl: proxy.url + 'friend/proxy',
+  // newsfeedServiceUrl: proxy.url + 'newsfeed/proxy',
+  // antiCyberbullyingServiceUrl: proxy.url + 'anti-cyberbullying/proxy',
+  // adServiceUrl: proxy.url + 'ad/proxy'
 };
 
 /*
