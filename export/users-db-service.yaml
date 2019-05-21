@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: users-db
   name: users-db
 spec:
+  type: NodePort
   ports:
   - name: "5435"
     port: 5435
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: users-db
 status:
   loadBalancer: {}
+

@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: friends-db
   name: friends-db
 spec:
+  type: NodePort
   ports:
   - name: "5445"
     port: 5445
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: friends-db
 status:
   loadBalancer: {}
+

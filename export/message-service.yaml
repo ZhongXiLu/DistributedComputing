@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: message
   name: message
 spec:
+  type: NodePort
   ports:
   - name: "5013"
     port: 5013
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: message
 status:
   loadBalancer: {}
+

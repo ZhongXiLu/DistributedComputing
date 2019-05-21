@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: newsfeed
   name: newsfeed
 spec:
+  type: NodePort
   ports:
   - name: "5007"
     port: 5007
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: newsfeed
 status:
   loadBalancer: {}
+

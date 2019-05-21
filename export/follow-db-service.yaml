@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: follow-db
   name: follow-db
 spec:
+  type: NodePort
   ports:
   - name: "5444"
     port: 5444
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: follow-db
 status:
   loadBalancer: {}
+

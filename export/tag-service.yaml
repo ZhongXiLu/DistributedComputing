@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: tag
   name: tag
 spec:
+  type: NodePort
   ports:
   - name: "5003"
     port: 5003
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: tag
 status:
   loadBalancer: {}
+

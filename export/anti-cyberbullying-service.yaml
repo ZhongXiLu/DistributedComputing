@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: anti-cyberbullying
   name: anti-cyberbullying
 spec:
+  type: NodePort
   ports:
   - name: "5008"
     port: 5008
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: anti-cyberbullying
 status:
   loadBalancer: {}
+

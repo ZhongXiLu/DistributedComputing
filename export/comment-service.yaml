@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: comment
   name: comment
 spec:
+  type: NodePort
   ports:
   - name: "5006"
     port: 5006
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: comment
 status:
   loadBalancer: {}
+

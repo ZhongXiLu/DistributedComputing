@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: ads-db
   name: ads-db
 spec:
+  type: NodePort
   ports:
   - name: "5442"
     port: 5442
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: ads-db
 status:
   loadBalancer: {}
+

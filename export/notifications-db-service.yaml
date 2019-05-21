@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: notifications-db
   name: notifications-db
 spec:
+  type: NodePort
   ports:
   - name: "5443"
     port: 5443
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: notifications-db
 status:
   loadBalancer: {}
+

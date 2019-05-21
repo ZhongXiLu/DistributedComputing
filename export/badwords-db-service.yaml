@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: badwords-db
   name: badwords-db
 spec:
+  type: NodePort
   ports:
   - name: "5441"
     port: 5441
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: badwords-db
 status:
   loadBalancer: {}
+

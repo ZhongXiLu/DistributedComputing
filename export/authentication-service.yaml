@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: authentication
   name: authentication
 spec:
+  type: NodePort
   ports:
   - name: "5004"
     port: 5004
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: authentication
 status:
   loadBalancer: {}
+

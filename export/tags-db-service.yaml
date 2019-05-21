@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: tags-db
   name: tags-db
 spec:
+  type: NodePort
   ports:
   - name: "5437"
     port: 5437
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: tags-db
 status:
   loadBalancer: {}
+

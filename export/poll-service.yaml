@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: poll
   name: poll
 spec:
+  type: NodePort
   ports:
   - name: "5014"
     port: 5014
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: poll
 status:
   loadBalancer: {}
+

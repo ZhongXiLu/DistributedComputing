@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: messages-db
   name: messages-db
 spec:
+  type: NodePort
   ports:
   - name: "5446"
     port: 5446
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: messages-db
 status:
   loadBalancer: {}
+

@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: comments-db
   name: comments-db
 spec:
+  type: NodePort
   ports:
   - name: "5440"
     port: 5440
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: comments-db
 status:
   loadBalancer: {}
+

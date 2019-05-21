@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: posts-db
   name: posts-db
 spec:
+  type: NodePort
   ports:
   - name: "5436"
     port: 5436
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: posts-db
 status:
   loadBalancer: {}
+

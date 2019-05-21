@@ -9,6 +9,7 @@ metadata:
     io.kompose.service: friend
   name: friend
 spec:
+  type: NodePort
   ports:
   - name: "5012"
     port: 5012
@@ -17,3 +18,4 @@ spec:
     io.kompose.service: friend
 status:
   loadBalancer: {}
+
