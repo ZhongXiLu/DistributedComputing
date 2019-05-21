@@ -11,11 +11,12 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name: "5437"
-    port: 5437
+  - name: "5432"
+    port: 5432
     targetPort: 5432
   selector:
     io.kompose.service: tags-db
 status:
   loadBalancer: {}
+
 
