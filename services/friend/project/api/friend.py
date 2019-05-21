@@ -109,7 +109,7 @@ def accept_friend():
                              auth=(g.user_id_or_token, g.password))
         try:
             friend_acceptor_name = r_obj.json['data']['username']
-        except KeyError:
+        except:
             friend_acceptor_name = f'User {friend_initiator_id}'
 
         # Send notification to initiator
@@ -162,11 +162,9 @@ def get_friend_requests(user_id):
 @friend_blueprint.route('/<user_id>', methods=['GET'])
 def get_friends(user_id):
     """Get all friends of the user"""
-    q1 = Friend.query.filter_by(friend_initiator_id=user_id, is_accepted=True)
-    q2 = Friend.query.filter_by(friend_acceptor_id=user_id, is_accepted=True)
-    friends = q1.union(q2).all()
+    q1 = [friend.friend_acceptor_id for friend in Friend.query.filter_by(friend_initiator_id=user_id, is_accepted=True)]
+    q2 = [friend.friend_initiator_id for friend in Friend.query.filter_by(friend_acceptor_id=user_id, is_accepted=True)]
     return jsonify({
         'status': 'success',
-        'friends': [(x.friend_initiator_id if x.friend_acceptor_id != user_id else x.friend_acceptor_id)
-                    for x in friends],
+        'friends': q1 + q2,
     })

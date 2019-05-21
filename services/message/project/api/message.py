@@ -53,11 +53,6 @@ def create_message():
         return jsonify(response_object), 400
 
     try:
-        db.session.add(Message(contents=contents, sender_id=sender_id, receiver_id=receiver_id))
-        db.session.commit()
-        response_object['status'] = 'success'
-        response_object['message'] = 'message was successfully created'
-
         # Check for bad words
         r_obj = send_request('post', 'anti-cyberbullying', 'anti_cyberbullying/contains_bad_word',
                              timeout=3, json={'sentence': str(contents)},
@@ -66,6 +61,7 @@ def create_message():
         if r_obj.status_code == 201:
             if r_obj.json['result']:
                 response_object['message'] = f'Post contains bad words: {r_obj.json["bad_word"]}'
+                return jsonify(response_object), 201
 
         # Update user categories for ads
         r_obj = send_request('post', 'ad', f'ads/user/{sender_id}',
@@ -73,6 +69,24 @@ def create_message():
                              auth=(g.user_id_or_token, g.password))
         response_object['ad'] = r_obj.json
 
+        # Send notification to receiver
+        try:
+            response_obj = send_request('get', 'users', f'users/{sender_id}', timeout=3,
+                                        auth=(g.user_id_or_token, g.password))
+            response_object['users'] = response_obj.json
+            username = response_obj.json['data']['username']
+
+            send_request('post', 'notification', 'notifications', timeout=3,
+                         json={'content': f'{username} has sent you a message', 'recipients': [receiver_id]},
+                         auth=(g.user_id_or_token, g.password))
+            response_object['notification'] = response_obj.json
+        except:
+            pass
+
+        db.session.add(Message(contents=contents, sender_id=sender_id, receiver_id=receiver_id))
+        db.session.commit()
+        response_object['status'] = 'success'
+        response_object['message'] = 'message was successfully created'
         return jsonify(response_object), 201
     except Exception as e:
         db.session.rollback()
