@@ -159,6 +159,56 @@ def delete_password(user_id):
     return jsonify(response_object), 400
 
 
+@authentication_blueprint.route('/passwords/<user_id>/block', methods=['PUT'])
+@auth.login_required
+def block_password(user_id):
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid payload.'
+    }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
+    try:
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
+        if pw:
+            pw.auth_allowed = False
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Blocked password of user {auth.username()}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError:
+        db.session.rollback()
+    return jsonify(response_object), 400
+
+
+@authentication_blueprint.route('/passwords/<user_id>/unblock', methods=['PUT'])
+@auth.login_required
+def unblock_password(user_id):
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid payload.'
+    }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
+    try:
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
+        if pw:
+            pw.auth_allowed = True
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Unblocked password of user {auth.username()}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError:
+        db.session.rollback()
+    return jsonify(response_object), 400
+
+
 @authentication_blueprint.route('/verify_credentials', methods=['GET'])
 @auth.login_required
 def verify_credentials():
@@ -200,8 +250,6 @@ def is_admin():
     response_object['message'] = 'successfully got is_admin'
     response_object['is_admin'] = pw.is_admin
     return jsonify(response_object), 200
-
-
 
 
 @auth.verify_password

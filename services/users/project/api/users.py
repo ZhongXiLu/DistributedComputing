@@ -253,6 +253,7 @@ def delete_user(user_id):
         'status': 'fail',
         'message': 'User does not exist'
     }
+    response_code = 404
     try:
         if not is_admin(g.user_id):
             response_object['message'] = 'User is not admin.'
@@ -261,7 +262,6 @@ def delete_user(user_id):
         response_object['message'] = 'Could not reach authentication service to check if user is admin.'
         return jsonify(response_object), 401
     try:
-
         user = User.query.filter_by(id=int(user_id)).first()
 
         if not user:
@@ -285,7 +285,7 @@ def delete_user(user_id):
     except ValueError:
         return jsonify(response_object), 404
     except RequestException as e:
-        return jsonify(response_object), 404
+        return jsonify(response_object), response_code
 
 
 @users_blueprint.route('/users/<user_id>/block', methods=['PUT'])
@@ -295,13 +295,29 @@ def block_user(user_id):
         'status': 'fail',
         'message': 'User does not exist'
     }
-
+    response_code = 404
+    try:
+        if not is_admin(g.user_id):
+            response_object['message'] = 'User is not admin.'
+            return jsonify(response_object), 401
+    except KeyError:
+        response_object['message'] = 'Could not reach authentication service to check if user is admin.'
+        return jsonify(response_object), 401
     try:
         user = User.query.filter_by(id=int(user_id)).first()
 
         if not user:
             return jsonify(response_object), 404
         else:
+            response_obj = send_request(
+                'PUT', 'authentication', f'passwords/{user_id}/block', timeout=3, auth=(g.user_id_or_token, g.password))
+            response_code = response_obj.status_code
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code != 200:
+                raise RequestException()
+
             user.active = False
             db.session.commit()
             response_object['status'] = 'success'
@@ -310,6 +326,8 @@ def block_user(user_id):
 
     except ValueError:
         return jsonify(response_object), 404
+    except RequestException as e:
+        return jsonify(response_object), response_code
 
 
 @users_blueprint.route('/users/<user_id>/unblock', methods=['PUT'])
@@ -319,6 +337,14 @@ def unblock_user(user_id):
         'status': 'fail',
         'message': 'User does not exist'
     }
+    response_code = 404
+    try:
+        if not is_admin(g.user_id):
+            response_object['message'] = 'User is not admin.'
+            return jsonify(response_object), 401
+    except KeyError:
+        response_object['message'] = 'Could not reach authentication service to check if user is admin.'
+        return jsonify(response_object), 401
 
     try:
         user = User.query.filter_by(id=int(user_id)).first()
@@ -326,6 +352,15 @@ def unblock_user(user_id):
         if not user:
             return jsonify(response_object), 404
         else:
+            response_obj = send_request(
+                'PUT', 'authentication', f'passwords/{user_id}/block', timeout=3, auth=(g.user_id_or_token, g.password))
+            response_code = response_obj.status_code
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code != 200:
+                raise RequestException()
+
             user.active = True
             db.session.commit()
             response_object['status'] = 'success'
@@ -334,3 +369,5 @@ def unblock_user(user_id):
 
     except ValueError:
         return jsonify(response_object), 404
+    except RequestException as e:
+        return jsonify(response_object), response_code
