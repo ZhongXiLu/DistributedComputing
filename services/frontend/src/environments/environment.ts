@@ -37,7 +37,7 @@ export const environment = {
   // friendServiceUrl: proxy.url + ':30012',
   // newsfeedServiceUrl: proxy.url + ':30017',
   // antiCyberbullyingServiceUrl: proxy.url + ':30003',
-  //adServiceUrl: proxy.url + ':30001'
+  // adServiceUrl: proxy.url + ':30001'
 };
 
 /*

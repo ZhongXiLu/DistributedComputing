@@ -16,7 +16,7 @@
 
         <h2>Add a new advertisement</h2>
 
-        <form action="http://localhost:5009/ads" method="POST" enctype="multipart/form-data">
+        <form action="/ads" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="word">Category</label>
                 <input type="text" class="form-control" id="category" name="category" placeholder="Enter categories (seperate with a space)">
@@ -45,7 +45,7 @@
             <tr>
               <th scope="row">{{ image.id }}</th>
               <td>{{ image.category }}</td>
-              <td><a href="http://localhost:5009/ads/{{ image.image }}">{{ image.image }}</a></td>
+              <td><a href="/ads/{{ image.image }}">{{ image.image }}</a></td>
             </tr>
             {% endfor %}
           </tbody>
