@@ -238,3 +238,75 @@ def login():
             return jsonify(response_object), 200
     except (ValueError, RequestException) as e:
         return jsonify(response_object), response_code
+
+
+@users_blueprint.route('/users/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    """Deletes a user"""
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+
+    try:
+        user = User.query.filter_by(id=int(user_id)).first()
+
+        if not user:
+            return jsonify(response_object), 404
+        else:
+            db.session.delete(user)
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = 'user was successfully removed'
+            return jsonify(response_object), 200
+
+    except ValueError:
+        return jsonify(response_object), 404
+
+
+@users_blueprint.route('/users/<user_id>/block', methods=['PUT'])
+def block_user(user_id):
+    """Blocks a user"""
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+
+    try:
+        user = User.query.filter_by(id=int(user_id)).first()
+
+        if not user:
+            return jsonify(response_object), 404
+        else:
+            user.active = False
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = 'user was successfully blocked'
+            return jsonify(response_object), 200
+
+    except ValueError:
+        return jsonify(response_object), 404
+
+
+@users_blueprint.route('/users/<user_id>/unblock', methods=['PUT'])
+def unblock_user(user_id):
+    """Blocks a user"""
+    response_object = {
+        'status': 'fail',
+        'message': 'User does not exist'
+    }
+
+    try:
+        user = User.query.filter_by(id=int(user_id)).first()
+
+        if not user:
+            return jsonify(response_object), 404
+        else:
+            user.active = True
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = 'user was successfully unblocked'
+            return jsonify(response_object), 200
+
+    except ValueError:
+        return jsonify(response_object), 404
