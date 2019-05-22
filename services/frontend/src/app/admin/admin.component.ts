@@ -50,34 +50,45 @@ export class AdminComponent implements OnInit {
     const token = localStorage.getItem("token")
     const encoded = btoa(token.toString()+(':k').toString())
     let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
-    this.http.post(environment.userServiceUrl+'/users', {
-      username: username
-    }, { headers:headers}).subscribe(
+    this.http.delete(environment.userServiceUrl+'/users/'+id, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="User deleted";
         },
       err => {
-        console.log("Error occured");
+        console.log(err);
       }
     );
 
   } 
 
   block(id){
-    const token = localStorage.getItem("token")
-    const encoded = btoa(token.toString()+(':k').toString())
-    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
-    this.http.post(environment.userServiceUrl+'/users', {
-      username: username
-    },{ headers:headers}).subscribe(
+    this.http.put(environment.userServiceUrl+'/users/'+id+'/block').subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="User blocked";
         },
       err => {
-        console.log("Error occured");
+        console.log(err);
       }
     );
 
   } 
+
+ unblock(id){
+    this.http.put(environment.userServiceUrl+'/users/'+id+'/unblock').subscribe(
+      res => {
+        console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="User unblocked";
+        },
+      err => {
+        console.log(err);
+      }
+    );
+
+  }
 
 }

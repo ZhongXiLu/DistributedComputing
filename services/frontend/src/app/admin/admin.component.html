@@ -6,6 +6,7 @@
       <br><br>
       <a target=_blank class="btn btn-primary" href="{{ environment.adServiceUrl + '/ads'}}" role="button">Advertisement Service</a>
     </div>
+      <h6 class="text-success" id="success" style="text-align:center;"></h6>
       <h3>Post Statistics</h3>
       <table class="table table-hover">
           <thead class="thead-dark">
@@ -31,6 +32,7 @@
         {{ user.username }}
         <button type="submit" class="btn btn-danger" value={{item}} (click)="submit(user.id)">Delete</button>
         <button type="button" class="btn btn-warning" (click)="block(user.id)">Block</button>
+        <button type="button" class="btn btn-warning" (click)="unblock(user.id)">Unblock</button>
         </li>
       </ul>
       
