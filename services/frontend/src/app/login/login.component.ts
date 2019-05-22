@@ -38,11 +38,13 @@ export class LoginComponent implements OnInit {
 	localStorage.setItem('token', this.responseHolder.token);
         localStorage.setItem('id', this.responseHolder.user_id);
         localStorage.setItem('admin', this.responseHolder.is_admin);
-        if(this.responseHolder.is_admin){
+        const admin= localStorage.getItem("admin")
+        if(admin=="true"){
 	  this.router.navigate(['/admin']);
   	}
-
-        this.router.navigate(['/newsfeed']);
+        else{
+	  this.router.navigate(['/newsfeed']);
+  	}
         
       },
       err => {

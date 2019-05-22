@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
         this.nav.show();
         const id = localStorage.getItem('id');
 	console.log(id);
-	this.http.get('http://localhost:5001/users/'+id).subscribe(
+	this.http.get(environment.userServiceUrl+'/users/'+id).subscribe(
         res => {
 	this.responseHolder = res;
 	this.username = this.responseHolder.data.username;
