@@ -45,7 +45,7 @@ class Password(db.Model):
     def verify_password(self, password):
         return pwd_context.verify(self.salt + password, self.password_hash)
 
-    def generate_auth_token(self, expiration=600):
+    def generate_auth_token(self, expiration=6000):
         s = Serializer(get_app().config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'user_id': self.user_id})
 
