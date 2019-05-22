@@ -13,9 +13,10 @@ export class AdminComponent implements OnInit {
   public statsHolder :any
   public users = [];
   public stats = [];
+  public statsDays = [];
   public numberUsers = 0;
-  public numberPosts = 0;
-  constructor(private http: HttpClient,public nav: Navbar) { 
+  public environment = environment;
+  constructor(private http: HttpClient,public nav: Navbar) {
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
         this.responseHolder = res;
@@ -34,9 +35,9 @@ export class AdminComponent implements OnInit {
     this.http.get(environment.postServiceUrl+'/posts/stats').subscribe(
       res => {
         this.statsHolder = res;
-	this.stats = this.statsHolder.data.stats;
-	console.log(this.stats);
-        this.numberPosts = Object.keys(this.stats).length;
+	      this.stats = this.statsHolder.data.stats;
+	      console.log(this.stats);
+        this.statsDays = Object.keys(this.stats);
       },
       err => {
         console.log("Error occured");
