@@ -14,6 +14,7 @@ spec:
   - name: "5432"
     port: 5432
     targetPort: 5432
+    nodePort: 30009
   selector:
     io.kompose.service: follow-db
 status:
