@@ -3,7 +3,7 @@
 # https://stackoverflow.com/questions/59895/get-the-source-directory-of-a-bash-script-from-within-the-script-itself
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-./${DIR}/install_kubernetes.sh
+${DIR}/install_kubernetes.sh
 
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 | tee ${DIR}/temp.out
 echo "#!/usr/bin/env bash" > ${DIR}/add_node_to_cluster.sh
