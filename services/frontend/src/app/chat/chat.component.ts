@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit {
   public cyberHolder :any
   public users = [];
   public usersObject = {};
+  public friend = localStorage.getItem("friend");
   constructor(private http: HttpClient, private tokens: TokenService,public nav: Navbar) {
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {

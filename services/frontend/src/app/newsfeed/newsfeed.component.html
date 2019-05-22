@@ -39,9 +39,9 @@
               <div class="col-12 mb-3">
               <div class="card">
                   <div class="card-body">
-                    <p class="card-text">Created by {{usersObject[post.creator]}}</p>
+                    <h4 class="card-text"><b>{{usersObject[post.creator]}}:</b></h4>
                     <p class="card-text">{{post.content}}</p>
-                    <a href="">{{likesLength}} likes</a>
+                    <a>{{likes[post.id].length}} likes</a>
                     <div class="timestampComment"> {{post.created_date}}</div>
                   
                     <div *ngFor="let tag of tags[post.id]">
@@ -51,11 +51,12 @@
                     <br>
                     <hr>
                     <div class="row" *ngFor="let comment of comments[post.id]" class="inline">
-                		<p style="display:block">{{comment.content}} written by {{usersObject[comment.creator]}}</p>
+                      <p style="display:block"><b>{{usersObject[comment.creator]}}</b>: {{comment.content}}</p>
+                      <div class="timestampComment"> {{comment.created_date}}</div>
                 		<hr>
                 	</div>
-                    <hr class="separate">
                     <input class="form-control" id={{post.id}} type="text" placeholder="Comment">
+                    <br>
                     <button class="btn btn-danger pull-right" (click)="comment(post.id)">Comment</button>
                   </div>
               </div>

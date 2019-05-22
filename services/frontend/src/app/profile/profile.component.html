@@ -7,31 +7,31 @@
     <div class="row posts">
       <div class="row justify-content-center">
         <div class="row" *ngFor="let post of posts">
-          <div class="col-12 mb-3">
-          <div class="card">
-              <div class="card-body">
-                <button class="btn btn-danger pull-right" (click)="deletePost(post.id)">Delete post</button>
-                <p class="card-text">{{post.content}}</p>
-                <a href="">{{likesLength}} likes</a>
-                <div class="timestampComment">By {{username}} {{post.created_date}}</div>
-                <div *ngFor="let tag of tags[post.id]">
-                    <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
-                </div>
-                <div *ngFor="let comment of comments[post.id]" class="inline">
-                		<a class="card-link">{{comment.content}}</a>
-                		<br>
-                		<a>written by {{usersObject[comment.creator]}}</a>
-                		<button class="btn btn-danger pull-right" (click)="delete(comment.id)">Delete</button>
+              <div class="col-12 mb-3">
+              <div class="card">
+                  <div class="card-body">
+                    <button class="btn btn-danger pull-right" (click)="deletePost(post.id)">Delete post</button>
+                    <p class="card-text">{{post.content}}</p>
+                    <a>{{likesLength}} likes</a>
+                    <div class="timestampComment"> {{post.created_date}}</div>
+
+                    <div *ngFor="let tag of tags[post.id]">
+                      <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="row" *ngFor="let comment of comments[post.id]" class="inline">
+                      <p style="display:block"><b>{{usersObject[comment.creator]}}</b>: {{comment.content}}</p>
+                      <div class="timestampComment"> {{comment.created_date}}</div>
                 		<hr>
-                </div>
-                <hr>
-                <hr class="separate">
-                <input class="form-control" type="text" placeholder="Comment" id={{post.id}} >
-                <button class="btn btn-danger pull-right" (click)="submitComment(post.id)">Comment</button>
+                	</div>
+                    <input class="form-control" id={{post.id}} type="text" placeholder="Comment">
+                    <br>
+                    <button class="btn btn-danger pull-right" (click)="submitComment(post.id)">Comment</button>
+                  </div>
               </div>
-          </div>
-          </div>
-        </div>
+              </div>
+            </div>
       </div>
     </div>
   </div>
