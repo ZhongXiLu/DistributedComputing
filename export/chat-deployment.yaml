@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export/
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chat
+  name: chat
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: chat
+    spec:
+      containers:
+      - image: zhongxilu/chat:latest
+        name: chat
+        ports:
+        - containerPort: 4200
+        resources: {}
+      restartPolicy: Always
+status: {}

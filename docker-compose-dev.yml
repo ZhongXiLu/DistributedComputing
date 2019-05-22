@@ -17,6 +17,17 @@ services:
     networks:
       - mynetwork
 
+  chat:
+    build:
+      context: ./services/chat
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/chat:/usr/src/app'
+    ports:
+      - 4201:4200
+    networks:
+      - mynetwork
+
   users:
     build:
       context: ./services/users

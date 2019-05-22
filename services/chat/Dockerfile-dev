@@ -1,0 +1,11 @@
+FROM node:10-alpine
+
+COPY package.json /usr/src/
+WORKDIR /usr/src/
+RUN npm install && npm install -g @angular/cli
+ENV PATH /usr/src/node_modules/.bin:$PATH
+
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+
+CMD ["/usr/src/app/entrypoint.sh"]

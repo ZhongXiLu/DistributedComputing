@@ -16,6 +16,16 @@ services:
     networks:
       - mynetwork
 
+  chat:
+    image: ${DOCKER_USERNAME}/chat:latest
+    build:
+      context: ./services/chat
+      dockerfile: Dockerfile-dev
+    ports:
+      - 4201:4200
+    networks:
+      - mynetwork
+
   users:
     image: ${DOCKER_USERNAME}/users:latest
     build:

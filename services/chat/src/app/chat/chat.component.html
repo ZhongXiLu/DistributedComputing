@@ -1,0 +1,24 @@
+
+
+<div class="container chats">
+  <h1 style="text-align: center">Chat with {{usersObject[friend]}} </h1>
+  <hr>
+  <br>
+  <div class="row">
+      <div class="col-md-10 chat">
+        <div class="conversation1" *ngFor="let message of messages">
+            <p class="big">{{ message.contents }}</p>
+            <p class="small">Sent by {{usersObject[message.sender_id]}}</p>
+            <p class="small">{{ message.time_sent }}</p>
+        </div>
+        <br>
+        <div class="container">
+          <div class="form">
+            <input type="text" placeholder="message" id="message">
+            <button class="btn btn-success" (click)="send()">Send</button>
+          </div>
+        </div>
+        <h6 class="text-danger" id="danger" style="text-align:center;"></h6>
+      </div>
+    </div>
+  </div>

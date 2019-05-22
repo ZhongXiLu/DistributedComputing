@@ -1,0 +1,8 @@
+.login{
+    height: 100vh;
+    background-size: cover;
+}
+.login-row{
+    width: 80%;
+    margin: 0 auto;
+}
