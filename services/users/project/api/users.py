@@ -290,6 +290,7 @@ def delete_user(user_id):
 
 
 @users_blueprint.route('/users/<user_id>/block', methods=['PUT'])
+@login_decorator
 def block_user(user_id):
     """Blocks a user"""
     response_object = {
@@ -332,6 +333,7 @@ def block_user(user_id):
 
 
 @users_blueprint.route('/users/<user_id>/unblock', methods=['PUT'])
+@login_decorator
 def unblock_user(user_id):
     """Blocks a user"""
     response_object = {
