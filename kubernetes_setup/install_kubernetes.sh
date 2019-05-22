@@ -15,6 +15,6 @@ sudo apt -y install kubeadm
 
 sudo swapoff -a
 
-echo "Disabling swap in fstab"
+echo "Disabling swap in fstab (created backup /etc/fstab.bak)"
 sudo cp /etc/fstab /etc/fstab.bak
 sudo sed -e '/.*swap.*/s/^/#/g' -i /etc/fstab

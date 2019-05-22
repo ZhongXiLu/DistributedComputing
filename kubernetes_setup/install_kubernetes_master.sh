@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 | tee $DIR/temp.out
 echo "#!/usr/bin/env bash" > $DIR/add_node_to_cluster.sh
-grep "." | tail -n 1 >> $DIR/add_node_to_cluster.sh
+sed ':loop /[^\\]\\$/N; s/\\\n//; t loop' $DIR/temp.out | grep "." | tail -n 1 >> $DIR/add_node_to_cluster.sh
 chmod +x $DIR/add_node_to_cluster.sh
 rm $DIR/temp.out
 
