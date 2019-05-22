@@ -24,6 +24,7 @@ def ping_pong():
 
 
 @anti_cyberbullying_blueprint.route('', methods=['GET'])
+@login_decorator
 def index():
     response_object = {
         'status': 'fail',
