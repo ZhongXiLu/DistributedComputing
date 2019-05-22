@@ -263,7 +263,7 @@ def verify_password(user_id_or_token, password):
             pw = Password.query.filter_by(user_id=int(user_id_or_token)).first()
         except ValueError:
             pass
-        if not pw or not pw.verify_password(password):
+        if not pw or not pw.auth_allowed or not pw.verify_password(password):
             return False
     g.pw = pw
     g.user_id = pw.user_id
