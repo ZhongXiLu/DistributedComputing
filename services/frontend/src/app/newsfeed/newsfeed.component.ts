@@ -76,8 +76,7 @@ export class NewsfeedComponent implements OnInit {
       	this.likesHolder = res;
 	console.log(this.likesHolder);
 	this.likes[post.id]=this.likesHolder.data.likes;
-        this.likesLength = this.likesHolder.data.likes.length;
-	}); 
+	});
 	}
       },
       err => {
