@@ -21,6 +21,7 @@ export class NewsfeedComponent implements OnInit {
   public likes = {};
   public adsHolder :any;
   public ads = [];
+  public adsImage: string;
   public usersHolder :any
   public users = [];
   public usersObject = {};
@@ -88,6 +89,7 @@ export class NewsfeedComponent implements OnInit {
         res => {
         this.adsHolder = res;
 	this.ads=this.adsHolder.data.ads;
+        this.adsImage = this.ads[0].image
       },
       err => {
         console.log(err);
@@ -117,6 +119,8 @@ export class NewsfeedComponent implements OnInit {
          const danger = (<HTMLInputElement>document.getElementById("danger"));
          danger.innerHTML="Your post did not pass the cyber bulling text";
         }
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Your post is submitted"
       },
       err => {
         console.log(err);
@@ -135,6 +139,8 @@ export class NewsfeedComponent implements OnInit {
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Your like is submitted";
       },
       err => {
         console.log(err);
@@ -155,6 +161,8 @@ comment(id){
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+	const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Your comment is submitted"
       },
       err => {
         console.log(err);

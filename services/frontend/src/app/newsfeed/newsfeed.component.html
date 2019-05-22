@@ -5,8 +5,8 @@
         <tr>
           <!--   ADS       -->
           <td style="width: 50%" class="align-top">
-            <div class="row" *ngFor="let ad of ads">
-              <img width=400 height=400 src="{{imageRoot}}/ads/{{ad.image}}" class="rounded mx-auto d-block border border-success" alt="Some advertisement">
+            <div class="row">
+              <img width=400 height=400 src="{{imageRoot}}/ads/{{adsImage}}" class="rounded mx-auto d-block border border-success" alt="Some advertisement">
             </div>
           </td>
 
@@ -16,6 +16,8 @@
               <div class="col-12 mb-3">
                <div class="card">
                   <div class="card-body">
+                    <h6 class="text-danger" id="danger" style="text-align:center;"></h6>
+                    <h6 class="text-success" id="success" style="text-align:center;"></h6>
                     <h3>Create new post:</h3>
                     <form action="#" method="POST">
                         <div class="form-group">

@@ -16,6 +16,7 @@ import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { ChatComponent } from './chat/chat.component';
 import { Guard } from './guard';
 import { Navbar } from './navbar';
+import { Admin } from './admin';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { Navbar } from './navbar';
     HttpClientModule,
     RouterModule
   ],
-  providers: [Guard, Navbar],
+  providers: [Guard, Navbar, Admin],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

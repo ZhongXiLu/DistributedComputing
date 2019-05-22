@@ -72,6 +72,8 @@ export class SearchComponent implements OnInit {
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Followed"
       },
       err => {
         console.log(err);
@@ -90,6 +92,8 @@ beFriend(id){
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+	const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Befriended"
       },
       err => {
         console.log(err);
@@ -109,6 +113,8 @@ accept(id){
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+	const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Request accepted"
       },
       err => {
         console.log(err);
@@ -124,6 +130,8 @@ delete(id){
         this.http.delete(environment.friendServiceUrl + '/friend/'+id+'/'+friend_2, { headers:headers}).subscribe(
       res => {
         console.log(res);
+	const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Friendship deleted"
       },
       err => {
         console.log(err);

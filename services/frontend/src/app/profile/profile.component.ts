@@ -103,6 +103,8 @@ export class ProfileComponent implements OnInit {
     }, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Comment added"
       },
       err => {
         console.log(err);
@@ -116,6 +118,8 @@ export class ProfileComponent implements OnInit {
         this.http.delete(environment.commentServiceUrl + '/comments/'+id, { headers:headers}).subscribe(
       res => {
         console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Comment deleted"
       },
       err => {
         console.log(err);
@@ -130,6 +134,8 @@ deletePost(id){
         this.http.delete(environment.postServiceUrl + '/posts/'+id, { headers:headers}).subscribe(
       res => {
         console.log(res);
+	const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Post deleted"
       },
       err => {
         console.log(err);
