@@ -25,19 +25,19 @@ export const environment = {
   adServiceUrl: 'http://localhost:5009'
 
   // for kubernetes
-  // userServiceUrl: proxy.url + 'users/proxy',
-  // postServiceUrl: proxy.url + 'post/proxy',
-  // followServiceUrl: proxy.url + 'follow/proxy',
-  // notificationServiceUrl: proxy.url + 'notification/proxy',
-  // tagServiceUrl: proxy.url + 'tag/proxy',
-  // authServiceUrl: proxy.url + 'authentication/proxy',
-  // likeServiceUrl: proxy.url + 'like/proxy',
-  // commentServiceUrl: proxy.url + 'comment/proxy',
-  // messageServiceUrl: proxy.url + 'message/proxy',
-  // friendServiceUrl: proxy.url + 'friend/proxy',
-  // newsfeedServiceUrl: proxy.url + 'newsfeed/proxy',
-  // antiCyberbullyingServiceUrl: proxy.url + 'anti-cyberbullying/proxy',
-  // adServiceUrl: proxy.url + 'ad/proxy'
+  // userServiceUrl: proxy.url + 'users:5000/proxy',
+  // postServiceUrl: proxy.url + 'post:5000/proxy',
+  // followServiceUrl: proxy.url + 'follow:5000/proxy',
+  // notificationServiceUrl: proxy.url + 'notification:5000/proxy',
+  // tagServiceUrl: proxy.url + 'tag:5000/proxy',
+  // authServiceUrl: proxy.url + 'authentication:5000/proxy',
+  // likeServiceUrl: proxy.url + 'like:5000/proxy',
+  // commentServiceUrl: proxy.url + 'comment:5000/proxy',
+  // messageServiceUrl: proxy.url + 'message:5000/proxy',
+  // friendServiceUrl: proxy.url + 'friend:5000/proxy',
+  // newsfeedServiceUrl: proxy.url + 'newsfeed:5000/proxy',
+  // antiCyberbullyingServiceUrl: proxy.url + 'anti-cyberbullying:5000/proxy',
+  // adServiceUrl: proxy.url + 'ad:5000/proxy'
 };
 
 /*
