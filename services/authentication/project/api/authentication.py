@@ -134,20 +134,75 @@ def update_password():
     return jsonify(response_object), 400
 
 
-@authentication_blueprint.route('/passwords', methods=['DELETE'])
+@authentication_blueprint.route('/passwords/<user_id>', methods=['DELETE'])
 @auth.login_required
-def delete_password():
+def delete_password(user_id):
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
     try:
-        pw = Password.query.filter_by(user_id=auth.username()).first()  # type: Password
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
         if pw:
             db.session.delete(pw)
             db.session.commit()
             response_object['status'] = 'success'
             response_object['message'] = f'Deleted password of user {auth.username()}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError:
+        db.session.rollback()
+    return jsonify(response_object), 400
+
+
+@authentication_blueprint.route('/passwords/<user_id>/block', methods=['PUT'])
+@auth.login_required
+def block_password(user_id):
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid payload.'
+    }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
+    try:
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
+        if pw:
+            pw.auth_allowed = False
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Blocked password of user {auth.username()}'
+            return jsonify(response_object), 200
+    except exc.IntegrityError:
+        db.session.rollback()
+    return jsonify(response_object), 400
+
+
+@authentication_blueprint.route('/passwords/<user_id>/unblock', methods=['PUT'])
+@auth.login_required
+def unblock_password(user_id):
+    response_object = {
+        'status': 'fail',
+        'message': 'Invalid payload.'
+    }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
+    try:
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
+        if pw:
+            pw.auth_allowed = True
+            db.session.commit()
+            response_object['status'] = 'success'
+            response_object['message'] = f'Unblocked password of user {auth.username()}'
             return jsonify(response_object), 200
     except exc.IntegrityError:
         db.session.rollback()
@@ -208,12 +263,8 @@ def verify_password(user_id_or_token, password):
             pw = Password.query.filter_by(user_id=int(user_id_or_token)).first()
         except ValueError:
             pass
-        if not pw or not pw.verify_password(password):
+        if not pw or not pw.auth_allowed or not pw.verify_password(password):
             return False
     g.pw = pw
     g.user_id = pw.user_id
     return True
-
-
-
-
