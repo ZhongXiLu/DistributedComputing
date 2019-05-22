@@ -14,7 +14,13 @@ export class NavbarComponent implements OnInit {
   public responseHolder :any
   public notifications = [];
   public notificationsLength = 0;
+  interval = 0;
   constructor(private http: HttpClient, private router:Router, public nav: Navbar) { 
+    this.interval = setInterval(()=>{ 
+	   this.retrieveNotifications();
+	},3000);
+  }
+  retrieveNotifications(){
     const id = localStorage.getItem('id');
     const token = localStorage.getItem("token")
     const encoded = btoa(token.toString()+(':k').toString())
@@ -31,6 +37,7 @@ export class NavbarComponent implements OnInit {
       }
     );
   }
+
   logout(){
     this.router.navigate(['/login']);
     localStorage.clear();

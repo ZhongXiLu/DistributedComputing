@@ -45,11 +45,30 @@ export class AdminComponent implements OnInit {
     
   }
 
-  submit(event){
-    const username = event.target.value;
+  submit(id){
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
     this.http.post(environment.userServiceUrl+'/users', {
       username: username
-    }).subscribe(
+    }, { headers:headers}).subscribe(
+      res => {
+        console.log(res);
+        },
+      err => {
+        console.log("Error occured");
+      }
+    );
+
+  } 
+
+  block(id){
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.post(environment.userServiceUrl+'/users', {
+      username: username
+    },{ headers:headers}).subscribe(
       res => {
         console.log(res);
         },

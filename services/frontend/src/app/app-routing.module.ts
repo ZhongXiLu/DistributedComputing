@@ -9,6 +9,7 @@ import { SearchComponent } from './search/search.component';
 import { NewsfeedComponent } from './newsfeed/newsfeed.component';
 import { ChatComponent } from './chat/chat.component';
 import { Guard } from './guard';
+import { Admin } from './admin';
 
 const routes: Routes = 
 [
@@ -30,7 +31,7 @@ const routes: Routes =
   },
   {
     path:'admin',
-    component: AdminComponent, canActivate:[Guard]
+    component: AdminComponent, canActivate:[Admin]
   },
   {
     path:'newsfeed',

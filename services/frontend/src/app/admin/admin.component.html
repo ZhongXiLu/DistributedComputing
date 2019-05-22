@@ -11,7 +11,7 @@
         <li class="list-group-item">
         {{ user.username }}
         <button type="submit" class="btn btn-danger" value={{item}} (click)="submit(user.id)">Delete</button>
-        <button type="button" class="btn btn-warning">Block</button>
+        <button type="button" class="btn btn-warning" (click)="block(user.id)">Block</button>
         </li>
       </ul>
       
