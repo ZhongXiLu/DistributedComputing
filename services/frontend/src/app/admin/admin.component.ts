@@ -64,7 +64,10 @@ export class AdminComponent implements OnInit {
   } 
 
   block(id){
-    this.http.put(environment.userServiceUrl+'/users/'+id+'/block').subscribe(
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.put(environment.userServiceUrl+'/users/'+id+'/block',{},{ headers:headers}).subscribe(
       res => {
         console.log(res);
         const success = (<HTMLInputElement>document.getElementById("success"));
@@ -78,7 +81,10 @@ export class AdminComponent implements OnInit {
   } 
 
  unblock(id){
-    this.http.put(environment.userServiceUrl+'/users/'+id+'/unblock').subscribe(
+    const token = localStorage.getItem("token")
+    const encoded = btoa(token.toString()+(':k').toString())
+    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.put(environment.userServiceUrl+'/users/'+id+'/unblock',{},{ headers:headers}).subscribe(
       res => {
         console.log(res);
         const success = (<HTMLInputElement>document.getElementById("success"));

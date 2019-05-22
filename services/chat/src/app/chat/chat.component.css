@@ -1,0 +1,26 @@
+.chat
+{ 
+text-align:center;
+}
+
+.conversation1
+{ 
+width: 100%;
+margin-top: 4px;
+background:#ccc;
+height: 50px;
+border-radius: 20px;
+word-wrap: break-word;
+padding: 12px;
+}
+.small
+{ 
+font-size: 10px;
+float: right;
+color: #f4f4f4;
+}
+.big
+{ 
+font-size: 15px;
+float: left;
+}

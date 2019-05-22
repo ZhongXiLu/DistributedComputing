@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose-dev-kube.yml convert -o export/
+    kompose.version: 1.17.0 (a74acad)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: chat
+  name: chat
+spec:
+  type: NodePort
+  ports:
+  - name: 4200
+    port: 4200
+    targetPort: 4200
+    nodePort: 30100
+  selector:
+    io.kompose.service: chat
+status:
+  loadBalancer: {}

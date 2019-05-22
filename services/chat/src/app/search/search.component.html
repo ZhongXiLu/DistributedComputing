@@ -1,0 +1,40 @@
+
+<br>
+<div class="container">
+  <h6 class="text-success" id="success" style="text-align:center;"></h6>
+
+  <h3 style="text-align: center">All Users</h3>
+  <ul *ngFor="let user of users" class="list-group">
+    <li class="list-group-item">
+    {{ user.username }}
+    <button type="button" class="btn btn-warning" (click)="beFriend(user.id)">Friend</button>
+    </li>
+   </ul>  
+</div>
+
+<br>
+<h3 style="text-align: center">Friends request</h3>
+<hr>
+<div class="container">
+  <p style="text-align: center" *ngIf="requests.length == 0">No friend requests :(</p>
+  <ul *ngFor="let request of requests" class="list-group">
+    <li class="list-group-item">
+    {{usersObject[request]}}
+    <button type="submit" class="btn btn-danger" value={{item}} (click)="accept(request)">Accept</button>
+    </li>
+   </ul>  
+</div>
+
+<br>
+<h3 style="text-align: center">My friends</h3>
+<hr>
+<div class="container">
+  <ul *ngFor="let friend of friends" class="list-group">
+    <li class="list-group-item">
+    {{usersObject[friend]}}
+    <button type="submit" class="btn btn-danger" (click)="delete(friend)">Delete</button>
+     <button type="submit" class="btn btn-warning" (click)="setConversation(friend)">Chat</button>
+    </li>
+   </ul>  
+</div>
+

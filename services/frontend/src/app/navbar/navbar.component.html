@@ -27,8 +27,10 @@
             Notifications
             <span class="badge" *ngIf="notificationsLength > 0">{{notificationsLength}}</span>
           </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink" *ngFor="let notification of notifications">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+          	<div *ngFor="let notification of notifications">
             <a class="dropdown-item" (click)="read(notification.id)">{{notification.content}}</a>
+            </div>
           </div>
         </li>
         <li class="nav-item">

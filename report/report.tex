@@ -37,6 +37,16 @@ On top of all these components, we defined a specific service for the frontend a
 
 \begin{figure}[H]
     \begin{center}
+        \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{images/architecture_chat.png}}
+    \end{center}
+    \caption{Architecture of core microservices plus chat service with their interaction}
+    \label{fig:arch_chat}
+\end{figure}
+
+Similarly to the frontend service, there exists a standalone chat application as well. This application is as minimalistic as possible while still providing the basic functionality to login/register and sending messages to your friends.
+
+\begin{figure}[H]
+    \begin{center}
         \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{images/architecture_poll.png}}
     \end{center}
     \caption{Architecture of core microservices plus poll service with their interaction}
