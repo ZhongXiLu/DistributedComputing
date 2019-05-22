@@ -134,15 +134,20 @@ def update_password():
     return jsonify(response_object), 400
 
 
-@authentication_blueprint.route('/passwords', methods=['DELETE'])
+@authentication_blueprint.route('/passwords/<user_id>', methods=['DELETE'])
 @auth.login_required
-def delete_password():
+def delete_password(user_id):
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
+    admin_user = Password.query.filter_by(user_id=g.user_id)
+    if not admin_user.is_admin:
+        response_object['message'] = 'User is not admin.'
+        return jsonify(response_object), 401
+
     try:
-        pw = Password.query.filter_by(user_id=auth.username()).first()  # type: Password
+        pw = Password.query.filter_by(user_id=user_id).first()  # type: Password
         if pw:
             db.session.delete(pw)
             db.session.commit()
@@ -197,6 +202,8 @@ def is_admin():
     return jsonify(response_object), 200
 
 
+
+
 @auth.verify_password
 def verify_password(user_id_or_token, password):
     # Try to authenticate with token
@@ -213,7 +220,3 @@ def verify_password(user_id_or_token, password):
     g.pw = pw
     g.user_id = pw.user_id
     return True
-
-
-
-

@@ -215,6 +215,10 @@ def login():
             # response_object["sdfqsdf"] = "qsdfqsdf"
             return jsonify(response_object), 404
         else:
+            if not user.active:
+                response_object['message'] = 'You are blocked.'
+                response_code = 401
+                raise RequestException()
             response_obj = send_request(
                 'get', 'authentication', 'token', timeout=3, auth=(user.id, password))
             response_code = response_obj.status_code
@@ -237,23 +241,41 @@ def login():
             response_object["user_id"] = user.id
             return jsonify(response_object), 200
     except (ValueError, RequestException) as e:
+        db.session.rollback()
         return jsonify(response_object), response_code
 
 
 @users_blueprint.route('/users/<user_id>', methods=['DELETE'])
+@auth.login_required
 def delete_user(user_id):
     """Deletes a user"""
     response_object = {
         'status': 'fail',
         'message': 'User does not exist'
     }
-
     try:
+        if not is_admin(g.user_id):
+            response_object['message'] = 'User is not admin.'
+            return jsonify(response_object), 401
+    except KeyError:
+        response_object['message'] = 'Could not reach authentication service to check if user is admin.'
+        return jsonify(response_object), 401
+    try:
+
         user = User.query.filter_by(id=int(user_id)).first()
 
         if not user:
             return jsonify(response_object), 404
         else:
+            response_obj = send_request(
+                'delete', 'authentication', f'passwords/{user_id}', timeout=3, auth=(g.user_id_or_token, g.password))
+            response_code = response_obj.status_code
+            if response_obj.status_code == 503:
+                response_object = response_obj.json
+                raise RequestException()
+            elif response_obj.status_code != 200:
+                raise RequestException()
+
             db.session.delete(user)
             db.session.commit()
             response_object['status'] = 'success'
@@ -261,6 +283,8 @@ def delete_user(user_id):
             return jsonify(response_object), 200
 
     except ValueError:
+        return jsonify(response_object), 404
+    except RequestException as e:
         return jsonify(response_object), 404
 
 
