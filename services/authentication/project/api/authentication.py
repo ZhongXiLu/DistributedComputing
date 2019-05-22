@@ -141,7 +141,7 @@ def delete_password(user_id):
         'status': 'fail',
         'message': 'Invalid payload.'
     }
-    admin_user = Password.query.filter_by(user_id=g.user_id)
+    admin_user = Password.query.filter_by(user_id=g.user_id).first()
     if not admin_user.is_admin:
         response_object['message'] = 'User is not admin.'
         return jsonify(response_object), 401
@@ -166,7 +166,7 @@ def block_password(user_id):
         'status': 'fail',
         'message': 'Invalid payload.'
     }
-    admin_user = Password.query.filter_by(user_id=g.user_id)
+    admin_user = Password.query.filter_by(user_id=g.user_id).first()
     if not admin_user.is_admin:
         response_object['message'] = 'User is not admin.'
         return jsonify(response_object), 401
@@ -191,7 +191,7 @@ def unblock_password(user_id):
         'status': 'fail',
         'message': 'Invalid payload.'
     }
-    admin_user = Password.query.filter_by(user_id=g.user_id)
+    admin_user = Password.query.filter_by(user_id=g.user_id).first()
     if not admin_user.is_admin:
         response_object['message'] = 'User is not admin.'
         return jsonify(response_object), 401

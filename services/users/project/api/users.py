@@ -246,7 +246,7 @@ def login():
 
 
 @users_blueprint.route('/users/<user_id>', methods=['DELETE'])
-@auth.login_required
+@login_decorator
 def delete_user(user_id):
     """Deletes a user"""
     response_object = {
@@ -261,6 +261,7 @@ def delete_user(user_id):
     except KeyError:
         response_object['message'] = 'Could not reach authentication service to check if user is admin.'
         return jsonify(response_object), 401
+
     try:
         user = User.query.filter_by(id=int(user_id)).first()
 
