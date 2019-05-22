@@ -89,7 +89,7 @@ export class NewsfeedComponent implements OnInit {
         res => {
         this.adsHolder = res;
 	this.ads=this.adsHolder.data.ads;
-        this.adsImage = this.ads[0].image
+        this.adsImage = this.ads[Math.floor(Math.random() * this.ads.length)].image
       },
       err => {
         console.log(err);

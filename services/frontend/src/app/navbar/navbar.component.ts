@@ -14,11 +14,12 @@ export class NavbarComponent implements OnInit {
   public responseHolder :any
   public notifications = [];
   public notificationsLength = 0;
+  public userId = localStorage.getItem("id");
   interval = 0;
   constructor(private http: HttpClient, private router:Router, public nav: Navbar) { 
     this.interval = setInterval(()=>{ 
 	   this.retrieveNotifications();
-	},3000);
+	},10000);
   }
   retrieveNotifications(){
     const id = localStorage.getItem('id');
@@ -44,6 +45,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.retrieveNotifications();
   }
 
   read(id){

@@ -1,5 +1,9 @@
+
+<br>
 <div class="container">
   <h6 class="text-success" id="success" style="text-align:center;"></h6>
+
+  <h3 style="text-align: center">All Users</h3>
   <ul *ngFor="let user of users" class="list-group">
     <li class="list-group-item">
     {{ user.username }}
@@ -8,9 +12,12 @@
     </li>
    </ul>  
 </div>
-<h6 style="text-align: center">Friends request</h6>
+
+<br>
+<h3 style="text-align: center">Friends request</h3>
 <hr>
 <div class="container">
+  <p style="text-align: center" *ngIf="requests.length == 0">No friend requests :(</p>
   <ul *ngFor="let request of requests" class="list-group">
     <li class="list-group-item">
     {{usersObject[request]}}
@@ -18,7 +25,9 @@
     </li>
    </ul>  
 </div>
-<h6 style="text-align: center">My friends</h6>
+
+<br>
+<h3 style="text-align: center">My friends</h3>
 <hr>
 <div class="container">
   <ul *ngFor="let friend of friends" class="list-group">
