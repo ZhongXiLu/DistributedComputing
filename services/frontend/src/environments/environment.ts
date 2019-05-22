@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const proxy = {
-    url: 'http://localhost:8001/api/v1/namespaces/default/services/'
+    url: 'http://192.168.99.100'
 };
 
 export const environment = {
@@ -25,19 +25,19 @@ export const environment = {
   adServiceUrl: 'http://localhost:5009'
 
   // for kubernetes
-  // userServiceUrl: proxy.url + 'users:5000/proxy',
-  // postServiceUrl: proxy.url + 'post:5000/proxy',
-  // followServiceUrl: proxy.url + 'follow:5000/proxy',
-  // notificationServiceUrl: proxy.url + 'notification:5000/proxy',
-  // tagServiceUrl: proxy.url + 'tag:5000/proxy',
-  // authServiceUrl: proxy.url + 'authentication:5000/proxy',
-  // likeServiceUrl: proxy.url + 'like:5000/proxy',
-  // commentServiceUrl: proxy.url + 'comment:5000/proxy',
-  // messageServiceUrl: proxy.url + 'message:5000/proxy',
-  // friendServiceUrl: proxy.url + 'friend:5000/proxy',
-  // newsfeedServiceUrl: proxy.url + 'newsfeed:5000/proxy',
-  // antiCyberbullyingServiceUrl: proxy.url + 'anti-cyberbullying:5000/proxy',
-  // adServiceUrl: proxy.url + 'ad:5000/proxy'
+  // userServiceUrl: proxy.url + ':30026',
+  // postServiceUrl: proxy.url + ':30022',
+  // followServiceUrl: proxy.url + ':30010',
+  // notificationServiceUrl: proxy.url + ':30018',
+  // tagServiceUrl: proxy.url + ':30024',
+  // authServiceUrl: proxy.url + ':30005',
+  // likeServiceUrl: proxy.url + ':30013',
+  // commentServiceUrl: proxy.url + ':30008',
+  // messageServiceUrl: proxy.url + ':30016',
+  // friendServiceUrl: proxy.url + ':30012',
+  // newsfeedServiceUrl: proxy.url + ':30017',
+  // antiCyberbullyingServiceUrl: proxy.url + ':30003',
+  //adServiceUrl: proxy.url + ':30001'
 };
 
 /*

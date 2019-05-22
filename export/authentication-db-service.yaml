@@ -14,6 +14,7 @@ spec:
   - name: "5432"
     port: 5432
     targetPort: 5432
+    nodePort: 30004
   selector:
     io.kompose.service: authentication-db
 status:
