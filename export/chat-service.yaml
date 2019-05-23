@@ -11,7 +11,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - name: 4200
+  - name: "4200"
     port: 4200
     targetPort: 4200
     nodePort: 30100
