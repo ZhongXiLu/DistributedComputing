@@ -11,4 +11,4 @@ echo Enter the master node username:
 read USERNAME
 
 scp ${USERNAME}@${MASTER_NODE_ADDRESS}:${DIR}/add_node_to_cluster.sh ${DIR}
-${DIR}/add_node_to_cluster.sh
+sudo ${DIR}/add_node_to_cluster.sh
