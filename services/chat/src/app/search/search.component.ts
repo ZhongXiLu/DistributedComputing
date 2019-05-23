@@ -31,11 +31,20 @@ export class SearchComponent implements OnInit {
         console.log("Error occured");
       }
     );
+
+    this.interval = setInterval(()=>{
+       this.retrieveData();
+    },4000);
   }
 
   ngOnInit() {
     this.nav.show();
-    const user = localStorage.getItem("id")
+
+    this.retrieveData();
+  }
+
+  retrieveData() {
+    const user = localStorage.getItem("id");
 
     this.http.get(environment.friendServiceUrl+'/friend/'+user+'/requests').subscribe(
       res => {
@@ -58,7 +67,6 @@ export class SearchComponent implements OnInit {
         console.log(err);
       }
     );
-    
   }
 
 beFriend(id){

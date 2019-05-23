@@ -147,12 +147,12 @@ export class NewsfeedComponent implements OnInit {
         console.log(res);
         const success = (<HTMLInputElement>document.getElementById("success"));
         success.innerHTML="Your like is submitted";
+        this.retrieveNewsfeed();
       },
       err => {
         console.log(err);
       }
     );
-    this.retrieveNewsfeed();
 }
 
 unlike(id){
@@ -165,12 +165,12 @@ unlike(id){
         console.log(res);
         const success = (<HTMLInputElement>document.getElementById("success"));
         success.innerHTML="Your unliked a post";
+        this.retrieveNewsfeed();
       },
       err => {
         console.log(err);
       }
     );
-    this.retrieveNewsfeed();
 }
 
 comment(id){
@@ -187,13 +187,13 @@ comment(id){
       res => {
         console.log(res);
 	const success = (<HTMLInputElement>document.getElementById("success"));
-        success.innerHTML="Your comment is submitted"
+        success.innerHTML="Your comment is submitted";
+        this.retrieveNewsfeed();
       },
       err => {
         console.log(err);
       }
     );
-      this.retrieveNewsfeed();
    }
 
 }
