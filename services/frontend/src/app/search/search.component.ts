@@ -17,6 +17,8 @@ export class SearchComponent implements OnInit {
   public requestsHolder :any
   public requests = [];
   public usersObject = {};
+  interval = 0;
+
   constructor(private http: HttpClient, private router:Router,public nav: Navbar) { 
     this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
@@ -31,10 +33,13 @@ export class SearchComponent implements OnInit {
         console.log("Error occured");
       }
     );
+
+    this.interval = setInterval(()=>{
+	   this.retrieveData();
+	},4000);
   }
 
-  ngOnInit() {
-    this.nav.show();
+  retrieveData() {
     const user = localStorage.getItem("id")
 
     this.http.get(environment.friendServiceUrl+'/friend/'+user+'/requests').subscribe(
@@ -58,7 +63,11 @@ export class SearchComponent implements OnInit {
         console.log(err);
       }
     );
-    
+  }
+
+  ngOnInit() {
+    this.nav.show();
+    this.retrieveData();
   }
 
  follow(id){
