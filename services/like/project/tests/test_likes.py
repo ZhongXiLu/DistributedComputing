@@ -6,6 +6,7 @@ import unittest
 from project import db
 from project.api.models import Like
 from project.tests.base import BaseTestCase
+from flask import g
 
 
 def add_like(post_id, user_id):
@@ -67,11 +68,8 @@ class TestLikeService(BaseTestCase):
             self.assertTrue(userId in [like['user_id'] for like in data['data']['likes']])
 
             # Delete like
-            response = self.client.delete(
-                f'/likes/posts/{postId}',
-                data=json.dumps({'user_id': userId}),
-                content_type='application/json'
-            )
+            g.user_id = userId
+            response = self.client.delete(f'/likes/posts/{postId}',)
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 200)
             self.assertIn('success', data['status'])
