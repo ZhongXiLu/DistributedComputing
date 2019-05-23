@@ -48,6 +48,7 @@
                       <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
                     </div>
                     <button class="btn btn-danger pull-right" (click)="like(post.id)">Like</button>
+                    <button class="btn btn-danger pull-right" (click)="unlike(post.id)">Unike</button>
                     <br>
                     <hr>
                     <div class="row" *ngFor="let comment of comments[post.id]" class="inline">

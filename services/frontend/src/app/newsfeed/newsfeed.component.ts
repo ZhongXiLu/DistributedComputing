@@ -147,6 +147,8 @@ export class NewsfeedComponent implements OnInit {
     );	
 }
 
+
+
 comment(id){
     	const creator = localStorage.getItem("id");
 	const comment= (<HTMLInputElement>document.getElementById(id)).value;
