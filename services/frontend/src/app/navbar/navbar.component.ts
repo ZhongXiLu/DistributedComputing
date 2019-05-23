@@ -23,20 +23,22 @@ export class NavbarComponent implements OnInit {
   }
   retrieveNotifications(){
     const id = localStorage.getItem('id');
-    const token = localStorage.getItem("token")
-    const encoded = btoa(token.toString()+(':k').toString())
-    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
-    this.http.get(environment.notificationServiceUrl+'/notifications/user/'+id, { headers:headers}).subscribe(
-      res => {
-        this.responseHolder = res;
-	this.notifications = this.responseHolder.data.notifications;
-	console.log(this.responseHolder);
-        this.notificationsLength = this.notifications.length;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    const token = localStorage.getItem("token");
+    if(token != null) {
+      const encoded = btoa(token.toString() + (':k').toString());
+      let headers: HttpHeaders = new HttpHeaders().set('content-type', 'application/json').set('Authorization', 'Basic ' + encoded);
+      this.http.get(environment.notificationServiceUrl + '/notifications/user/' + id, {headers: headers}).subscribe(
+        res => {
+          this.responseHolder = res;
+          this.notifications = this.responseHolder.data.notifications;
+          console.log(this.responseHolder);
+          this.notificationsLength = this.notifications.length;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   logout(){

@@ -43,13 +43,24 @@ export class NewsfeedComponent implements OnInit {
         console.log("Error occured");
       }
     );
-     this.interval = setInterval(()=>{ 
-	   this.retrieveNewsfeed();
-	},4000);
+
+      const id = localStorage.getItem("id");
+      const token = localStorage.getItem("token");
+	    const encoded = btoa(token.toString()+(':k').toString())
+	    let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+     this.http.get(environment.adServiceUrl+'/ads/user/'+id,{ headers}).subscribe(
+        res => {
+        this.adsHolder = res;
+	this.ads=this.adsHolder.data.ads;
+        this.adsImage = this.ads[Math.floor(Math.random() * this.ads.length)].image
+      },
+      err => {
+        console.log(err);
+      });
    }
   retrieveNewsfeed(){
-        const id = localStorage.getItem("id")
-	const token = localStorage.getItem("token")
+        const id = localStorage.getItem("id");
+	const token = localStorage.getItem("token");
 	const encoded = btoa(token.toString()+(':k').toString())
 	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
 
@@ -84,22 +95,11 @@ export class NewsfeedComponent implements OnInit {
       err => {
         console.log(err);
       });
-
-
-      this.http.get(environment.adServiceUrl+'/ads/user/'+id,{ headers}).subscribe(
-        res => {
-        this.adsHolder = res;
-	this.ads=this.adsHolder.data.ads;
-        this.adsImage = this.ads[Math.floor(Math.random() * this.ads.length)].image
-      },
-      err => {
-        console.log(err);
-      });
         
       }
   ngOnInit() { 
-        this.nav.show();
-    
+    this.nav.show();
+    this.retrieveNewsfeed();
   }
 
    submit(event) {
@@ -125,7 +125,8 @@ export class NewsfeedComponent implements OnInit {
          danger.innerHTML="Your post did not pass the cyber bulling text";
         }
         const success = (<HTMLInputElement>document.getElementById("success"));
-        success.innerHTML="Your post is submitted"
+        success.innerHTML="Your post is submitted";
+        this.retrieveNewsfeed();
       },
       err => {
         console.log(err);
@@ -150,7 +151,8 @@ export class NewsfeedComponent implements OnInit {
       err => {
         console.log(err);
       }
-    );	
+    );
+    this.retrieveNewsfeed();
 }
 
 unlike(id){
@@ -167,7 +169,8 @@ unlike(id){
       err => {
         console.log(err);
       }
-    );	
+    );
+    this.retrieveNewsfeed();
 }
 
 comment(id){
@@ -190,6 +193,7 @@ comment(id){
         console.log(err);
       }
     );
+      this.retrieveNewsfeed();
    }
 
 }
