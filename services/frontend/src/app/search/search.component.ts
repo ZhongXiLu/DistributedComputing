@@ -73,7 +73,24 @@ export class SearchComponent implements OnInit {
       res => {
         console.log(res);
         const success = (<HTMLInputElement>document.getElementById("success"));
-        success.innerHTML="Followed"
+        success.innerHTML="Followed " + this.usersObject[id]
+      },
+      err => {
+        console.log(err);
+      }
+    );
+   }
+
+   unfollow(id) {
+    const follower = localStorage.getItem("id");
+   	const token = localStorage.getItem("token");
+	  const encoded = btoa(token.toString()+(':k').toString());
+	  let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+    this.http.delete(environment.followServiceUrl + '/follow/' + follower + '/' + id, {headers:headers}).subscribe(
+      res => {
+        console.log(res);
+	      const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Unfollowed " + this.usersObject[id]
       },
       err => {
         console.log(err);
@@ -93,7 +110,7 @@ beFriend(id){
       res => {
         console.log(res);
 	const success = (<HTMLInputElement>document.getElementById("success"));
-        success.innerHTML="Befriended"
+        success.innerHTML="Befriended " + this.usersObject[id]
       },
       err => {
         console.log(err);

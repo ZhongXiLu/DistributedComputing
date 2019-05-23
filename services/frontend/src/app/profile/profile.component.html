@@ -1,10 +1,31 @@
 <div class="container">
+  <br>
     <div class="row profile-header">
       <img src="/assets/avatar.png">
-      <p>{{username}}</p>
+      <br><br>
+      <h2>{{username}}</h2>
+      <br>
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th scope="col">Friends</th>
+            <th scope="col">Followers</th>
+            <th scope="col">Following</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{friends.length}}</td>
+            <td>{{followers.length}}</td>
+            <td>{{followees.length}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <h6 class="text-success" id="success" style="text-align:center;"></h6>
-    <div class="row posts">
+  <br><br>
+  <h3 style="text-align: center">Posts</h3>
+  <div class="row posts">
       <div class="row justify-content-center">
         <div class="row" *ngFor="let post of posts">
               <div class="col-12 mb-3">

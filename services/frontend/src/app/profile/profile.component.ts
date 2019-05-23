@@ -24,7 +24,10 @@ export class ProfileComponent implements OnInit {
   public likesLength : number
   public likesHolder :any;
   public likes = {};
-  constructor(private http: HttpClient, public nav: Navbar) 
+  public friends = [];
+  public followers = [];
+  public followees = [];
+  constructor(private http: HttpClient, public nav: Navbar)
    {
       this.http.get(environment.userServiceUrl+'/users').subscribe(
       res => {
@@ -87,6 +90,33 @@ export class ProfileComponent implements OnInit {
       err => {
         console.log(err);
       });
+
+      this.http.get(environment.friendServiceUrl+'/friend/'+id).subscribe(
+      res => {
+          this.friends = res.friends;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+
+      this.http.get(environment.followServiceUrl+'/follow/followers/'+id).subscribe(
+      res => {
+          this.followers = res.followers;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+
+      this.http.get(environment.followServiceUrl+'/follow/followees/'+id).subscribe(
+      res => {
+          this.followees = res.followees;
+        },
+        err => {
+          console.log(err);
+        }
+      );
  
   }
 

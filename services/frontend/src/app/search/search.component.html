@@ -7,8 +7,9 @@
   <ul *ngFor="let user of users" class="list-group">
     <li class="list-group-item">
     {{ user.username }}
-    <button type="submit" class="btn btn-danger" value={{item}} (click)="follow(user.id)">Follow</button>
-    <button type="button" class="btn btn-warning" (click)="beFriend(user.id)">Friend</button>
+      <button type="submit" class="btn btn-danger" value={{item}} (click)="unfollow(user.id)">Unfollow</button>
+      <button type="submit" class="btn btn-danger" value={{item}} (click)="follow(user.id)">Follow</button>
+      <button type="button" class="btn btn-warning" (click)="beFriend(user.id)">Friend</button>
     </li>
    </ul>  
 </div>
