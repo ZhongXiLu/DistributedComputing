@@ -10,18 +10,18 @@ export const environment = {
   production: false,
 
   // for docker-compose
-  userServiceUrl: 'http://localhost:5001',
-  authServiceUrl: 'http://localhost:5004',
-  messageServiceUrl: 'http://localhost:5013',
-  friendServiceUrl: 'http://localhost:5012',
-  antiCyberbullyingServiceUrl: 'http://localhost:5008',
+  // userServiceUrl: 'http://localhost:5001',
+  // authServiceUrl: 'http://localhost:5004',
+  // messageServiceUrl: 'http://localhost:5013',
+  // friendServiceUrl: 'http://localhost:5012',
+  // antiCyberbullyingServiceUrl: 'http://localhost:5008',
 
   // for kubernetes
-  // userServiceUrl: proxy.url + ':30026',
-  // authServiceUrl: proxy.url + ':30005',
-  // messageServiceUrl: proxy.url + ':30016',
-  // friendServiceUrl: proxy.url + ':30012',
-  // antiCyberbullyingServiceUrl: proxy.url + ':30003',
+  userServiceUrl: proxy.url + ':30026',
+  authServiceUrl: proxy.url + ':30005',
+  messageServiceUrl: proxy.url + ':30016',
+  friendServiceUrl: proxy.url + ':30012',
+  antiCyberbullyingServiceUrl: proxy.url + ':30003'
 };
 
 /*
