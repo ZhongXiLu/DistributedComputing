@@ -33,11 +33,9 @@ def test():
 @cli.command('seed_db')
 def seed_db():
     """Seeds the database."""
-    # db.session.add(Post(creator='0', content='Hello World!'))
-    # db.session.add(Post(creator='0', content='Hello World again!'))
-    # db.session.add(Post(creator='1', content='Some other post'))
-    # db.session.add(Post(creator='69', content='Yet another another post :)'))
-    # db.session.commit()
+    db.session.add(Post(creator='2', content='Hello World!'))
+    db.session.add(Post(creator='2', content='I love Distributed Computing!'))
+    db.session.commit()
     pass
 
 

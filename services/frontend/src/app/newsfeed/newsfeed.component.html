@@ -6,7 +6,7 @@
           <!--   ADS       -->
           <td style="width: 50%" class="align-top">
             <div class="row">
-              <img width=400 height=400 src="{{imageRoot}}/ads/{{adsImage}}" class="rounded mx-auto d-block border border-success" alt="Some advertisement">
+              <img width=400 height=400 src="{{imageRoot}}/ads/{{adsImage}}" class="rounded mx-auto d-block border border-success" alt="Advertisement placeholder">
             </div>
           </td>
 
@@ -43,7 +43,7 @@
                     <p class="card-text">{{post.content}}</p>
                     <a>{{likes[post.id].length}} likes</a>
                     <div class="timestampComment"> {{post.created_date}}</div>
-                  
+
                     <div *ngFor="let tag of tags[post.id]">
                       <button class="btn btn-info">{{usersObject[tag.user_id]}}</button>
                     </div>
