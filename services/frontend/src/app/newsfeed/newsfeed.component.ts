@@ -26,6 +26,7 @@ export class NewsfeedComponent implements OnInit {
   public users = [];
   public usersObject = {};
   public cyberHolder :any
+  interval = 0;
   public imageRoot = environment.adServiceUrl; 
 
   constructor(private http: HttpClient, public nav: Navbar) {
@@ -42,10 +43,11 @@ export class NewsfeedComponent implements OnInit {
         console.log("Error occured");
       }
     );
+     this.interval = setInterval(()=>{ 
+	   this.retrieveNewsfeed();
+	},4000);
    }
-
-  ngOnInit() { 
-        this.nav.show();
+  retrieveNewsfeed(){
         const id = localStorage.getItem("id")
 	const token = localStorage.getItem("token")
 	const encoded = btoa(token.toString()+(':k').toString())
@@ -93,6 +95,10 @@ export class NewsfeedComponent implements OnInit {
       err => {
         console.log(err);
       });
+        
+      }
+  ngOnInit() { 
+        this.nav.show();
     
   }
 
@@ -147,7 +153,22 @@ export class NewsfeedComponent implements OnInit {
     );	
 }
 
-
+unlike(id){
+    	const user_id = localStorage.getItem("id");
+   	const token = localStorage.getItem("token");
+	const encoded = btoa(token.toString()+(':k').toString());
+	let headers: HttpHeaders = new HttpHeaders().set('content-type','application/json').set('Authorization', 'Basic '+encoded);
+        this.http.delete(environment.likeServiceUrl + '/likes/posts/'+id, { headers:headers}).subscribe(
+      res => {
+        console.log(res);
+        const success = (<HTMLInputElement>document.getElementById("success"));
+        success.innerHTML="Your unliked a post";
+      },
+      err => {
+        console.log(err);
+      }
+    );	
+}
 
 comment(id){
     	const creator = localStorage.getItem("id");
