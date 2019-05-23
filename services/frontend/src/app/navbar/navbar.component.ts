@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   constructor(private http: HttpClient, private router:Router, public nav: Navbar) { 
     this.interval = setInterval(()=>{ 
 	   this.retrieveNotifications();
-	},10000);
+	},3000);
   }
   retrieveNotifications(){
     const id = localStorage.getItem('id');

@@ -25,14 +25,14 @@ SERVICES = [
 service_status = {}
 
 
-def send_notification_to_all(service):
+def send_notification_to_all(message):
     """Send notification to all users that a service is temporary down"""
 
     response_obj = send_request('get', 'users', 'users', timeout=3)
     all_users = [user['id'] for user in response_obj.json['data']['users']]
 
     send_request('post', 'notification', 'notifications', timeout=3,
-                 json={'content': f'{service} service is temporary down. Please wait while we\'ll try to fix this.',
+                 json={'content': message,
                        'recipients': all_users}, auth=('2', 'admin'))
 
 
@@ -45,13 +45,18 @@ def poll_services():
             if response_object.json['status'] == "fail":
                 if not service_status[service]:
                     service_status[service] = True  # status = down
-                    send_notification_to_all(service)
+                    send_notification_to_all(
+                        f'{service} service is temporary down. Please wait while we\'ll try to fix this.')
             else:
-                service_status[service] = False     # status = up
+                if service_status[service]:
+                    service_status[service] = False     # status = up
+                    send_notification_to_all(
+                        f'{service} service is back up. Thank you for your patience.')
         except:
             if not service_status[service]:
                 service_status[service] = True  # status = down
-                send_notification_to_all(service)
+                send_notification_to_all(
+                    f'{service} service is temporary down. Please wait while we\'ll try to fix this.')
 
 
 def main():
@@ -63,7 +68,8 @@ def main():
     for service, path in SERVICES:
         service_status[service] = False
 
-    schedule.every(30).seconds.do(poll_services)
+    time.sleep(60)  # wait initial seconds
+    schedule.every(10).seconds.do(poll_services)
     while True:
         schedule.run_pending()
         time.sleep(1)
