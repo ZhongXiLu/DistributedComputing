@@ -1,6 +1,6 @@
 
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
 from sqlalchemy import exc
 from util.send_request import *
 from util.verify_password import login_decorator
@@ -72,16 +72,13 @@ def create_like():
 @login_decorator
 def delete_like(post_id):
     """Undo a like on a specific post"""
-    post_data = request.get_json()
     response_object = {
         'status': 'fail',
         'message': 'Like does not exist'
     }
 
-    user_id = post_data.get('user_id')
-
     try:
-        like = Like.query.filter(Like.user_id == int(user_id), Like.post_id == int(post_id)).first()
+        like = Like.query.filter(Like.user_id == int(g.user_id), Like.post_id == int(post_id)).first()
 
         if not like:
             return jsonify(response_object), 404

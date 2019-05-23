@@ -36,3 +36,4 @@ chmod +x kompose
         minikube service frontend --url
         minikube service chat --url
         ```
+    6. Run all tests: `./runAllTests.sh`
