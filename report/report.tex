@@ -19,8 +19,7 @@
     \begin{center}
         \makebox[\textwidth]{\includegraphics[width=0.8\paperwidth]{images/architecture.png}}
     \end{center}
-    \caption{Architecture of core microservices with their interaction}
-    \label{fig:arch}
+    \caption{Architecture of core microservices with their interaction \label{fig:arch}}
 \end{figure}
 
 The core microservices that form the backend of our system can be found in figure \ref{fig:arch}. The interactions, i.e. dependencies, between the different microservices are shown as well. Most of these services also have a corresponding database, in the actual implementation the database is ran on a separate service. More details on these services can be found in section \ref{api}.
@@ -33,7 +32,7 @@ The core microservices that form the backend of our system can be found in figur
     \label{fig:arch_frontend}
 \end{figure}
 
-On top of all these components, we defined a specific service for the frontend as well (see figure \ref{fig:arch_frontend}). This service is only there to offer a view for our application and will therefor communicate with our backend by making use of the provided api. As a side note, (almost) each request that is sent from the frontend implicitly goes through the authentication service to verify the user credentials that was stored in a token.
+On top of all these components, we defined a specific service for the frontend as well (see figure \ref{fig:arch_frontend}). This service is only there to offer a view for our application and will therefore communicate with our backend by making use of the provided api. As a side note, (almost) each request that is sent from the frontend implicitly goes through the authentication service to verify the user credentials that were stored in a token.
 
 \begin{figure}[H]
     \begin{center}
@@ -43,7 +42,7 @@ On top of all these components, we defined a specific service for the frontend a
     \label{fig:arch_chat}
 \end{figure}
 
-Similarly to the frontend service, there exists a standalone chat application as well. This application is as minimalistic as possible while still providing the basic functionality to login/register and sending messages to your friends. Of course, it uses the same backend as the frontend service. This will allow cross-communication between users from the chat and main application, since they're using data from the same services.
+Similarly to the frontend service, there exists a standalone chat application as well. This application is as minimalistic as possible while still providing the basic functionality to login/register and send messages to your friends. Of course, it uses the same backend as the frontend service. This will allow cross-communication between users from the chat and main application, since they're using data from the same services.
 
 \begin{figure}[H]
     \begin{center}
@@ -58,7 +57,7 @@ Lastly, we added a separate poll service as well that has the responsibility to 
 \section{API Services}
 \label{api}
 
-This section will go more into these core microservices by precisely defining their REST API. Note that most of these services also have a ping url.
+This section will go more into the core microservices by precisely defining their REST API. Note that most of these services also have a ping url.
 
 \begin{description}
     \item [User service:]
