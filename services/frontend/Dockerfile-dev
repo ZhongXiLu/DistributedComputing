@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM nikolaik/python-nodejs:python3.7-nodejs10
 
 COPY package.json /usr/src/
 WORKDIR /usr/src/

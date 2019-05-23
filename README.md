@@ -29,8 +29,9 @@ chmod +x kompose
 3. Set up the services in kubernetes (in project root directory):
     1. Start minikube in the background: `minikube start --memory=8192 --cpus=4`
     2. Create pods: `kubectl create -f export/`
-    3. Set up: `./setup.sh`
-    4. The url's to access the main and chat application can be found via following commands:
+    3. Wait until all pods are running
+    4. Set up: `./setup.sh`
+    5. The url's to access the main and chat application can be found via following commands:
         ```bash
         minikube service frontend --url
         minikube service chat --url

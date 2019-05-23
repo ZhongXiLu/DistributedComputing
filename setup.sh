@@ -16,6 +16,6 @@ done
 # Set up minikube ip
 echo "Setting up minikube ip"
 FRONTEND_POD=$(kubectl get pods --all-namespaces | grep 'frontend-' | grep -v 'db-' | awk '{print $2}')
-kubectl exec -it FRONTEND_POD python set_proxy_url.py http://$(minikube ip)
+kubectl exec -it $FRONTEND_POD python set_proxy_url.py http://$(minikube ip)
 CHAT_POD=$(kubectl get pods --all-namespaces | grep 'chat-' | grep -v 'db-' | awk '{print $2}')
-kubectl exec -it CHAT_POD python set_proxy_url.py http://$(minikube ip)
+kubectl exec -it $CHAT_POD python set_proxy_url.py http://$(minikube ip)
